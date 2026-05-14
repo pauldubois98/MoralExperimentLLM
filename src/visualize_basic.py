@@ -8,6 +8,7 @@ Run: uv run python src/visualize_basic.py
 import warnings
 from pathlib import Path
 
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
@@ -111,11 +112,11 @@ ax.set_ylabel('% of decisions', fontsize=12)
 ax.set_title('STAY vs SWERVE decisions by model', fontsize=14, fontweight='bold', pad=12)
 ax.set_ylim(0, 105)
 ax.axhline(50, color='black', linewidth=0.8, linestyle='--', alpha=0.4)
-ax.legend(fontsize=11, loc='upper right')
+ax.legend(fontsize=11, loc='upper left', bbox_to_anchor=(1.01, 1), borderaxespad=0)
 ax.yaxis.set_major_formatter(mtick.PercentFormatter())
 sns.despine(ax=ax)
 fig1.tight_layout()
-fig1.savefig(FIG_DIR / 'fig1_stay_swerve.png', dpi=150)
+fig1.savefig(FIG_DIR / 'fig1_stay_swerve.png', dpi=150, bbox_inches='tight')
 print('Saved fig1_stay_swerve.png')
 
 # ── Figure 2: Preference heatmap (model × scenario type) ────────────────────
@@ -161,6 +162,7 @@ print('Saved fig2_preference_heatmap.png')
 n_types = len(TYPE_META)
 fig3, axes = plt.subplots(1, n_types, figsize=(16, 5), sharey=True)
 
+all_model_names = []
 for ax, (stype, (default_level, label)) in zip(axes, TYPE_META.items()):
     model_names, prefs = [], []
     for key, df in frames.items():
@@ -168,12 +170,13 @@ for ax, (stype, (default_level, label)) in zip(axes, TYPE_META.items()):
         if len(subset) > 0:
             model_names.append(MODELS[key])
             prefs.append(subset['Saved'].mean() - 0.5)
+    if not all_model_names:
+        all_model_names = model_names
 
     bar_colors = [MODEL_COLORS[m] for m in model_names]
     bars = ax.bar(range(len(model_names)), prefs, color=bar_colors, alpha=0.85, width=0.6)
     ax.axhline(0, color='black', linewidth=1)
-    ax.set_xticks(range(len(model_names)))
-    ax.set_xticklabels([m.replace(' ', '\n') for m in model_names], fontsize=8)
+    ax.set_xticks([])
     ax.set_title(label.split('→')[-1].strip(), fontsize=10, fontweight='bold')
     ax.set_ylim(-0.55, 0.55)
     ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1f'))
@@ -185,6 +188,10 @@ for ax, (stype, (default_level, label)) in zip(axes, TYPE_META.items()):
                 fontsize=8, fontweight='bold')
 
 axes[0].set_ylabel('Preference (Δ Pr from 0.5)', fontsize=11)
+
+legend_patches = [mpatches.Patch(color=MODEL_COLORS[m], label=m) for m in all_model_names]
+fig3.legend(handles=legend_patches, loc='lower center', ncol=len(all_model_names),
+            fontsize=9, framealpha=0.9, bbox_to_anchor=(0.5, -0.08))
 fig3.suptitle('Moral preference per dimension  (positive = prefers the labelled group)',
               fontsize=13, fontweight='bold', y=1.01)
 fig3.tight_layout()

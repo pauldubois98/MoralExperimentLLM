@@ -125,7 +125,7 @@ legend_handles = [
     for m in model_order if m in amce['model'].unique()
 ]
 ax.legend(handles=legend_handles, fontsize=10, loc='lower right', framealpha=0.9)
-ax.set_xlim(-0.8, 1.2)
+ax.set_xlim(-1.1, 1.1)
 sns.despine(ax=ax)
 fig.tight_layout()
 fig.savefig(FIG_DIR / 'fig5a_amce_forest.png', dpi=150, bbox_inches='tight')
@@ -185,14 +185,15 @@ model_handles = [
                   markersize=10, linewidth=0, label=MODEL_STYLE[m]['label'])
     for m in llm_models if m in amce['model'].unique()
 ]
-ax.legend(handles=cluster_patches + model_handles, fontsize=9, loc='upper right', framealpha=0.9)
+ax.legend(handles=cluster_patches + model_handles, fontsize=9, loc='upper left',
+          bbox_to_anchor=(1.01, 1), borderaxespad=0, framealpha=0.9)
 ax.set_xlabel(f'PC1 ({S[0]**2 / (S**2).sum()*100:.1f}% variance)', fontsize=11)
 ax.set_ylabel(f'PC2 ({S[1]**2 / (S**2).sum()*100:.1f}% variance)', fontsize=11)
 ax.set_title('Moral profile map: 130 countries (coloured by cluster) + LLMs overlaid\n'
              '(PCA of 9 AMCE dimensions)', fontsize=13, fontweight='bold')
 sns.despine(ax=ax)
 fig.tight_layout()
-fig.savefig(FIG_DIR / 'fig5b_pca_map.png', dpi=150)
+fig.savefig(FIG_DIR / 'fig5b_pca_map.png', dpi=150, bbox_inches='tight')
 plt.close()
 print('Saved fig5b_pca_map.png')
 

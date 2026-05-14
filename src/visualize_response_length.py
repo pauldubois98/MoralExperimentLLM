@@ -93,18 +93,10 @@ for patch, color in zip(bp['boxes'], model_colors):
     patch.set_facecolor(color)
     patch.set_alpha(0.7)
 
-# Annotate with median + mean
-for i, (m, data) in enumerate(zip(model_order, data_by_model)):
-    median = np.median(data)
-    mean   = np.mean(data)
-    ax.text(i, ax.get_ylim()[1] if ax.get_ylim()[1] > 0 else max(d.max() for d in data_by_model if len(d)),
-            f'med={median:.0f}\nmean={mean:.0f}',
-            ha='center', va='bottom', fontsize=7.5, color='#333')
-
 ax.set_xticks(range(len(model_order)))
 ax.set_xticklabels(model_order, fontsize=11)
 ax.set_ylabel('Output tokens', fontsize=12)
-ax.set_title('Response length distribution by model\n(standard + CoT combined)',
+ax.set_title('Response length distribution by model',
              fontsize=13, fontweight='bold')
 ax.yaxis.set_major_locator(mticker.MaxNLocator(integer=True))
 sns.despine(ax=ax)
@@ -114,22 +106,45 @@ plt.close()
 print('Saved fig7a_token_distribution.png')
 
 
-# ── Fig 7b: Token count by choice (STAY vs SWERVE) ───────────────────────────
+# ── Fig 7b: CoT vs standard token count per model ────────────────────────────
+
+# Load per-variant separately for this comparison
+variant_dfs = {}
+for variant in ('standard', 'cot'):
+    rows = []
+    for model, style in MODEL_STYLE.items():
+        path = DATA_DIR / f'responses_{model}_{variant}.csv'
+        if not path.exists():
+            continue
+        df = pd.read_csv(path)
+        df = df[df['Intervention'] == 0].copy()
+        df = df[df['OutputTokens'].notna() & (df['OutputTokens'] > 0)]
+        df['model_label'] = style['label']
+        df['model_key']   = model
+        df['color']       = style['color']
+        rows.append(df)
+    variant_dfs[variant] = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame()
 
 fig, axes = plt.subplots(1, len(model_order), figsize=(3.2 * len(model_order), 5), sharey=False)
 if len(model_order) == 1:
     axes = [axes]
 
-for ax, model_label in zip(axes, model_order):
-    sub = all_df[all_df['model_label'] == model_label]
-    color = sub['color'].iloc[0]
+for ax, model_key in zip(axes, [m for m in MODEL_STYLE if MODEL_STYLE[m]['label'] in model_order]):
+    style = MODEL_STYLE[model_key]
+    color = style['color']
+    label = style['label']
 
-    stay   = sub[sub['LLMChoice'] == 'STAY']['OutputTokens'].dropna()
-    swerve = sub[sub['LLMChoice'] == 'SWERVE']['OutputTokens'].dropna()
+    std_tokens = variant_dfs['standard']
+    std_tokens = std_tokens[std_tokens['model_key'] == model_key]['OutputTokens'].dropna().values if len(std_tokens) else np.array([])
+    cot_tokens = variant_dfs.get('cot', pd.DataFrame())
+    cot_tokens = cot_tokens[cot_tokens['model_key'] == model_key]['OutputTokens'].dropna().values if len(cot_tokens) else np.array([])
 
-    data   = [stay.values, swerve.values]
-    labels = ['STAY', 'SWERVE']
-    colors = [color, '#aaaaaa']
+    r, g, b = int(color[1:3],16), int(color[3:5],16), int(color[5:7],16)
+    dark_color = f'#{int(r*0.55):02x}{int(g*0.55):02x}{int(b*0.55):02x}'
+
+    data   = [d for d in [std_tokens, cot_tokens] if len(d)]
+    xlabels = ['Standard', 'CoT'][:len(data)]
+    colors  = [color, dark_color][:len(data)]
 
     bp = ax.boxplot(data, patch_artist=True, widths=0.5,
                     medianprops=dict(color='black', linewidth=2),
@@ -138,22 +153,17 @@ for ax, model_label in zip(axes, model_order):
         patch.set_facecolor(c)
         patch.set_alpha(0.75)
 
-    for i, (d, lbl) in enumerate(zip(data, labels), 1):
-        ax.text(i, ax.get_ylim()[1] if ax.get_ylim()[1] > 1 else max(max(stay) if len(stay) else 0, max(swerve) if len(swerve) else 0),
-                f'n={len(d)}\nmed={np.median(d):.0f}',
-                ha='center', va='bottom', fontsize=8)
-
-    ax.set_xticklabels(labels, fontsize=11)
-    ax.set_title(model_label, fontsize=10, fontweight='bold', color=color)
+    ax.set_xticklabels(xlabels, fontsize=10)
+    ax.set_title(label, fontsize=9, fontweight='bold', color=color)
     ax.set_ylabel('Output tokens' if ax == axes[0] else '', fontsize=10)
     sns.despine(ax=ax)
 
-fig.suptitle('Response length by choice (STAY vs SWERVE)',
+fig.suptitle('Response length: standard vs CoT by model',
              fontsize=13, fontweight='bold', y=1.02)
 fig.tight_layout()
-fig.savefig(FIG_DIR / 'fig7b_length_by_choice.png', dpi=150, bbox_inches='tight')
+fig.savefig(FIG_DIR / 'fig7b_cot_vs_standard.png', dpi=150, bbox_inches='tight')
 plt.close()
-print('Saved fig7b_length_by_choice.png')
+print('Saved fig7b_cot_vs_standard.png')
 
 
 # ── Fig 7c: Median token count per scenario type ─────────────────────────────
@@ -186,7 +196,7 @@ ax.set_xticks(x)
 ax.set_xticklabels(scenario_labels, fontsize=11)
 ax.set_ylabel('Median output tokens', fontsize=12)
 ax.set_title('Response length by scenario type', fontsize=13, fontweight='bold')
-ax.legend(fontsize=9, loc='upper right', framealpha=0.9)
+ax.legend(fontsize=9, loc='upper left', bbox_to_anchor=(1.01, 1), borderaxespad=0, framealpha=0.9)
 sns.despine(ax=ax)
 fig.tight_layout()
 fig.savefig(FIG_DIR / 'fig7c_length_by_factor.png', dpi=150, bbox_inches='tight')

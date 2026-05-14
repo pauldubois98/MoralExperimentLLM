@@ -94,10 +94,10 @@ ax.set_ylabel('Number of scenarios (out of 2,600 across both variants)', fontsiz
 ax.set_ylim(0, 2800)
 ax.axhline(TOTAL, color='black', linewidth=0.8, linestyle='--', alpha=0.3)
 ax.set_title('Data availability per model — standard + CoT combined\n(% inside bar = valid responses)', fontsize=13, fontweight='bold')
-ax.legend(loc='upper right', fontsize=10, framealpha=0.9)
+ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1), borderaxespad=0, fontsize=10, framealpha=0.9)
 sns.despine(ax=ax)
 fig.tight_layout()
-fig.savefig(FIG_DIR / 'fig_missing1_overview.png', dpi=150)
+fig.savefig(FIG_DIR / 'fig_missing1_overview.png', dpi=150, bbox_inches='tight')
 print('Saved fig_missing1_overview.png')
 
 # ── Fig 2: Failure mode breakdown (pie per model, only failed ones) ───────────
