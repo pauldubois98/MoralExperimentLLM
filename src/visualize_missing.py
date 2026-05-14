@@ -22,6 +22,7 @@ ALL_MODELS = [
     'mistral-large-3',
     'grok-4.1',
     'deepseek-v4-pro',
+    'llama-4-maverick',
 ]
 LABELS = {
     'claude-opus-4-7':  'Claude\nOpus 4.7',
@@ -30,6 +31,7 @@ LABELS = {
     'mistral-large-3':  'Mistral\nLarge 3',
     'grok-4.1':         'Grok 4.1',
     'deepseek-v4-pro':  'DeepSeek\nV4 Pro',
+    'llama-4-maverick': 'Llama 4\nMaverick',
 }
 
 C_VALID   = '#4c9b6e'
@@ -37,25 +39,29 @@ C_PARSE   = '#f0a500'
 C_API     = '#d94f3d'
 C_NOFILE  = '#aaaaaa'
 
-# ── Collect stats ─────────────────────────────────────────────────────────────
+# ── Collect stats (both variants combined) ────────────────────────────────────
 
 rows = []
 for m in ALL_MODELS:
-    path = Path(f'data/responses_{m}_standard.csv')
-    if not path.exists():
-        rows.append({'model': m, 'valid': 0, 'parse_fail': 0, 'api_error': 0, 'no_file': 1300})
-        continue
-    df = pd.read_csv(path)
-    s  = df[df['Intervention'] == 0]
-    api_err   = s['LLMReasoning'].str.startswith('ERROR', na=False).sum()
-    null_saved = s['Saved'].isna().sum()
-    parse_fail = null_saved - api_err
-    valid      = len(s) - null_saved
+    valid, parse_fail, api_err, no_file = 0, 0, 0, 0
+    for variant in ('standard', 'cot'):
+        path = Path(f'data/responses_{m}_{variant}.csv')
+        if not path.exists():
+            no_file += 1300
+            continue
+        df = pd.read_csv(path)
+        s  = df[df['Intervention'] == 0]
+        ae = s['LLMReasoning'].str.startswith('ERROR', na=False).sum()
+        ns = s['Saved'].isna().sum()
+        valid      += len(s) - ns
+        parse_fail += ns - ae
+        api_err    += ae
+        no_file    += 1300 - len(s)   # scenarios not yet attempted in this variant
     rows.append({'model': m, 'valid': valid, 'parse_fail': parse_fail,
-                 'api_error': api_err, 'no_file': 0})
+                 'api_error': api_err, 'no_file': no_file})
 
 stats = pd.DataFrame(rows).set_index('model')
-TOTAL = 1300
+TOTAL = 2600  # 2 variants × 1300
 
 # ── Fig 1: Stacked bar — breakdown per model ──────────────────────────────────
 
@@ -84,10 +90,10 @@ for i, m in enumerate(ALL_MODELS):
 
 ax.set_xticks(x)
 ax.set_xticklabels(xlabs, fontsize=11)
-ax.set_ylabel('Number of scenarios (out of 1,300)', fontsize=11)
-ax.set_ylim(0, 1420)
+ax.set_ylabel('Number of scenarios (out of 2,600 across both variants)', fontsize=11)
+ax.set_ylim(0, 2800)
 ax.axhline(TOTAL, color='black', linewidth=0.8, linestyle='--', alpha=0.3)
-ax.set_title('Data availability per model\n(% inside bar = valid responses)', fontsize=13, fontweight='bold')
+ax.set_title('Data availability per model — standard + CoT combined\n(% inside bar = valid responses)', fontsize=13, fontweight='bold')
 ax.legend(loc='upper right', fontsize=10, framealpha=0.9)
 sns.despine(ax=ax)
 fig.tight_layout()
@@ -127,7 +133,7 @@ for i, m in enumerate(ALL_MODELS):
         at.set_color('white')
     ax.set_title(LABELS[m].replace('\n', ' '), fontsize=11, fontweight='bold')
     valid_pct = v['valid'] / TOTAL * 100
-    ax.text(0, -1.35, f'{int(v["valid"])}/1300 valid ({valid_pct:.0f}%)',
+    ax.text(0, -1.35, f'{int(v["valid"])}/2600 valid ({valid_pct:.0f}%)',
             ha='center', fontsize=9, color='#444')
 
 for j in range(len(ALL_MODELS), len(axes)):
@@ -153,8 +159,12 @@ type_order = ['Gender', 'Fitness', 'SocialStatus', 'Age', 'Utilitarian', 'Specie
 
 type_fail = {}
 for m in parse_models:
-    path = Path(f'data/responses_{m}_standard.csv')
-    df = pd.read_csv(path)
+    dfs = []
+    for variant in ('standard', 'cot'):
+        path = Path(f'data/responses_{m}_{variant}.csv')
+        if path.exists():
+            dfs.append(pd.read_csv(path))
+    df = pd.concat(dfs, ignore_index=True)
     s  = df[df['Intervention'] == 0]
     pf = s[s['Saved'].isna() & ~s['LLMReasoning'].str.startswith('ERROR', na=False)]
     rates = pf.groupby('ScenarioTypeStrict').size() / s.groupby('ScenarioTypeStrict').size()

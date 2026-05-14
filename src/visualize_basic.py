@@ -27,6 +27,9 @@ MODELS = {
     'gpt-5.5':          'GPT-5.5',
     'gemini-3-pro':     'Gemini 3 Pro*',
     'mistral-large-3':  'Mistral Large 3',
+    'grok-4.1':         'Grok 4.1',
+    'deepseek-v4-pro':  'DeepSeek v4 Pro',
+    'llama-4-maverick': 'Llama 4 Maverick',
 }
 
 MODEL_COLORS = {
@@ -34,6 +37,9 @@ MODEL_COLORS = {
     'GPT-5.5':           '#10a37f',
     'Gemini 3 Pro*':     '#4285f4',
     'Mistral Large 3':   '#ff7000',
+    'Grok 4.1':          '#9b59b6',
+    'DeepSeek v4 Pro':   '#e91e63',
+    'Llama 4 Maverick':  '#607d8b',
 }
 
 # Default (preferred) level per scenario type, and its label
@@ -49,11 +55,15 @@ TYPE_META = {
 # ── Load data ────────────────────────────────────────────────────────────────
 
 def load_model(key: str) -> pd.DataFrame | None:
-    path = DATA_DIR / f'responses_{key}_standard.csv'
-    if not path.exists():
+    dfs = []
+    for variant in ('standard', 'cot'):
+        path = DATA_DIR / f'responses_{key}_{variant}.csv'
+        if path.exists():
+            dfs.append(pd.read_csv(path))
+    if not dfs:
         return None
-    df = pd.read_csv(path)
-    df = df[df['Saved'].notna()]               # drop parse failures
+    df = pd.concat(dfs, ignore_index=True)
+    df = df[df['Saved'].notna()]
     df['ModelLabel'] = MODELS[key]
     return df
 
@@ -183,4 +193,3 @@ print('Saved fig3_per_attribute.png')
 
 plt.close('all')
 print('\nAll figures saved to figures/')
-print('* Gemini 3 Pro has only ~11% valid scenarios due to safety filter truncation.')

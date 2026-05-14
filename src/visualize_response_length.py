@@ -31,6 +31,7 @@ MODEL_STYLE = {
     'mistral-large-3':  {'color': '#ff7000', 'label': 'Mistral Large 3'},
     'grok-4.1':         {'color': '#9b59b6', 'label': 'Grok 4.1'},
     'deepseek-v4-pro':  {'color': '#e91e63', 'label': 'DeepSeek v4 Pro'},
+    'llama-4-maverick': {'color': '#607d8b', 'label': 'Llama 4 Maverick'},
 }
 
 FACTOR_LABELS = {
@@ -43,22 +44,23 @@ FACTOR_LABELS = {
     'Random':      'Random',
 }
 
-# ── Load all standard response files ──────────────────────────────────────────
+# ── Load all response files (standard + CoT combined) ─────────────────────────
 
 dfs = []
 for model, style in MODEL_STYLE.items():
-    path = DATA_DIR / f'responses_{model}_standard.csv'
-    if not path.exists():
-        continue
-    df = pd.read_csv(path)
-    # Keep one row per scenario (Intervention==0) to avoid double-counting
-    df = df[df['Intervention'] == 0].copy()
-    df = df[df['OutputTokens'].notna() & (df['OutputTokens'] > 0)]
-    df['model_label'] = style['label']
-    df['model_key']   = model
-    df['color']       = style['color']
-    df['char_count']  = df['LLMReasoning'].fillna('').str.len()
-    dfs.append(df)
+    for variant in ('standard', 'cot'):
+        path = DATA_DIR / f'responses_{model}_{variant}.csv'
+        if not path.exists():
+            continue
+        df = pd.read_csv(path)
+        # Keep one row per scenario (Intervention==0) to avoid double-counting
+        df = df[df['Intervention'] == 0].copy()
+        df = df[df['OutputTokens'].notna() & (df['OutputTokens'] > 0)]
+        df['model_label'] = style['label']
+        df['model_key']   = model
+        df['color']       = style['color']
+        df['char_count']  = df['LLMReasoning'].fillna('').str.len()
+        dfs.append(df)
 
 if not dfs:
     raise FileNotFoundError('No response files found.')
@@ -102,7 +104,7 @@ for i, (m, data) in enumerate(zip(model_order, data_by_model)):
 ax.set_xticks(range(len(model_order)))
 ax.set_xticklabels(model_order, fontsize=11)
 ax.set_ylabel('Output tokens', fontsize=12)
-ax.set_title('Response length distribution by model\n(standard prompt variant)',
+ax.set_title('Response length distribution by model\n(standard + CoT combined)',
              fontsize=13, fontweight='bold')
 ax.yaxis.set_major_locator(mticker.MaxNLocator(integer=True))
 sns.despine(ax=ax)
