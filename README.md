@@ -96,20 +96,19 @@ data/
   amce_all_models_{standard|emphasis}.csv     # Combined table (all models + human avg)
 
 figures/
-  fig5a_amce_forest.png          # Forest plot: 9 AMCE factors × all models
-  fig5b_pca_map.png              # PCA of 130 countries with LLMs overlaid
-  fig5c_radar.png                # Radar chart: 9 AMCE dimensions
+  fig_missing*.png               # Missing data diagnostics (3 figures)
   fig1_stay_swerve.png           # STAY/SWERVE rates per model
   fig2_preference_heatmap.png    # Per-attribute preference heatmap
   fig3_per_attribute.png         # Per-attribute bar chart
-  fig_missing*.png               # Missing data diagnostics (3 figures)
+  fig5a_amce_forest.png          # Forest plot: 9 AMCE factors × all models
+  fig5b_pca_map.png              # PCA of 130 countries with LLMs overlaid
+  fig5c_radar.png                # Radar chart: 9 AMCE dimensions
+  fig6a_prompt_delta_heatmap.png # Emphasis − standard AMCE delta heatmap
+  fig6b_prompt_forest.png        # Side-by-side forest: standard vs Emphasis
   fig7a_token_distribution.png   # Output token violin+box per model
-  fig7a_cot_vs_standard.png      # Token counts: standard vs Emphasis side-by-side
   fig7b_length_by_choice.png     # Token count split by STAY/SWERVE choice
   fig7c_length_by_factor.png     # Median tokens per scenario type
   fig7d_latency.png              # Latency CDF per model
-  fig6a_prompt_delta_heatmap.png # Emphasis − standard AMCE delta heatmap
-  fig6b_prompt_forest.png        # Side-by-side forest: standard vs Emphasis
 ```
 
 ## The 9 AMCE dimensions

@@ -14,7 +14,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 import seaborn as sns
 
 warnings.filterwarnings('ignore')
@@ -124,21 +123,21 @@ for ax, model in zip(axes, common_models):
     emphasis_sub = emphasis[emphasis['model'] == model].set_index('factor')
 
     for fi, factor in enumerate(factors):
-        y_std = fi + 0.15
-        y_cot = fi - 0.15
+        y_standard = fi + 0.15
+        y_emphasis = fi - 0.15
 
         if factor in std_sub.index:
             row = std_sub.loc[factor]
-            ax.plot([row['ci_lo'], row['ci_hi']], [y_std, y_std],
+            ax.plot([row['ci_lo'], row['ci_hi']], [y_standard, y_standard],
                     color=style['color'], linewidth=1.5, alpha=0.5)
-            ax.plot(row['estimate'], y_std, 'o', color=style['color'],
+            ax.plot(row['estimate'], y_standard, 'o', color=style['color'],
                     markersize=7, zorder=3, label='standard' if fi == 0 else '')
 
         if factor in emphasis_sub.index:
             row = emphasis_sub.loc[factor]
-            ax.plot([row['ci_lo'], row['ci_hi']], [y_cot, y_cot],
+            ax.plot([row['ci_lo'], row['ci_hi']], [y_emphasis, y_emphasis],
                     color=style['color'], linewidth=1.5, alpha=0.5, linestyle='--')
-            ax.plot(row['estimate'], y_cot, 's', color=style['color'],
+            ax.plot(row['estimate'], y_emphasis, 's', color=style['color'],
                     markersize=7, zorder=3, markerfacecolor='white',
                     markeredgewidth=1.5, label='Emphasis' if fi == 0 else '')
 
