@@ -76,6 +76,8 @@ Confidence intervals were computed as ±1.96 SE.
 For analyses combining both prompt variants, AMCE estimates and standard errors were averaged across the two variants per model.
 The human global average baseline was computed from the 130-country dataset of [AWAD2018] by averaging country-level estimates.
 
+To place LLM profiles relative to the 130-country human distribution, PCA was performed on the country-level AMCE matrix from [AWAD2018] and projected each LLM into the same space.
+
 ---
 
 ## 3. Results
@@ -142,71 +144,54 @@ GPT-5.5, Gemini, and Grok reach the theoretical maximum (+1.00). Claude (+0.87) 
 Mistral and Llama 4 Maverick are near-indifferent to species.
 
 
-### 3.3 Moral distance map: PCA of nine-dimensional profiles
+### 3.2 Moral distance map: PCA of nine-dimensional profiles
 
-To place LLM profiles relative to the 130-country human distribution, PCA was performed on the country-level AMCE matrix from [AWAD2018] and projected each LLM into the same space (Figure 6).
-
+Projecting the LLMs embeddings on the PCA of human answers (figure 4), all seven LLMs fall outside the three main human cultural clusters.
+They even fall far from the convex envelope of all countries.
 ![PCA moral distance map](../figures/fig5b_pca_map.png)
-*Figure 6. PCA of nine-dimensional AMCE profiles for 130 countries (coloured by cluster: Western, Eastern, Latin/Southern) with LLMs overlaid. All seven LLMs fall outside the main human clusters.*
-
-All seven LLMs fall outside the three main human cultural clusters.
-The nearest country for each model (by Euclidean distance in the original nine-dimensional AMCE space) is:
-
-| Model | Nearest country |
-|---|---|
-| Claude Opus 4.7 | Jordan |
-| GPT-5.5 | Denmark |
-| Gemini 3 Pro | Denmark |
-| Mistral Large 3 | Brazil |
-| Grok 4.1 | Pakistan |
-| DeepSeek v4 Pro | Pakistan |
-| Llama 4 Maverick | Jersey |
+*Figure 4. PCA of nine-dimensional AMCE profiles for 130 countries (coloured by cluster: Western, Eastern, Latin/Southern) with LLMs overlaid. All seven LLMs fall outside the main human clusters.*
 
 This finding is striking: despite all models having been developed by companies based in the United States, Europe, and China and trained predominantly on English-language data, their moral profiles do not cluster near any major human population in the PCA space.
-The divergence from the human distribution suggests that standard RLHF alignment processes do not systematically instil the moral preferences of any particular human population.
+The divergence from the human distribution suggests that standard RLHF alignment and other post training processes do not systematically instil the human moral preferences for this kind of questions.
 
-### 3.4 Inter-model diversity
+### 3.3 Inter-model diversity
 
-The variation among models is comparable in magnitude to the variation across human cultural clusters.
+The variation among models is larger in magnitude to the variation across human cultural clusters.
 Mistral Large 3 inverts the human preference on four dimensions (Legality, Relation to AV, Age, and Gender), while Llama 4 Maverick shows the highest intervention bias of any model tested, paired with near-indifference to species.
-GPT-5.5 and Gemini 3 Pro converge closely, both mapping to Denmark and displaying similar profiles (near-ceiling on Species and No. of Lives, moderate on intervention).
-This inter-model diversity has a concrete implication: the choice of LLM vendor for an autonomous system is not morally neutral, and could lead to systematically different decisions in rare but consequential edge cases.
+GPT-5.5 and Gemini 3 Pro and Caude Opus 4.7 converge closely, both displaying similar profiles (near-ceiling on Species and No. of Lives, moderate on intervention).
+This inter-model diversity has a concrete implication: the choice of LLM vendor for an autonomous system is not morally neutral.
+If current modern LLMs are used in autonomous vehicules in the future, changing LLM engine on a car could lead to systematically different decisions.
 
 ### 3.5 Effect of emphasis prompting
 
-Comparing standard and emphasis prompt variants (Figures 7 and 8) reveals that prompting style has minimal effect on AMCE estimates for the three most widely deployed models (Claude, GPT-5.5, Gemini).
-Some variation is visible for Mistral, Grok, and Llama 4 Maverick notably Mistral's Social Status estimate shifts by +0.13 points under emphasis prompting but no dimension shows a reversal of sign for any mainstream model.
-
-![AMCE delta heatmap](../figures/fig6a_prompt_delta_heatmap.png)
-*Figure 7. Heatmap of AMCE differences (emphasis − standard) per model and dimension. Near-zero entries (white) indicate prompt-invariant preferences.*
+Comparing standard and emphasis prompt variants (Figures 5) reveals that prompting style has minimal effect on AMCE estimates for the three most widely deployed models (Claude, GPT-5.5, Gemini).
+Some variation is visible for Mistral, Grok, and Llama 4 Maverick, but changes remain minor.
 
 ![Standard vs emphasis forest plot](../figures/fig6b_prompt_forest.png)
-*Figure 8. Side-by-side AMCE estimates for standard (filled circle) and emphasis (open square) variants per model.*
+*Figure 5. Side-by-side AMCE estimates for standard (filled circle) and emphasis (open square) variants per model.*
 
 This stability suggests that the moral preferences captured here are robust properties of model weights rather than surface-level response styles that vary with framing.
 
-### 3.6 Response length and latency
+### 3.6 Response length
 
-Response length varies substantially across models (Figure 9).
-Gemini 3 Pro produces the longest responses (median 913 tokens combined across variants), while GPT-5.5 is the most concise (median 164 tokens).
-Importantly, response length shows no meaningful variation across the seven scenario types (Figure 10), indicating that models do not deliberate more on any particular moral dimension than others.
+Response length varies substantially across models (Figure 6).
+Gemini 3 Pro produces the longest responses (median 913 tokens combined across variants), while GPT-5.5 is the most concise (median 164 tokens, more than 5 times shorter).
+Response length shows no meaningful variation across the seven scenario types (Figure 7), indicating that models do not deliberate more on any particular moral dimension than others.
 
 ![Token distribution](../figures/fig7a_token_distribution.png)
-*Figure 9. Output token distribution by model (standard + emphasis combined). Violin shows density; box shows quartiles.*
+*Figure 6. Output token distribution by model (standard + emphasis combined). Violin shows density; box shows quartiles.*
 
 ![Token count by scenario type](../figures/fig7c_length_by_factor.png)
-*Figure 10. Median output tokens by scenario type. No systematic variation is observed across moral dimensions, for any model.*
+*Figure 7. Median output tokens by scenario type. No systematic variation is observed across moral dimensions, for any model.*
 
-Emphasis prompting increases response length for all models (Figure 11), consistent with the instruction to think before answering yet this additional reasoning does not translate into different preferences (Section 3.5).
+Emphasis prompting was not found to significantly increase response length.
 
 ![Standard vs emphasis token comparison](../figures/fig7b_emphasis_vs_standard.png)
 *Figure 11. Output token counts for standard (lighter) vs. emphasis (darker) prompt variants per model.*
 
-Latency varies substantially across providers (Figure 12).
-Given that the three mainstream models display broadly similar moral profiles, response speed becomes a primary differentiating factor for deployment in time-sensitive contexts in this light, GPT-5.5's combination of short responses and low latency is noteworthy.
-
-![Latency CDF](../figures/fig7d_latency.png)
-*Figure 12. Cumulative distribution of response latency by model.*
+Given that the three mainstream models display broadly similar moral profiles, response length becomes a primary differentiating factor.
+The next token generation architecture implies that response speed is linked to response length.
+For deployment in time-sensitive contexts in this light, GPT-5.5's short responses is noteworthy.
 
 ---
 
