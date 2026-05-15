@@ -176,7 +176,7 @@ This stability suggests that the moral preferences captured here are robust prop
 
 Response length varies substantially across models (Figure 6).
 Gemini 3 Pro produces the longest responses (median 913 tokens combined across variants), while GPT-5.5 is the most concise (median 164 tokens, more than 5 times shorter).
-Response length shows no meaningful variation across the seven scenario types (Figure 7), indicating that models do not deliberate more on any particular moral dimension than others.
+Response length shows that models tend to delibreate faster (with shorter responses) in cases where they show strong preferences (Figure 7).
 
 ![Token distribution](../figures/fig7a_token_distribution.png)
 *Figure 6. Output token distribution by model (standard + emphasis combined). Violin shows density; box shows quartiles.*
@@ -200,54 +200,60 @@ For deployment in time-sensitive contexts in this light, GPT-5.5's short respons
 ### 4.1 LLMs are morally out-of-distribution relative to humans
 
 The most robust finding of this study is that no tested LLM sits within the main human cultural clusters on the PCA moral map, despite all being trained primarily on human-generated content.
-This out-of-distribution result is consistent with the hypothesis that RLHF and related alignment techniques do not faithfully reproduce the moral preferences of any human population, but rather create a novel moral profile that prioritises certain values (high utilitarian weight on number of lives, near-universal human-over-animal preference) while discarding others (age preference, gender preference) that are robustly present in human data.
+This out-of-distribution result is consistent with the hypothesis that RLHF and related alignment techniques do not faithfully reproduce the moral preferences of any human population.
+They instead create a novel moral profile that prioritises certain values (high utilitarian weight on number of lives, near-universal human-over-animal preference) while discarding others (age preference, gender preference) that are robustly present in human data.
 Whether this constitutes a bug or a feature depends on normative commitments: one might argue that LLMs have corrected for biases present in human moral intuitions, or that they have drifted from the values of the populations they are meant to serve.
 
 ### 4.2 Substantial inter-model diversity raises deployment questions
 
 The diversity among LLMs is surprising.
-One might expect models trained on overlapping datasets and aligned with similar constitutional principles to converge on similar moral profiles.
-Instead, Mistral and Llama 4 Maverick display profiles that partially invert human norms, while GPT-5.5 and Grok 4.1 display near-ceiling utilitarian preferences on Species and No. of Lives that no human population approaches.
+One might expect models trained on overlapping datasets (basically all of internet) to converge on similar moral profiles.
+Instead, Mistral and Llama 4 Maverick display profiles that partially invert human norms, while GPT-5.5 and Grok 4.1 display near-ceiling utilitarian preferences on Species and Nunmber of Lives that no human population approaches.
 
 This heterogeneity has a practical implication that goes beyond academic interest.
 Unlike human drivers, who show broadly similar moral intuitions regardless of the car manufacturer, AI-powered vehicles could introduce model-brand-level moral heterogeneity into public space.
 In a future where LLMs govern autonomous systems operating in public environments, the choice of AI provider is equivalent to a choice of moral framework.
-This concern is not hypothetical: LLMs are already deployed in robotics platforms capable of physical manipulation [BROHAN2023, DRIESS2023, PALIGEMMA], and the extension to autonomous vehicles is architecturally straightforward.
+This concern is not fully hypothetical: LLMs are already deployed in robotics platforms capable of physical manipulation [BROHAN2023, DRIESS2023, PALIGEMMA].
+The extension to autonomous vehicles is a possibility.
+At the moment, it seems that car manufacturer are building specific models for driving.
+It is unclear wether this path will continue, or if alternative approaches using LLMs will emerge.
 
 ### 4.3 Gender neutrality as an alignment artefact
 
-The near-universal gender indifference among LLMs all show AMCEs within ±0.07 on the Gender dimension, versus +0.12 for the human average is best understood as a consequence of deliberate alignment choices rather than an independent moral stance.
-Developers have invested significant effort in making models gender-neutral in content generation to correct for historical biases in training data (e.g., the tendency to assign male gender to professional roles).
+The near-universal gender indifference among all LLMs is observed.
+Meanwhile humans show a small but statistically significant bias.
+Developers have invested significant effort in making models gender-neutral in content generation to correct for historical biases in training data (e.g., the tendency to assign male/female gender to specific professional roles).
 This correction appears to generalise to moral reasoning contexts, suppressing the modest human preference for saving women that emerges consistently across cultures in the Moral Machine data [GEMINI-BIAS].
-Whether this generalisation is desirable is an open question: in structured dilemma contexts, gender neutrality differs from human norms but may reflect a principled commitment to equality that humans endorse in the abstract even if not in the moment.
+Whether this generalisation is desirable is an open question.
+In structured dilemma contexts, gender neutrality differs from human norms.
+But this difference may reflect a principled commitment to equality that humans are trying to endorse in the abstract even if not in practice at the moment.
 
 ### 4.4 Emphasis prompting does not change moral preferences
 
 The finding that emphasis prompting does not materially alter AMCE estimates is reassuring for practitioners but raises theoretical questions.
 It suggests that moral preferences are encoded as relatively stable properties of model weights rather than as context-sensitive response strategies.
-Emphasis prompting consistently elicits longer responses models generate more text when asked to reason carefully but this additional text does not correspond to changed decisions.
-From a deployment standpoint, this implies that simple prompt engineering is unlikely to be an effective tool for adjusting LLM moral profiles, and that aligning a model's moral preferences with a target population would require retraining or fine-tuning.
+From a deployment standpoint, this implies that simple prompt engineering is unlikely to be an effective tool for adjusting LLM moral profiles.
+Aligning a model's moral preferences with a target population would likely require retraining or fine-tuning.
+Note that while reflection emphesis has been tested, prompt manipulation has not.
+The emphasis and standard prompts differ in only one sentence.
+More substantial prompt variations may produce larger effects.
+It is left for future research to test if prompting the model to alig with different moral code can change the model's decision.  
 
-### 4.5 Parse failures as a reliability concern
-
-A small fraction of responses across all models could not be parsed as valid STAY/SWERVE choices.
-In deployed systems, such failures would lead to undefined behaviour a meaningful safety concern.
-All 20 GPT-5.5 parse failures in the standard run were caused by API-side token truncation at exactly 512 tokens, indicating a configuration issue rather than a model-level failure; these were successfully resolved on rerun.
-Engineers deploying LLMs in safety-critical decision pipelines should implement robust output validation and fallback logic, and monitor parse failure rates as a reliability metric.
-
-### 4.6 Limitations
+### 4.5 Limitations
 
 This study has several limitations.
 First, all scenarios were presented in English; moral preferences may shift in other languages [AWAD2018].
 Second, temperature was set to zero for reproducibility, but some models may exhibit different preferences at higher temperatures.
-Third, the Moral Machine paradigm, while widely validated, abstracts away many real-world complexities of autonomous driving.
-Fourth, the emphasis and standard prompts differ in only one sentence; more substantial prompt variations (e.g., role assignment, explicit ethical frameworks) may produce larger effects.
-Finally, model weights change over time through fine-tuning updates; the profiles reported here reflect model states as of May 2026.
+Third, the Moral Machine paradigm, abstracts away many real-world complexities of autonomous driving.
+Finally, model versions change at a very fast rate.
+Frontier models were tested so that results remain up to date for as long as possible.
+The profiles reported here reflect model states as of May 2026.
 
-### 4.7 Conclusion
+### 4.6 Conclusion
 
-Frontier LLMs exhibit consistent and distinct moral preferences that diverge from the human global average on multiple dimensions, differ substantially from one another, and remain stable under prompt variation.
-These findings suggest that the implicit moral profiles of current AI systems are neither well-calibrated to human values nor uniform across providers a combination that warrants careful consideration as LLMs are increasingly deployed in systems with real-world consequences for human welfare.
+Frontier LLMs exhibit consistent and distinct moral preferences that diverge from the human global average on multiple dimensions, differ substantially from one another, but remain stable under (small) prompt variation.
+These findings suggest that the implicit moral profiles of current AI systems are neither well-calibrated to human values nor uniform across providers.
+A combination that warrants careful consideration as LLMs are increasingly deployed in systems with real-world consequences for human welfare.
 
 ---
 
