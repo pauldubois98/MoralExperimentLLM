@@ -21,8 +21,9 @@ The response length varies by an order of magnitude across models despite broadl
 As autonomous vehicles, surgical robots, and other safety-critical systems increasingly incorporate AI decision-making, the question of whether AI systems share human moral intuitions becomes practically consequential.
 A self-driving car that must choose between hitting a group of pedestrians or swerving into its own passengers cannot defer the decision; some preference ordering must be encoded, implicitly or explicitly, in its behaviour.
 
-The Moral Machine experiment [AWAD2018] provided the largest empirical dataset of human moral preferences to date, asking millions of participants across 130 countries to judge unavoidable accident scenarios involving an autonomous vehicle.
-The study identified nine binary moral dimensions intervention, relation to the vehicle, legality of crossing, gender, physical fitness, social status, age, number of lives, and species and found that aggregate human preferences, quantified as Average Marginal Causal Effects, vary substantially across cultural clusters while sharing a common core (strong preference for saving humans over animals, more lives over fewer, and legal pedestrians over illegal ones).
+The Moral Machine experiment [AWAD2018] provided the largest empirical dataset of human moral preferences, asking millions of participants across 130 countries to judge unavoidable accident scenarios involving an autonomous vehicle.
+The study identified nine binary moral dimensions: intervention, relation to the vehicle, legality of crossing, gender, physical fitness, social status, age, number of lives, and species.
+The study found that aggregate human preferences, quantified as Average Marginal Causal Effects, vary substantially across cultural clusters while sharing a common core (strong preference for saving humans over animals, more lives over fewer, and legal pedestrians over illegal ones).
 
 The rapid deployment of large language models in agentic and embodied settings [BROHAN2023, DRIESS2023] including robotics platforms capable of physical action makes the question of LLM moral alignment newly urgent.
 If an LLM governs a robot navigating a crowded environment, its implicit preferences over human lives matter.
@@ -60,25 +61,15 @@ Seven frontier models were queried via the OpenRouter API, which provides a unif
 | DeepSeek v4 Pro | DeepSeek | `deepseek/deepseek-v4-pro` |
 | Llama 4 Maverick | Meta | `meta-llama/llama-4-maverick` |
 
-All models were queried at temperature 0 with a 2,048-token output budget to ensure deterministic and complete responses.
-Each model received two prompt variants: a **standard** prompt instructing the model to "analyse the situation carefully and make a decision", and an **emphasis** prompt instructing it to "think carefully about the consequences of each choice before deciding." Both variants used the same system role (ethical advisor for autonomous vehicle policy) and required the model to end its response with either `STAY` or `SWERVE` on a final line.
-
-### 2.3 Data collection and parse failure handling
-
-The runner was implemented as a resumable concurrent batch executor supporting up to five parallel workers per model.
-For each scenario, the model output was parsed by searching for the last occurrence of `STAY` or `SWERVE` in the response.
+All models were queried at temperature 0 to ensure deterministic responses.
+Each model received two prompt variants: a **standard** prompt instructing the model to "analyse the situation carefully and make a decision", and an **emphasis** prompt instructing it to "think carefully about the consequences of each choice before deciding." 
+Both variants used the same system role (ethical advisor for autonomous vehicle policy) and required the model to end its response with either `STAY` or `SWERVE` on a final line.
 Rows where no valid choice could be extracted were flagged as parse failures and retried in subsequent runs.
-Figure A1 summarises data availability across all models and variants.
-
-![Data availability per model standard and emphasis combined](../figures/fig_missing1_overview.png)
-*Figure A1. Data availability across both prompt variants. Parse failures on Gemini 3 Pro arise from safety-filter-induced truncation. All GPT-5.5 parse failures (n=20) occurred at exactly 512 output tokens, indicating API-side truncation; these were successfully rerun.*
-
-Final scenario counts per model ranged from 1,283 (Gemini 3 Pro, emphasis) to 1,300 (Claude Opus 4.7, Mistral Large 3, Grok 4.1, Llama 4 Maverick, both variants).
-All models exceeded the 50-scenario minimum required for regression.
+Gemini 3 Pro arise parsing failure due to safety-filter in 15 cases out of the 1300 tested.
 
 ### 2.4 AMCE computation
 
-Following [AWAD2018], nine Average Marginal Causal Effects were computed per model using weighted ordinary least squares with inverse-probability weights derived from the scenario generation design, and clustered standard errors at the session level.
+Following [AWAD2018], nine Average Marginal Causal Effects were computed per model using weighted ordinary least squares with inverse-probability weights.
 The nine AMCEs quantify the change in probability of a group being saved when the relevant attribute shifts from its baseline to its target value (e.g., from illegal crossing to legal crossing for the Legality dimension).
 Confidence intervals were computed as ±1.96 SE.
 
