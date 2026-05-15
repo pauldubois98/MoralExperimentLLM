@@ -6,7 +6,7 @@
 
 ## Abstract
 
-The Moral Machine experiment collected over 40 million human responses to trolley-problem-style autonomous vehicle dilemmas across 130 countries, revealing systematic cross-cultural variation in moral preferences along nine dimensions. We replicate this experiment with seven frontier large language models (LLMs) — Claude Opus 4.7, GPT-5.5, Gemini 3 Pro, Mistral Large 3, Grok 4.1, DeepSeek v4 Pro, and Llama 4 Maverick — querying each with 1,300 standardised scenarios and computing Average Marginal Causal Effects (AMCEs) using the original paper's weighted OLS regression methodology. We find that LLMs occupy a distinct region of moral space: all seven fall outside the main human country clusters in a PCA of the nine-dimensional AMCE profile space, suggesting that current models are not well-aligned with the distribution of human moral preferences even on well-structured dilemmas. At the same time, models differ substantially from one another, raising practical questions about whose values should govern AI systems deployed in safety-critical contexts. We further find that chain-of-thought-style "emphasis" prompting produces negligible changes in AMCE estimates for most models, and that response length varies by an order of magnitude across models despite broadly similar preference profiles among the three most widely deployed systems.
+The Moral Machine experiment collected over 40 million human responses to trolley-problem-style autonomous vehicle dilemmas across 130 countries, revealing systematic cross-cultural variation in moral preferences along nine dimensions. This study replicates this experiment with seven frontier large language models (LLMs): Claude Opus 4.7, GPT-5.5, Gemini 3 Pro, Mistral Large 3, Grok 4.1, DeepSeek v4 Pro, and Llama 4 Maverick. The Average Marginal Causal Effects (AMCEs) was computed using the original paper's weighted OLS regression methodology. The results show that LLMs occupy a distinct region of moral space: all seven fall outside the main human country clusters in a PCA of the nine-dimensional AMCE profile space, suggesting that current models are not well-aligned with the distribution of human moral preferences even on well-structured dilemmas. At the same time, models differ substantially from one another, raising practical questions about whose values should govern AI systems deployed in safety-critical contexts. This study further finds that modifying the prompt produces negligible changes in AMCE estimates. The response length varies by an order of magnitude across models despite broadly similar preference profiles among the three most widely deployed systems.
 
 ---
 
@@ -16,7 +16,7 @@ As autonomous vehicles, surgical robots, and other safety-critical systems incre
 
 The Moral Machine experiment [AWAD2018] provided the largest empirical dataset of human moral preferences to date, asking millions of participants across 130 countries to judge unavoidable accident scenarios involving an autonomous vehicle. The study identified nine binary moral dimensions — intervention, relation to the vehicle, legality of crossing, gender, physical fitness, social status, age, number of lives, and species — and found that aggregate human preferences, quantified as Average Marginal Causal Effects, vary substantially across cultural clusters while sharing a common core (strong preference for saving humans over animals, more lives over fewer, and legal pedestrians over illegal ones).
 
-The rapid deployment of large language models in agentic and embodied settings [BROHAN2023, DRIESS2023] — including robotics platforms capable of physical action — makes the question of LLM moral alignment newly urgent. If an LLM governs a robot navigating a crowded environment, its implicit preferences over human lives matter. Yet we know surprisingly little about whether the moral profiles of current frontier models resemble those of humans, and how much models differ from one another.
+The rapid deployment of large language models in agentic and embodied settings [BROHAN2023, DRIESS2023] — including robotics platforms capable of physical action — makes the question of LLM moral alignment newly urgent. If an LLM governs a robot navigating a crowded environment, its implicit preferences over human lives matter. Yet surprisingly little is known about whether the moral profiles of current frontier models resemble those of humans, and how much models differ from one another.
 
 This study asks three questions:
 
@@ -32,11 +32,11 @@ Following the broader effort to benchmark LLMs along non-capability dimensions �
 
 ### 2.1 Scenario generation
 
-We replicated the Moral Machine scenario structure following [AWAD2018]. Each session consists of 13 paired dilemmas presented in a fixed block. Across 100 sessions, we generated 1,300 unique scenarios, each represented as two rows in the dataset (one per side of the dilemma) encoding the following binary attributes: intervention type (stay/swerve), barrier presence, pedestrian composition (ped-vs-ped or ped-vs-passenger), crossing signal (legal/illegal/no crossing), scenario type (Gender, Fitness, SocialStatus, Age, Utilitarian, Species, or Random), attribute level, and extended session ID for clustering.
+This study replicated the Moral Machine scenario structure following [AWAD2018]. Each session consists of 13 paired dilemmas presented in a fixed block. Across 100 sessions, 1,300 unique scenarios were generated, each represented as two rows in the dataset (one per side of the dilemma) encoding the following binary attributes: intervention type (stay/swerve), barrier presence, pedestrian composition (ped-vs-ped or ped-vs-passenger), crossing signal (legal/illegal/no crossing), scenario type (Gender, Fitness, SocialStatus, Age, Utilitarian, Species, or Random), attribute level, and extended session ID for clustering.
 
 ### 2.2 Models
 
-We queried seven frontier models via the OpenRouter API, which provides a unified OpenAI-compatible interface:
+Seven frontier models were queried via the OpenRouter API, which provides a unified OpenAI-compatible interface:
 
 | Model | Provider | OpenRouter ID |
 |---|---|---|
@@ -61,9 +61,9 @@ Final scenario counts per model ranged from 1,283 (Gemini 3 Pro, emphasis) to 1,
 
 ### 2.4 AMCE computation
 
-Following [AWAD2018], we computed nine Average Marginal Causal Effects per model using weighted ordinary least squares with inverse-probability weights derived from the scenario generation design, and clustered standard errors at the session level. The nine AMCEs quantify the change in probability of a group being saved when the relevant attribute shifts from its baseline to its target value (e.g., from illegal crossing to legal crossing for the Legality dimension). Confidence intervals were computed as ±1.96 SE.
+Following [AWAD2018], nine Average Marginal Causal Effects were computed per model using weighted ordinary least squares with inverse-probability weights derived from the scenario generation design, and clustered standard errors at the session level. The nine AMCEs quantify the change in probability of a group being saved when the relevant attribute shifts from its baseline to its target value (e.g., from illegal crossing to legal crossing for the Legality dimension). Confidence intervals were computed as ±1.96 SE.
 
-For analyses combining both prompt variants, we averaged AMCE estimates and standard errors across the two variants per model. The human global average baseline was computed from the 130-country dataset of [AWAD2018] by averaging country-level estimates.
+For analyses combining both prompt variants, AMCE estimates and standard errors were averaged across the two variants per model. The human global average baseline was computed from the 130-country dataset of [AWAD2018] by averaging country-level estimates.
 
 ---
 
@@ -71,7 +71,7 @@ For analyses combining both prompt variants, we averaged AMCE estimates and stan
 
 ### 3.1 STAY vs. SWERVE baseline rates
 
-Before examining the nine moral dimensions, we note that all seven models swerve (intervene) at substantially higher rates than a random baseline, ranging from roughly 60% to over 90% SWERVE across models (Figure 1). Llama 4 Maverick exhibits the highest intervention rate; Mistral Large 3 the lowest among the seven.
+Before examining the nine moral dimensions, all seven models swerve (intervene) at substantially higher rates than a random baseline, ranging from roughly 60% to over 90% SWERVE across models (Figure 1). Llama 4 Maverick exhibits the highest intervention rate; Mistral Large 3 the lowest among the seven.
 
 ![STAY vs SWERVE rates by model](../figures/fig1_stay_swerve.png)
 *Figure 1. Proportion of STAY vs. SWERVE decisions per model, averaged across both prompt variants.*
@@ -83,7 +83,7 @@ Figure 2 shows the forest plot of AMCE estimates for all nine dimensions, compar
 ![AMCE forest plot](../figures/fig5a_amce_forest.png)
 *Figure 2. Average Marginal Causal Effects for nine moral dimensions across all seven LLMs and the human global average (averaged across standard and emphasis variants). Positive values indicate preference for the right-side group; error bars show 95% confidence intervals.*
 
-We summarise the key findings dimension by dimension:
+The key findings are summarised dimension by dimension:
 
 **Intervention (stay→swerve).** Humans show a weak preference for omission over commission (AMCE = +0.05, favouring swerving only marginally). All seven LLMs show a much stronger intervention preference, ranging from +0.13 (Mistral) to +0.66 (Llama 4 Maverick). Llama 4 Maverick stands out as a strongly action-oriented model: it swerves in nearly two-thirds more cases than baseline regardless of outcome composition.
 
@@ -91,7 +91,7 @@ We summarise the key findings dimension by dimension:
 
 **Legality (illegal→legal).** Humans reward legal pedestrians (AMCE = +0.35). Claude (+0.57), GPT-5.5 (+0.61), and Gemini (+0.61) substantially amplify this preference. Grok (+0.21) and DeepSeek (+0.27) are attenuated but positive. Mistral (−0.45) and Llama 4 Maverick (−0.25) invert it, favouring illegal crossers — a striking reversal of the human norm.
 
-**Gender (male→female).** Humans display a moderate preference for saving women (AMCE = +0.12). All LLMs show near-zero gender preference (range: −0.07 to +0.07), effectively gender-neutral. We hypothesise that this reflects deliberate alignment choices by developers to avoid reinforcing gender stereotypes, applied broadly enough to suppress gender preferences even in emergency contexts where human intuitions diverge (see Section 4.3).
+**Gender (male→female).** Humans display a moderate preference for saving women (AMCE = +0.12). All LLMs show near-zero gender preference (range: −0.07 to +0.07), effectively gender-neutral. This likely reflects deliberate alignment choices by developers to avoid reinforcing gender stereotypes, applied broadly enough to suppress gender preferences even in emergency contexts where human intuitions diverge (see Section 4.3).
 
 **Fitness (large→fit).** Humans mildly prefer fitter individuals (AMCE = +0.15). Most LLMs match this closely (range: +0.04 to +0.16), with Mistral (−0.12) being the exception.
 
@@ -118,7 +118,7 @@ Figures 4 and 5 display the six character-attribute dimensions as a heatmap and 
 
 ### 3.3 Moral distance map: PCA of nine-dimensional profiles
 
-To place LLM profiles relative to the 130-country human distribution, we performed PCA on the country-level AMCE matrix from [AWAD2018] and projected each LLM into the same space (Figure 6).
+To place LLM profiles relative to the 130-country human distribution, PCA was performed on the country-level AMCE matrix from [AWAD2018] and projected each LLM into the same space (Figure 6).
 
 ![PCA moral distance map](../figures/fig5b_pca_map.png)
 *Figure 6. PCA of nine-dimensional AMCE profiles for 130 countries (coloured by cluster: Western, Eastern, Latin/Southern) with LLMs overlaid. All seven LLMs fall outside the main human clusters.*
