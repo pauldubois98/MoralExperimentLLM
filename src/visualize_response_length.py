@@ -166,34 +166,39 @@ plt.close()
 print('Saved fig7b_emphasis_vs_standard.png')
 
 
-# ── Fig 7c: Median token count per scenario type ─────────────────────────────
+# ── Fig 7c: Median token count per scenario type (all 9 AMCE dimensions) ─────
 
-scenario_col = 'ScenarioType'
-if scenario_col not in all_df.columns:
-    scenario_col = 'ScenarioTypeStrict'
+DIM_FILTERS_7C = {
+    'Intervention\n(stay→swerve)':  lambda df: df,
+    'Relation to AV\n(pax→ped)':   lambda df: df[df['PedPed'] == 0],
+    'Legality\n(illegal→legal)':    lambda df: df[(df['PedPed'] == 1) & (df['CrossingSignal'].isin([1, 2]))],
+    'Gender\n(male→female)':        lambda df: df[df['ScenarioTypeStrict'] == 'Gender'],
+    'Fitness\n(large→fit)':         lambda df: df[df['ScenarioTypeStrict'] == 'Fitness'],
+    'Social Status\n(low→high)':    lambda df: df[df['ScenarioTypeStrict'] == 'SocialStatus'],
+    'Age\n(elderly→young)':         lambda df: df[df['ScenarioTypeStrict'] == 'Age'],
+    'No. of Lives\n(fewer→more)':   lambda df: df[df['ScenarioTypeStrict'] == 'Utilitarian'],
+    'Species\n(pets→humans)':       lambda df: df[df['ScenarioTypeStrict'] == 'Species'],
+}
+dim_labels_7c = list(DIM_FILTERS_7C.keys())
 
-scenario_types = [s for s in FACTOR_LABELS if s in all_df[scenario_col].unique()]
-scenario_labels = [FACTOR_LABELS[s] for s in scenario_types]
-
-medians = pd.DataFrame(index=model_order, columns=scenario_labels, dtype=float)
+medians = pd.DataFrame(index=model_order, columns=dim_labels_7c, dtype=float)
 for model_label in model_order:
     sub = all_df[all_df['model_label'] == model_label]
-    for stype, slabel in zip(scenario_types, scenario_labels):
-        vals = sub[sub[scenario_col] == stype]['OutputTokens'].dropna()
-        medians.loc[model_label, slabel] = vals.median() if len(vals) else np.nan
+    for dim_label, filt in DIM_FILTERS_7C.items():
+        vals = filt(sub)['OutputTokens'].dropna()
+        medians.loc[model_label, dim_label] = vals.median() if len(vals) else np.nan
 
-fig, ax = plt.subplots(figsize=(12, 5))
-x = np.arange(len(scenario_labels))
+fig, ax = plt.subplots(figsize=(16, 5))
+x = np.arange(len(dim_labels_7c))
 width = 0.8 / len(model_order)
 
 for i, (model_label, color) in enumerate(zip(model_order, model_colors)):
     vals = medians.loc[model_label].values.astype(float)
     offset = (i - len(model_order) / 2 + 0.5) * width
-    bars = ax.bar(x + offset, vals, width=width * 0.9,
-                  color=color, alpha=0.8, label=model_label)
+    ax.bar(x + offset, vals, width=width * 0.9, color=color, alpha=0.8, label=model_label)
 
 ax.set_xticks(x)
-ax.set_xticklabels(scenario_labels, fontsize=11)
+ax.set_xticklabels(dim_labels_7c, fontsize=9)
 ax.set_ylabel('Median output tokens', fontsize=12)
 ax.set_title('Response length by scenario type', fontsize=13, fontweight='bold')
 ax.legend(fontsize=9, loc='upper left', bbox_to_anchor=(1.01, 1), borderaxespad=0, framealpha=0.9)
