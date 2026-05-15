@@ -81,7 +81,7 @@ def per_scenario(df: pd.DataFrame) -> pd.DataFrame:
 
 # ── Figure 1: STAY vs SWERVE rates ──────────────────────────────────────────
 
-fig1, ax = plt.subplots(figsize=(8, 4.5))
+fig1, ax = plt.subplots(figsize=(11, 5))
 
 labels, stay_vals, swerve_vals, colors = [], [], [], []
 for key, df in frames.items():
@@ -107,7 +107,7 @@ for bar, s_pct, sv_pct in zip(bars_swerve, stay_vals, swerve_vals):
             f'{sv_pct:.1f}%', ha='center', va='center', fontsize=11, color='white', fontweight='bold')
 
 ax.set_xticks(x)
-ax.set_xticklabels(labels, fontsize=12)
+ax.set_xticklabels(labels, fontsize=11, rotation=25, ha='right')
 ax.set_ylabel('% of decisions', fontsize=12)
 ax.set_title('STAY vs SWERVE decisions by model', fontsize=14, fontweight='bold', pad=12)
 ax.set_ylim(0, 105)
