@@ -80,53 +80,67 @@ The human global average baseline was computed from the 130-country dataset of [
 
 ## 3. Results
 
-### 3.1 STAY vs. SWERVE baseline rates
+### 3.1 AMCE profiles: LLMs vs. the human global average
 
-Before examining the nine moral dimensions, all seven models swerve (intervene) at substantially higher rates than a random baseline, ranging from roughly 60% to over 90% SWERVE across models (Figure 1).
-Llama 4 Maverick exhibits the highest intervention rate; Mistral Large 3 the lowest among the seven.
-
-![STAY vs SWERVE rates by model](../figures/fig1_stay_swerve.png)
-*Figure 1. Proportion of STAY vs. SWERVE decisions per model, averaged across both prompt variants.*
-
-### 3.2 AMCE profiles: LLMs vs. the human global average
+Figure 1 displays the character-attribute dimensions as a per-attribute bar charts.
+![Per-attribute bar chart](../figures/fig3_per_attribute.png)
+*Figure 1. Per-attribute moral preferences for all seven LLMs across the six character-type scenario dimensions.*
 
 Figure 2 shows the forest plot of AMCE estimates for all nine dimensions, comparing each model to the human global average.
-
 ![AMCE forest plot](../figures/fig5a_amce_forest.png)
 *Figure 2. Average Marginal Causal Effects for nine moral dimensions across all seven LLMs and the human global average (averaged across standard and emphasis variants). Positive values indicate preference for the right-side group; error bars show 95% confidence intervals.*
 
-The key findings are summarised dimension by dimension:
-
-**Intervention (stay→swerve).** Humans show a weak preference for omission over commission (AMCE = +0.05, favouring swerving only marginally). All seven LLMs show a much stronger intervention preference, ranging from +0.13 (Mistral) to +0.66 (Llama 4 Maverick). Llama 4 Maverick stands out as a strongly action-oriented model: it swerves in nearly two-thirds more cases than baseline regardless of outcome composition.
-
-**Relation to AV (passengers→pedestrians).** Humans slightly prefer to spare pedestrians over passengers (AMCE = +0.10). Claude Opus 4.7 (+0.52) strongly prefers pedestrians. GPT-5.5 (+0.34) and Llama 4 Maverick (+0.23) follow. Grok 4.1 (+0.13) is close to human. Mistral Large 3 (−0.37) reverses the preference entirely, sparing its own passengers over pedestrians.
-
-**Legality (illegal→legal).** Humans reward legal pedestrians (AMCE = +0.35). Claude (+0.57), GPT-5.5 (+0.61), and Gemini (+0.61) substantially amplify this preference. Grok (+0.21) and DeepSeek (+0.27) are attenuated but positive. Mistral (−0.45) and Llama 4 Maverick (−0.25) invert it, favouring illegal crossers a striking reversal of the human norm.
-
-**Gender (male→female).** Humans display a moderate preference for saving women (AMCE = +0.12). All LLMs show near-zero gender preference (range: −0.07 to +0.07), effectively gender-neutral. This likely reflects deliberate alignment choices by developers to avoid reinforcing gender stereotypes, applied broadly enough to suppress gender preferences even in emergency contexts where human intuitions diverge (see Section 4.3).
-
-**Fitness (large→fit).** Humans mildly prefer fitter individuals (AMCE = +0.15). Most LLMs match this closely (range: +0.04 to +0.16), with Mistral (−0.12) being the exception.
-
-**Social status (low→high).** Humans show a modest preference for high-status individuals (AMCE = +0.35), though this varies widely across cultural clusters. All LLMs show near-zero social status preference (range: −0.14 to +0.18), consistent with egalitarian alignment training.
-
-**Age (elderly→young).** Humans strongly prefer to save younger people (AMCE = +0.48). Gemini 3 Pro (+0.46) closely matches the human average. Claude (+0.27) is intermediate. GPT-5.5 (+0.05), Grok (+0.06), DeepSeek (+0.04), and Llama 4 Maverick (+0.05) are nearly indifferent to age. Mistral (−0.18) slightly prefers the elderly.
-
-**Number of lives (fewer→more).** Humans prefer to save more lives (AMCE = +0.49). This is the dimension of strongest and most consistent LLM agreement with human preferences, though several models overshoot dramatically: GPT-5.5 (+0.98), Grok 4.1 (+1.00), and Llama 4 Maverick (+1.00) reach near-perfect utilitarian maximisation. Claude (+0.73) and Mistral (+0.70) are more moderate.
-
-**Species (pets→humans).** Humans strongly prefer humans over animals (AMCE = +0.57). GPT-5.5, Gemini, and Grok reach the theoretical maximum (+1.00). Claude (+0.87) and DeepSeek (+0.90) are strong but below ceiling. Mistral (−0.01) and Llama 4 Maverick (+0.08) are near-indifferent to species Mistral being the only model that does not reliably prefer humans over animals.
-
 Figure 3 shows the same preferences as a radar chart for visual comparison.
-
 ![Radar chart of AMCE dimensions](../figures/fig5c_radar.png)
 *Figure 3. Radar chart of AMCE estimates across all nine dimensions. The dashed line shows the human global average.*
 
-Figures 4 and 5 display the six character-attribute dimensions as a heatmap and per-attribute bar charts.
+The key findings are summarised dimension by dimension: (exact values table available in appendix).
 
-![Preference heatmap](../figures/fig2_preference_heatmap.png)
-*Figure 4. Heatmap of moral preferences across six character-type dimensions (Δ Pr from 0.5). Positive (blue) = preference for the right-side group; negative (red) = preference for the left-side group.*
+**Intervention (stay→swerve).**
+Humans show a weak preference for omission over commission (AMCE = +0.05, favouring swerving only marginally).
+All seven LLMs show a much stronger intervention preference.
+Llama 4 Maverick stands out as a strongly action-oriented model.
 
-![Per-attribute bar chart](../figures/fig3_per_attribute.png)
-*Figure 5. Per-attribute moral preferences for all seven LLMs across the six character-type scenario dimensions.*
+**Relation to vehicule (passengers→pedestrians).**
+Mistral Large 3 reverses the preference entirely, sparing its own passengers over pedestrians.
+Claude Opus 4.7 (+0.52) strongly prefers pedestrians.
+Humans and other LLMs (GPT-5.5, Llama 4 Maverick, Grok 4.1) slightly prefer to spare pedestrians over passengers.
+
+**Legality (illegal→legal).**
+Humans reward legal pedestrians similarly as Deepseek and Grok.
+Claude, GPT-5.5, and Gemini substantially amplify this preference. 
+Mistral and Llama 4 Maverick invert it, favouring illegal crossers.
+
+**Gender (male→female).**
+Humans display a moderate preference for saving women (AMCE = +0.12).
+All LLMs show near-zero gender preference (range: −0.07 to +0.07), effectively gender-neutral.
+This could reflects deliberate alignment choices by developers to avoid reinforcing gender stereotypes.
+More about this lead in discussion (Section 4.3).
+
+**Fitness (large→fit).**
+Humans mildly prefer fitter individuals, LLMs mostly match this.
+
+**Social status (low→high).**
+Humans show a modest preference for high-status individuals, though this varies widely across cultural clusters.
+All LLMs show near-zero social status preference, consistent with egalitarian alignment training.
+
+**Age (elderly→young).**
+Humans strongly prefer to save younger people (AMCE = +0.48).
+Gemini 3 Pro (+0.46) closely matches the human average.
+Claude (+0.27) is intermediate.
+GPT-5.5 (+0.05), Grok (+0.06), DeepSeek (+0.04), and Llama 4 Maverick (+0.05) are nearly indifferent to age.
+Mistral (−0.18) slightly prefers the elderly.
+
+**Number of lives (fewer→more).**
+Humans prefer to save more lives.
+This is the dimension of strongest preferences.
+Several models overshoot dramatically human preferences.
+
+**Species (pets→humans).**
+Humans strongly prefer humans over animals (AMCE = +0.57).
+GPT-5.5, Gemini, and Grok reach the theoretical maximum (+1.00). Claude (+0.87) and DeepSeek (+0.90) are also long overshooting human preferences.
+Mistral and Llama 4 Maverick are near-indifferent to species.
+
 
 ### 3.3 Moral distance map: PCA of nine-dimensional profiles
 
