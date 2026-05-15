@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 
 echo "=== Phase 3: AMCE analysis ==="
 uv run python src/analysis.py
-uv run python src/analysis.py --variant cot
+uv run python src/analysis.py --variant emphasis
 
 echo ""
 echo "=== Phase 4: Visualizations ==="

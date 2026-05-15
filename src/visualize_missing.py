@@ -44,7 +44,7 @@ C_NOFILE  = '#aaaaaa'
 rows = []
 for m in ALL_MODELS:
     valid, parse_fail, api_err, no_file = 0, 0, 0, 0
-    for variant in ('standard', 'cot'):
+    for variant in ('standard', 'emphasis'):
         path = Path(f'data/responses_{m}_{variant}.csv')
         if not path.exists():
             no_file += 1300
@@ -93,7 +93,7 @@ ax.set_xticklabels(xlabs, fontsize=11)
 ax.set_ylabel('Number of scenarios (out of 2,600 across both variants)', fontsize=11)
 ax.set_ylim(0, 2800)
 ax.axhline(TOTAL, color='black', linewidth=0.8, linestyle='--', alpha=0.3)
-ax.set_title('Data availability per model — standard + CoT combined\n(% inside bar = valid responses)', fontsize=13, fontweight='bold')
+ax.set_title('Data availability per model — standard + Emphasis combined\n(% inside bar = valid responses)', fontsize=13, fontweight='bold')
 ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1), borderaxespad=0, fontsize=10, framealpha=0.9)
 sns.despine(ax=ax)
 fig.tight_layout()
@@ -160,7 +160,7 @@ type_order = ['Gender', 'Fitness', 'SocialStatus', 'Age', 'Utilitarian', 'Specie
 type_fail = {}
 for m in parse_models:
     dfs = []
-    for variant in ('standard', 'cot'):
+    for variant in ('standard', 'emphasis'):
         path = Path(f'data/responses_{m}_{variant}.csv')
         if path.exists():
             dfs.append(pd.read_csv(path))

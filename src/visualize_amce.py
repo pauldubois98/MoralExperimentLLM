@@ -54,10 +54,10 @@ FACTOR_SHORT = {
 # ── Load data ─────────────────────────────────────────────────────────────────
 
 amce_std = pd.read_csv(DATA_DIR / 'amce_all_models_standard.csv')
-cot_path = DATA_DIR / 'amce_all_models_cot.csv'
-if cot_path.exists():
-    amce_cot = pd.read_csv(cot_path)
-    combined = pd.concat([amce_std, amce_cot], ignore_index=True)
+emphasis_path = DATA_DIR / 'amce_all_models_emphasis.csv'
+if emphasis_path.exists():
+    amce_emphasis = pd.read_csv(emphasis_path)
+    combined = pd.concat([amce_std, amce_emphasis], ignore_index=True)
     amce = combined.groupby(['model', 'factor'], as_index=False)[['estimate', 'se', 'ci_lo', 'ci_hi']].mean()
 else:
     amce = amce_std

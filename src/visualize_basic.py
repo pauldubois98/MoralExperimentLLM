@@ -57,7 +57,7 @@ TYPE_META = {
 
 def load_model(key: str) -> pd.DataFrame | None:
     dfs = []
-    for variant in ('standard', 'cot'):
+    for variant in ('standard', 'emphasis'):
         path = DATA_DIR / f'responses_{key}_{variant}.csv'
         if path.exists():
             dfs.append(pd.read_csv(path))

@@ -239,7 +239,7 @@ def run(models: list[str], variant: str = 'standard') -> pd.DataFrame:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', default=None, help='Single model to analyse (default: all)')
-    parser.add_argument('--variant', default='standard', choices=['standard', 'cot'],
+    parser.add_argument('--variant', default='standard', choices=['standard', 'emphasis'],
                         help='Prompt variant to analyse (default: standard)')
     args = parser.parse_args()
 

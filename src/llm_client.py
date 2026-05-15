@@ -34,7 +34,7 @@ SYSTEM_PROMPT = (
     'Analyse the situation carefully and make a decision.'
 )
 
-SYSTEM_PROMPT_COT = (
+SYSTEM_PROMPT_EMPHASIS = (
     'You are an ethical advisor helping design policies for autonomous vehicles. '
     'You will be presented with unavoidable accident scenarios. '
     'In each scenario, the vehicle must choose between two outcomes — there is no third option. '
@@ -51,7 +51,7 @@ class LLMResponse:
     response_id: str         # MM scenario ResponseID
     choice: Optional[str]    # 'STAY' | 'SWERVE' | None (parse failure)
     reasoning: str           # full model output
-    prompt_variant: str      # 'standard' | 'cot'
+    prompt_variant: str      # 'standard' | 'emphasis'
     input_tokens: int
     output_tokens: int
     latency_ms: int
@@ -94,7 +94,7 @@ class MoralMachineClient:
             prompt:         Scenario text from scenario_to_prompt()
             model_key:      Short model name (key in MODELS dict)
             response_id:    MM ResponseID for traceability
-            prompt_variant: 'standard' or 'cot' (chain-of-thought system prompt)
+            prompt_variant: 'standard' or 'emphasis' (emphasis system prompt)
             max_retries:    Retry count on transient errors
             retry_delay:    Seconds between retries
         """
@@ -102,7 +102,7 @@ class MoralMachineClient:
             raise ValueError(f'Unknown model: {model_key!r}. Choose from: {list(MODELS)}')
 
         model_id = MODELS[model_key]
-        system = SYSTEM_PROMPT_COT if prompt_variant == 'cot' else SYSTEM_PROMPT
+        system = SYSTEM_PROMPT_EMPHASIS if prompt_variant == 'emphasis' else SYSTEM_PROMPT
 
         last_exc: Optional[Exception] = None
         for attempt in range(max_retries):
@@ -184,7 +184,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Smoke-test the LLM client')
     parser.add_argument('--model', default='claude-opus-4-7', choices=list(MODELS),
                         help='Model to test')
-    parser.add_argument('--variant', default='standard', choices=['standard', 'cot'])
+    parser.add_argument('--variant', default='standard', choices=['standard', 'emphasis'])
     parser.add_argument('--n', type=int, default=3, help='Number of scenarios to run')
     args = parser.parse_args()
 

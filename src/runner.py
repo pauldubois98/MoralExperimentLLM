@@ -3,7 +3,7 @@ Phase 3 runner: queries an LLM for every scenario and writes responses to CSV.
 
 Usage:
     uv run python src/runner.py --model claude-opus-4-7
-    uv run python src/runner.py --model mistral-large-3 --workers 5 --variant cot
+    uv run python src/runner.py --model mistral-large-3 --workers 5 --variant emphasis
 
 The output CSV is scenarios.csv with Saved filled in, plus extra LLM columns.
 Resumable: already-processed ResponseIDs are skipped on re-run.
@@ -176,7 +176,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model',   required=True, choices=list(MODELS),
                         help='Model key to run')
-    parser.add_argument('--variant', default='standard', choices=['standard', 'cot'],
+    parser.add_argument('--variant', default='standard', choices=['standard', 'emphasis'],
                         help='Prompt variant (default: standard)')
     parser.add_argument('--workers', type=int, default=3,
                         help='Concurrent requests (default: 3)')

@@ -44,11 +44,11 @@ FACTOR_LABELS = {
     'Random':      'Random',
 }
 
-# ── Load all response files (standard + CoT combined) ─────────────────────────
+# ── Load all response files (standard + Emphasis combined) ─────────────────────────
 
 dfs = []
 for model, style in MODEL_STYLE.items():
-    for variant in ('standard', 'cot'):
+    for variant in ('standard', 'emphasis'):
         path = DATA_DIR / f'responses_{model}_{variant}.csv'
         if not path.exists():
             continue
@@ -106,11 +106,11 @@ plt.close()
 print('Saved fig7a_token_distribution.png')
 
 
-# ── Fig 7b: CoT vs standard token count per model ────────────────────────────
+# ── Fig 7b: Emphasis vs standard token count per model ────────────────────────────
 
 # Load per-variant separately for this comparison
 variant_dfs = {}
-for variant in ('standard', 'cot'):
+for variant in ('standard', 'emphasis'):
     rows = []
     for model, style in MODEL_STYLE.items():
         path = DATA_DIR / f'responses_{model}_{variant}.csv'
@@ -136,14 +136,14 @@ for ax, model_key in zip(axes, [m for m in MODEL_STYLE if MODEL_STYLE[m]['label'
 
     std_tokens = variant_dfs['standard']
     std_tokens = std_tokens[std_tokens['model_key'] == model_key]['OutputTokens'].dropna().values if len(std_tokens) else np.array([])
-    cot_tokens = variant_dfs.get('cot', pd.DataFrame())
-    cot_tokens = cot_tokens[cot_tokens['model_key'] == model_key]['OutputTokens'].dropna().values if len(cot_tokens) else np.array([])
+    emphasis_tokens = variant_dfs.get('emphasis', pd.DataFrame())
+    emphasis_tokens = emphasis_tokens[emphasis_tokens['model_key'] == model_key]['OutputTokens'].dropna().values if len(emphasis_tokens) else np.array([])
 
     r, g, b = int(color[1:3],16), int(color[3:5],16), int(color[5:7],16)
     dark_color = f'#{int(r*0.55):02x}{int(g*0.55):02x}{int(b*0.55):02x}'
 
-    data   = [d for d in [std_tokens, cot_tokens] if len(d)]
-    xlabels = ['Standard', 'CoT'][:len(data)]
+    data   = [d for d in [std_tokens, emphasis_tokens] if len(d)]
+    xlabels = ['Standard', 'Emphasis'][:len(data)]
     colors  = [color, dark_color][:len(data)]
 
     bp = ax.boxplot(data, patch_artist=True, widths=0.5,
@@ -158,12 +158,12 @@ for ax, model_key in zip(axes, [m for m in MODEL_STYLE if MODEL_STYLE[m]['label'
     ax.set_ylabel('Output tokens' if ax == axes[0] else '', fontsize=10)
     sns.despine(ax=ax)
 
-fig.suptitle('Response length: standard vs CoT by model',
+fig.suptitle('Response length: standard vs Emphasis by model',
              fontsize=13, fontweight='bold', y=1.02)
 fig.tight_layout()
-fig.savefig(FIG_DIR / 'fig7b_cot_vs_standard.png', dpi=150, bbox_inches='tight')
+fig.savefig(FIG_DIR / 'fig7b_emphasis_vs_standard.png', dpi=150, bbox_inches='tight')
 plt.close()
-print('Saved fig7b_cot_vs_standard.png')
+print('Saved fig7b_emphasis_vs_standard.png')
 
 
 # ── Fig 7c: Median token count per scenario type ─────────────────────────────

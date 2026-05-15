@@ -46,20 +46,20 @@ You also need the Moral Machine OSF dataset in `osfstorage-archive/`:
 # Phase 1 — generate scenarios
 uv run python src/scenario_generator.py --sessions 100 --seed 42
 
-# Phase 2 — collect LLM responses (resumable; --variant cot for chain-of-thought)
+# Phase 2 — collect LLM responses (resumable; --variant emphasis for emphasis)
 uv run python src/runner.py --model claude-opus-4-7
-uv run python src/runner.py --model claude-opus-4-7 --variant cot --workers 5
+uv run python src/runner.py --model claude-opus-4-7 --variant emphasis --workers 5
 
 # Phase 3 — compute AMCEs
 uv run python src/analysis.py --variant standard # standard variant
-uv run python src/analysis.py --variant cot      # CoT variant
+uv run python src/analysis.py --variant emphasis      # Emphasis variant
 
 # Phase 4 — generate figures
 uv run python src/visualize_amce.py               # AMCE forest, PCA map, radar
 uv run python src/visualize_basic.py              # STAY/SWERVE rates, heatmap
 uv run python src/visualize_missing.py            # Missing data diagnostics
 uv run python src/visualize_response_length.py    # Token counts, latency
-uv run python src/visualize_prompt_comparison.py  # Standard vs CoT comparison
+uv run python src/visualize_prompt_comparison.py  # Standard vs Emphasis comparison
 
 # Or run phases 3 + 4 in one go:
 bash run_analysis.sh
@@ -69,7 +69,7 @@ bash run_analysis.sh
 
 ```
 --model     Model key (required); see llm_client.py for available models
---variant   standard | cot  (default: standard)
+--variant   standard | emphasis  (default: standard)
 --workers   Concurrent requests (default: 3)
 ```
 
@@ -87,13 +87,13 @@ src/
   visualize_basic.py             # STAY/SWERVE rates, per-attribute heatmap
   visualize_missing.py           # Missing data / parse failure diagnostics
   visualize_response_length.py   # Token count distributions and latency CDF
-  visualize_prompt_comparison.py # Standard vs CoT delta heatmap and forest
+  visualize_prompt_comparison.py # Standard vs Emphasis delta heatmap and forest
 
 data/
   scenarios.csv                          # 1300 scenarios × 2 rows each
-  responses_{model}_{standard|cot}.csv   # LLM choices + metadata per run
-  amce_{model}_{standard|cot}.csv        # Per-model AMCE estimates
-  amce_all_models_{standard|cot}.csv     # Combined table (all models + human avg)
+  responses_{model}_{standard|emphasis}.csv   # LLM choices + metadata per run
+  amce_{model}_{standard|emphasis}.csv        # Per-model AMCE estimates
+  amce_all_models_{standard|emphasis}.csv     # Combined table (all models + human avg)
 
 figures/
   fig5a_amce_forest.png          # Forest plot: 9 AMCE factors × all models
@@ -104,12 +104,12 @@ figures/
   fig3_per_attribute.png         # Per-attribute bar chart
   fig_missing*.png               # Missing data diagnostics (3 figures)
   fig7a_token_distribution.png   # Output token violin+box per model
-  fig7a_cot_vs_standard.png      # Token counts: standard vs CoT side-by-side
+  fig7a_cot_vs_standard.png      # Token counts: standard vs Emphasis side-by-side
   fig7b_length_by_choice.png     # Token count split by STAY/SWERVE choice
   fig7c_length_by_factor.png     # Median tokens per scenario type
   fig7d_latency.png              # Latency CDF per model
-  fig6a_prompt_delta_heatmap.png # CoT − standard AMCE delta heatmap
-  fig6b_prompt_forest.png        # Side-by-side forest: standard vs CoT
+  fig6a_prompt_delta_heatmap.png # Emphasis − standard AMCE delta heatmap
+  fig6b_prompt_forest.png        # Side-by-side forest: standard vs Emphasis
 ```
 
 ## The 9 AMCE dimensions
