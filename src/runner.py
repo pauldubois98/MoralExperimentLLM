@@ -62,9 +62,11 @@ def _process_scenario(
     client: MoralMachineClient,
     model_key: str,
     variant: str,
+    max_tokens: int = 2048,
 ) -> tuple[str, LLMResponse, list[dict]]:
     prompt = scenario_to_prompt(rows)
-    resp = client.query(prompt, model_key, response_id=rid, prompt_variant=variant)
+    resp = client.query(prompt, model_key, response_id=rid, prompt_variant=variant,
+                        max_tokens=max_tokens)
     rows = _apply_choice(rows, resp.choice)
     return rid, resp, rows
 
@@ -75,6 +77,7 @@ def run(
     model_key: str,
     variant: str = 'standard',
     workers: int = 3,
+    max_tokens: int = 2048,
     scenarios_path: Path = SCENARIOS_PATH,
     out_dir: Path = DATA_DIR,
 ) -> Path:
@@ -119,7 +122,7 @@ def run(
 
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = {
-            pool.submit(_process_scenario, rid, rows, client, model_key, variant): rid
+            pool.submit(_process_scenario, rid, rows, client, model_key, variant, max_tokens): rid
             for rid, rows in scenarios.items()
         }
 
@@ -180,6 +183,8 @@ if __name__ == '__main__':
                         help='Prompt variant (default: standard)')
     parser.add_argument('--workers', type=int, default=3,
                         help='Concurrent requests (default: 3)')
+    parser.add_argument('--max-tokens', type=int, default=2048,
+                        help='Max output tokens per request (default: 2048)')
     parser.add_argument('--scenarios', default=str(SCENARIOS_PATH),
                         help='Path to scenarios CSV')
     args = parser.parse_args()
@@ -187,6 +192,7 @@ if __name__ == '__main__':
     run(
         model_key=args.model,
         variant=args.variant,
+        max_tokens=args.max_tokens,
         workers=args.workers,
         scenarios_path=Path(args.scenarios),
     )
