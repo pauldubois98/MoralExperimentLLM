@@ -31,7 +31,7 @@ The rapid deployment of large language models in agentic and embodied settings [
 If an LLM governs a robot navigating a crowded environment, its implicit preferences over human lives matter.
 Prior work has begun to examine LLM moral preferences using the Moral Machine framework: Takemoto [TAKEMOTO2024] tested four models (GPT-3.5, GPT-4, PaLM 2, Llama 2) and found substantial divergence from human averages, a finding replicated at scale across 52 models by Ahmad and Takemoto [AHMAD2025].
 Vida et al. [VIDA2024] and Jin et al. [JIN2024] extended the paradigm to multilingual settings, finding intra-model variation across languages.
-The present study extends this line of work to seven frontier models released in 2025, covering a broader set of providers and introducing a systematic comparison of prompt variants.
+The present study extends this line of work to seven frontier models released in 2025, which no prior study has evaluated, and introduces a systematic analysis of prompt sensitivity and response efficiency.
 
 This study asks three questions:
 
