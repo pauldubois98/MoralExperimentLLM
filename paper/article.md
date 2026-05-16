@@ -180,7 +180,12 @@ This stability suggests that the moral preferences captured here are robust prop
 
 Response length varies substantially across models (Figure 6).
 Gemini 3 Pro produces the longest responses (median 913 tokens combined across variants), while GPT-5.5 is the most concise (median 164 tokens, more than 5 times shorter).
-Response length shows that models tend to delibreate faster (with shorter responses) in cases where they show strong preferences (Figure 7).
+Within individual models, response length tends to be shorter for scenario types where the model exhibits stronger preferences (Figure 8).
+A Spearman correlation between |AMCE| and median token count is negative and significant for four of the seven models (DeepSeek: r=−0.95, Grok: r=−0.90, GPT-5.5: r=−0.85, Gemini: r=−0.68; all p<0.05), but non-significant for Claude, Llama 4 Maverick, and Mistral.
+The pooled correlation across all models is weak and non-significant (r=−0.14, p=0.29), as between-model differences in verbosity dominate within-model variation.
+
+![AMCE vs response length correlation](../figures/fig8_amce_length_correlation.png)
+*Figure 8. Left: per-model Spearman correlation between preference strength (|AMCE|) and median output tokens across the nine moral dimensions (grey bars: p≥0.05). Right: scatter of all (model, dimension) pairs with regression line.*
 
 ![Token distribution](../figures/fig7a_token_distribution.png)
 *Figure 6. Output token distribution by model (standard + emphasis combined). Violin shows density; box shows quartiles.*
