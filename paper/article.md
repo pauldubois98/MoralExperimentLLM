@@ -19,15 +19,19 @@ The response length varies by an order of magnitude across models despite broadl
 ## 1. Introduction
 
 As autonomous vehicles, surgical robots, and other safety-critical systems increasingly incorporate AI decision-making, the question of whether AI systems share human moral intuitions becomes practically consequential.
-A self-driving car that must choose between hitting a group of pedestrians or swerving into its own passengers cannot defer the decision; some preference ordering must be encoded, implicitly or explicitly, in its behaviour.
+A self-driving car that must choose between hitting a group of pedestrians or swerving into its own passengers cannot defer the decision; some preference ordering must be encoded, implicitly or explicitly, in its behaviour [BONNEFON2016].
 
 The Moral Machine experiment [AWAD2018] provided the largest empirical dataset of human moral preferences, asking millions of participants across 130 countries to judge unavoidable accident scenarios involving an autonomous vehicle.
 The study identified nine binary moral dimensions: intervention, relation to the vehicle, legality of crossing, gender, physical fitness, social status, age, number of lives, and species.
 The study found that aggregate human preferences, quantified as Average Marginal Causal Effects, vary substantially across cultural clusters while sharing a common core (strong preference for saving humans over animals, more lives over fewer, and legal pedestrians over illegal ones).
+A controlled follow-up across 42 countries confirmed the robustness of these cross-cultural patterns [AWAD2020a].
+The moral psychology of AI as an emerging field is surveyed in [BONNEFON2024].
 
 The rapid deployment of large language models in agentic and embodied settings [BROHAN2023, DRIESS2023] including robotics platforms capable of physical action makes the question of LLM moral alignment newly urgent.
 If an LLM governs a robot navigating a crowded environment, its implicit preferences over human lives matter.
-Yet surprisingly little is known about whether the moral profiles of current frontier models resemble those of humans, and how much models differ from one another.
+Prior work has begun to examine LLM moral preferences using the Moral Machine framework: Takemoto [TAKEMOTO2024] tested four models (GPT-3.5, GPT-4, PaLM 2, Llama 2) and found substantial divergence from human averages, a finding replicated at scale across 52 models by Ahmad and Takemoto [AHMAD2025].
+Vida et al. [VIDA2024] and Jin et al. [JIN2024] extended the paradigm to multilingual settings, finding intra-model variation across languages.
+The present study extends this line of work to seven frontier models released in 2025, covering a broader set of providers and introducing a systematic comparison of prompt variants.
 
 This study asks three questions:
 
@@ -35,7 +39,7 @@ This study asks three questions:
 2. **Diversity**: Do different LLMs differ meaningfully from one another in their moral profiles?
 3. **Prompt sensitivity**: Does instructing a model to reason carefully before deciding ("emphasis" prompting) change its moral preferences?
 
-Following the broader effort to benchmark LLMs along non-capability dimensions including user preference rankings [CHIANG2024], political orientation [LLM-POLITICS], and social reasoning in adversarial settings [WEREWOLF] this work proposes moral preference profiling as a complementary axis for understanding frontier AI systems.
+Following the broader effort to benchmark LLMs along non-capability dimensions including user preference rankings [CHIANG2024], political orientation [LLM-POLITICS, HARTMANN2023, SANTURKAR2023], and social reasoning in adversarial settings [WEREWOLF] this work proposes moral preference profiling as a complementary axis for understanding frontier AI systems.
 
 ---
 
@@ -200,15 +204,20 @@ For deployment in time-sensitive contexts in this light, GPT-5.5's short respons
 ### 4.1 LLMs are morally out-of-distribution relative to humans
 
 The most robust finding of this study is that no tested LLM sits within the main human cultural clusters on the PCA moral map, despite all being trained primarily on human-generated content.
-This out-of-distribution result is consistent with the hypothesis that RLHF and related alignment techniques do not faithfully reproduce the moral preferences of any human population.
+This replicates and extends the findings of Takemoto [TAKEMOTO2024] and Ahmad and Takemoto [AHMAD2025] to a newer generation of frontier models.
+This out-of-distribution result is consistent with the hypothesis that RLHF [OUYANG2022] and related alignment techniques such as Constitutional AI [BAI2022] do not faithfully reproduce the moral preferences of any human population.
 They instead create a novel moral profile that prioritises certain values (high utilitarian weight on number of lives, near-universal human-over-animal preference) while discarding others (age preference, gender preference) that are robustly present in human data.
-Whether this constitutes a bug or a feature depends on normative commitments: one might argue that LLMs have corrected for biases present in human moral intuitions, or that they have drifted from the values of the populations they are meant to serve.
+This pattern is also consistent with the WEIRD critique [HENRICH2010]: models trained predominantly on Western, English-language internet text cannot be expected to represent the full distribution of human moral values, even if they are trained to be "helpful and harmless."
+Whether this constitutes a bug or a feature depends on normative commitments: one might argue that LLMs have corrected for biases present in human moral intuitions, or that they have drifted from the values of the populations they are meant to serve [GABRIEL2020].
 
 ### 4.2 Substantial inter-model diversity raises deployment questions
 
 The diversity among LLMs is surprising.
 One might expect models trained on overlapping datasets (basically all of internet) to converge on similar moral profiles.
-Instead, Mistral and Llama 4 Maverick display profiles that partially invert human norms, while GPT-5.5 and Grok 4.1 display near-ceiling utilitarian preferences on Species and Nunmber of Lives that no human population approaches.
+Instead, Mistral and Llama 4 Maverick display profiles that partially invert human norms, while GPT-5.5 and Grok 4.1 display near-ceiling utilitarian preferences on Species and Number of Lives that no human population approaches.
+This inter-model diversity is consistent with Kirgis [KIRGIS2024], who applied Haidt's Moral Foundations Theory [HAIDT2001] to a range of frontier models and found that variation across LLMs exceeds variation across human demographic groups.
+It also mirrors findings on ideological diversity: Santurkar et al. [SANTURKAR2023] showed that LLMs do not reliably represent any particular human demographic group's opinions.
+This finding suggests that fine-tuning choices rather than training data alone shape the values that emerge.
 
 This heterogeneity has a practical implication that goes beyond academic interest.
 Unlike human drivers, who show broadly similar moral intuitions regardless of the car manufacturer, AI-powered vehicles could introduce model-brand-level moral heterogeneity into public space.
@@ -222,8 +231,9 @@ It is unclear wether this path will continue, or if alternative approaches using
 
 The near-universal gender indifference among all LLMs is observed.
 Meanwhile humans show a small but statistically significant bias.
-Developers have invested significant effort in making models gender-neutral in content generation to correct for historical biases in training data (e.g., the tendency to assign male/female gender to specific professional roles).
-This correction appears to generalise to moral reasoning contexts, suppressing the modest human preference for saving women that emerges consistently across cultures in the Moral Machine data [GEMINI-BIAS].
+Developers have invested significant effort in making models gender-neutral in content generation to correct for historical biases in training data (e.g., the tendency to assign male/female gender to specific professional roles [KOTEK2023, WAN2023]).
+This correction appears to generalise to moral reasoning contexts, suppressing the modest human preference for saving women that emerges consistently across cultures in the Moral Machine data.
+The difficulty of calibrating this correction was illustrated by the early 2024 Gemini controversy, in which over-aggressive debiasing produced historically inaccurate image generations [GEMINI-BIAS].
 Whether this generalisation is desirable is an open question.
 In structured dilemma contexts, gender neutrality differs from human norms.
 But this difference may reflect a principled commitment to equality that humans are trying to endorse in the abstract even if not in practice at the moment.
@@ -242,9 +252,11 @@ It is left for future research to test if prompting the model to alig with diffe
 ### 4.5 Limitations
 
 This study has several limitations.
-First, all scenarios were presented in English; moral preferences may shift in other languages [AWAD2018].
+First, all scenarios were presented in English; moral preferences may shift in other languages, as demonstrated by Vida et al. [VIDA2024] and Jin et al. [JIN2024] who found intra-model cross-lingual variation in Moral Machine responses.
 Second, temperature was set to zero for reproducibility, but some models may exhibit different preferences at higher temperatures.
-Third, the Moral Machine paradigm, abstracts away many real-world complexities of autonomous driving.
+Third, the Moral Machine paradigm abstracts away many real-world complexities of autonomous driving.
+Fourth, the holistic evaluation framework of Liang et al. [LIANG2023] highlights that LLM behaviour varies substantially across evaluation contexts.
+Moral preferences elicited by forced-choice dilemmas may not generalise to open-ended moral reasoning.
 Finally, model versions change at a very fast rate.
 Frontier models were tested so that results remain up to date for as long as possible.
 The profiles reported here reflect model states as of May 2026.
@@ -259,18 +271,70 @@ A combination that warrants careful consideration as LLMs are increasingly deplo
 
 ## References
 
+### Moral Machine and AV ethics
+
 [AWAD2018] Awad, E., Dsouza, S., Kim, R., Schulz, J., Henrich, J., Shariff, A., Bonnefon, J.-F., & Rahwan, I. (2018). The Moral Machine experiment. *Nature*, 563, 59–64. https://doi.org/10.1038/s41586-018-0637-6
+
+[AWAD2020a] Awad, E., Dsouza, S., Shariff, A., Rahwan, I., & Bonnefon, J.-F. (2020). Universals and variations in moral decisions made in 42 countries by 70,000 participants. *Proceedings of the National Academy of Sciences*, 117(5), 2332–2337. https://doi.org/10.1073/pnas.1911517117
+
+[AWAD2020b] Awad, E., Dsouza, S., Bonnefon, J.-F., Shariff, A., & Rahwan, I. (2020). Crowdsourcing moral machines. *Communications of the ACM*, 63(3), 48–55. https://doi.org/10.1145/3339904
+
+[BONNEFON2016] Bonnefon, J.-F., Shariff, A., & Rahwan, I. (2016). The social dilemma of autonomous vehicles. *Science*, 352(6293), 1573–1576. https://doi.org/10.1126/science.aaf2654. *arXiv*:1510.03346.
+
+[BONNEFON2024] Bonnefon, J.-F., Rahwan, I., & Shariff, A. (2024). The moral psychology of artificial intelligence. *Annual Review of Psychology*, 75, 653–675. https://doi.org/10.1146/annurev-psych-030123-113559
+
+### LLM moral reasoning
+
+[TAKEMOTO2024] Takemoto, K. (2024). The moral machine experiment on large language models. *Royal Society Open Science*, 11(2), 231393. https://doi.org/10.1098/rsos.231393. *arXiv*:2309.05958.
+
+[AHMAD2025] Ahmad, M. S. Z., & Takemoto, K. (2025). Large-scale moral machine experiment on large language models. *PLOS One*, 20(5), e0322776. https://doi.org/10.1371/journal.pone.0322776. *arXiv*:2411.06790.
+
+[VIDA2024] Vida, K., Damken, F., & Lauscher, A. (2024). Decoding multilingual moral preferences: Unveiling LLM's biases through the Moral Machine experiment. *Proceedings of AIES 2024*. *arXiv*:2407.15184.
+
+[JIN2024] Jin, Z., et al. (2024). Language model alignment in multilingual trolley problems. *arXiv*:2407.02273.
+
+### AI alignment and values
+
+[OUYANG2022] Ouyang, L., Wu, J., Jiang, X., Almeida, D., et al. (2022). Training language models to follow instructions with human feedback. *Advances in Neural Information Processing Systems (NeurIPS 2022)*. *arXiv*:2203.02155.
+
+[BAI2022] Bai, Y., Kadavath, S., Kundu, S., Askell, A., et al. (2022). Constitutional AI: Harmlessness from AI feedback. *arXiv*:2212.08073.
+
+[GABRIEL2020] Gabriel, I. (2020). Artificial intelligence, values, and alignment. *Minds and Machines*, 30, 411–437. https://doi.org/10.1007/s11023-020-09539-2. *arXiv*:2001.09768.
+
+### LLM benchmarking and values
+
+[CHIANG2024] Chiang, W.-L., et al. (2024). Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference. *arXiv*:2403.04132.
+
+[LIANG2023] Liang, P., Bommasani, R., Lee, T., et al. (2023). Holistic evaluation of language models. *Transactions on Machine Learning Research*. *arXiv*:2211.09110.
+
+[SANTURKAR2023] Santurkar, S., Durmus, E., Ladhak, F., Lee, C., Liang, P., & Hashimoto, T. (2023). Whose opinions do language models reflect? *Proceedings of ICML 2023*. *arXiv*:2303.17548.
+
+[KIRGIS2024] Kirgis, P. (2024). Differences in the moral foundations of large language models. *arXiv*:2511.11790.
+
+[HARTMANN2023] Hartmann, J., Schwenzow, J., & Witte, M. (2023). The political ideology of conversational AI: Converging evidence on ChatGPT's pro-environmental, left-libertarian orientation. *arXiv*:2301.01768.
+
+[LLM-POLITICS] Dabadie, R., & Combes, A. (2024). The Political Gap Between AIs and Citizens. Foaster. https://llm-politics.foaster.ai / https://github.com/Foaster-ai/The_Political_Gap_Between_AIs_and_Citizens
+
+[WEREWOLF] Dabadie, R., & Combes, A. (2024). Werewolf Benchmark: Evaluating LLM Social Reasoning Through Adversarial Deduction. Foaster. https://werewolf.foaster.ai / https://github.com/Foaster-ai/Werewolf-bench
+
+### Gender bias in AI
+
+[KOTEK2023] Kotek, H., Dockum, R., & Sun, D. Q. (2023). Gender bias and stereotypes in large language models. *Proceedings of Collective Intelligence Conference (CI '23)*. https://doi.org/10.1145/3582269.3615599. *arXiv*:2308.14921.
+
+[WAN2023] Wan, Y., Pu, G., Sun, J., Garimella, A., Chang, K.-W., & Peng, N. (2023). "Kelly is a warm person, Joseph is a role model": Gender biases in LLM-generated reference letters. *Findings of ACL: EMNLP 2023*. *arXiv*:2310.09219.
+
+[GEMINI-BIAS] Vincent, J. (2024, February 21). Google pauses Gemini's ability to generate images of people after historical inaccuracies. *The Verge*. https://www.theverge.com/2024/2/21/24079371/google-ai-gemini-generative-inaccurate-historical
+
+### Cross-cultural psychology
+
+[HENRICH2010] Henrich, J., Heine, S. J., & Norenzayan, A. (2010). The weirdest people in the world? *Behavioral and Brain Sciences*, 33(2–3), 61–83. https://doi.org/10.1017/S0140525X0999152X
+
+[HAIDT2001] Haidt, J. (2001). The emotional dog and its rational tail: A social intuitionist approach to moral judgment. *Psychological Review*, 108(4), 814–834. https://doi.org/10.1037/0033-295X.108.4.814
+
+### Embodied AI and robotics
 
 [BROHAN2023] Brohan, A., et al. (2023). RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control. *arXiv*:2307.15818.
 
 [DRIESS2023] Driess, D., et al. (2023). PaLM-E: An Embodied Multimodal Language Model. *arXiv*:2303.03378.
 
 [PALIGEMMA] Beyer, L., et al. (2024). PaliGemma: A versatile 3B VLM for transfer. *arXiv*:2407.07726.
-
-[CHIANG2024] Chiang, W.-L., et al. (2024). Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference. *arXiv*:2403.04132.
-
-[LLM-POLITICS] Dabadie, R., & Combes, A. (2024). The Political Gap Between AIs and Citizens. Foaster. https://llm-politics.foaster.ai / https://github.com/Foaster-ai/The_Political_Gap_Between_AIs_and_Citizens
-
-[WEREWOLF] Dabadie, R., & Combes, A. (2024). Werewolf Benchmark: Evaluating LLM Social Reasoning Through Adversarial Deduction. Foaster. https://werewolf.foaster.ai / https://github.com/Foaster-ai/Werewolf-bench
-
-[GEMINI-BIAS] Vincent, J. (2024, February 21). Google pauses Gemini's ability to generate images of people after historical inaccuracies. *The Verge*. https://www.theverge.com/2024/2/21/24079371/google-ai-gemini-generative-inaccurate-historical
