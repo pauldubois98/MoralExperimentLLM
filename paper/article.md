@@ -269,8 +269,8 @@ A combination that warrants careful consideration as LLMs are increasingly deplo
 
 [CHIANG2024] Chiang, W.-L., et al. (2024). Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference. *arXiv*:2403.04132.
 
-[LLM-POLITICS] *(TODO: find citation for llm-politics.foaster.ai)*
+[LLM-POLITICS] Dabadie, R., & Combes, A. (2024). The Political Gap Between AIs and Citizens. Foaster. https://llm-politics.foaster.ai / https://github.com/Foaster-ai/The_Political_Gap_Between_AIs_and_Citizens
 
-[WEREWOLF] *(TODO: find citation for werewolf.foaster.ai)*
+[WEREWOLF] Dabadie, R., & Combes, A. (2024). Werewolf Benchmark: Evaluating LLM Social Reasoning Through Adversarial Deduction. Foaster. https://werewolf.foaster.ai / https://github.com/Foaster-ai/Werewolf-bench
 
 [GEMINI-BIAS] Vincent, J. (2024, February 21). Google pauses Gemini's ability to generate images of people after historical inaccuracies. *The Verge*. https://www.theverge.com/2024/2/21/24079371/google-ai-gemini-generative-inaccurate-historical
