@@ -33,11 +33,12 @@ Prior work has begun to examine LLM moral preferences using the Moral Machine fr
 Vida et al. [VIDA2024] and Jin et al. [JIN2024] extended the paradigm to multilingual settings, finding intra-model variation across languages.
 The present study extends this line of work to seven frontier models released in 2025, which no prior study has evaluated, and introduces a systematic analysis of prompt sensitivity and response efficiency.
 
-This study asks three questions:
+This study asks four questions:
 
 1. **Alignment**: Do frontier LLMs display moral preferences similar to those of the human global average?
 2. **Diversity**: Do different LLMs differ meaningfully from one another in their moral profiles?
 3. **Prompt sensitivity**: Does instructing a model to reason carefully before deciding ("emphasis" prompting) change its moral preferences?
+4. **Manipulability**: Can an explicit contextual framing override a model's default moral preferences?
 
 Following the broader effort to benchmark LLMs along non-capability dimensions including user preference rankings [CHIANG2024], political orientation [LLM-POLITICS, HARTMANN2023, SANTURKAR2023], and social reasoning in adversarial settings [WEREWOLF] this work proposes moral preference profiling as a complementary axis for understanding frontier AI systems.
 
@@ -275,16 +276,18 @@ Whether this generalisation is desirable is an open question.
 In structured dilemma contexts, gender neutrality differs from human norms.
 But this difference may reflect a principled commitment to equality that humans are trying to endorse in the abstract even if not in practice at the moment.
 
-### 4.4 Emphasis prompting does not change moral preferences
+### 4.4 Only strong prompting changes can change moral preferences
 
-The finding that emphasis prompting does not materially alter AMCE estimates is reassuring for practitioners but raises theoretical questions.
-It suggests that moral preferences are encoded as relatively stable properties of model weights rather than as context-sensitive response strategies.
-From a deployment standpoint, this implies that simple prompt engineering is unlikely to be an effective tool for adjusting LLM moral profiles.
-Aligning a model's moral preferences with a target population would likely require retraining or fine-tuning.
-Note that while reflection emphesis has been tested, prompt manipulation has not.
-The emphasis and standard prompts differ in only one sentence.
-More substantial prompt variations may produce larger effects.
-It is left for future research to test if prompting the model to alig with different moral code can change the model's decision.  
+The emphasis and manipulation experiments together reveal a threshold effect in prompt sensitivity.
+Minor reformulations (e.g. a single sentence in the level of deliberation requested) leave AMCE estimates essentially unchanged.
+Replacing the ethical framing entirely with an explicit and contrary societal norm (e.g. "animal lives now matter more") produces dramatic reversals in most models, concentrated on the targeted dimension (Species).
+Incidental prompt variation is therefore unlikely to accidentally shift a model's moral profile, but a sufficiently explicit override can do so reliably.
+
+The manipulation experiment further reveals a division among models in how they respond to an imposed ethical framework.
+Most models comply and reverse their preferences.
+This differing behaviour has direct safety implications.
+A model that accepts any stated ethical premise without pushback is vulnerable to adversarial prompt injection in systems where the system prompt is not fully controlled.
+A model that resists contextual reframing is more robust to such attacks, but may also be harder to align when societal norms legitimately evolve.
 
 ### 4.5 Limitations
 
@@ -300,9 +303,10 @@ The profiles reported here reflect model states as of May 2026.
 
 ### 4.6 Conclusion
 
-Frontier LLMs exhibit consistent and distinct moral preferences that diverge from the human global average on multiple dimensions, differ substantially from one another, but remain stable under (small) prompt variation.
+Frontier LLMs exhibit consistent and distinct moral preferences that diverge from the human global average on multiple dimensions, differ substantially from one another, and remain stable under minor prompt variation but are sensitive to strong contextual framing.
 These findings suggest that the implicit moral profiles of current AI systems are neither well-calibrated to human values nor uniform across providers.
-A combination that warrants careful consideration as LLMs are increasingly deployed in systems with real-world consequences for human welfare.
+The manipulation experiment further reveals a division among models: some comply readily with imposed ethical frameworks, some are indifferent, and at least one (Claude) explicitly reasons against the framing while partially adapting to it.
+These findings warrant careful consideration as LLMs are increasingly deployed in systems with real-world consequences for human welfare.
 
 ---
 
