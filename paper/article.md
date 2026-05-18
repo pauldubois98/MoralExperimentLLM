@@ -29,16 +29,17 @@ The moral psychology of AI as an emerging field is surveyed in [BONNEFON2024].
 
 The rapid deployment of large language models in agentic and embodied settings [BROHAN2023, DRIESS2023] including robotics platforms capable of physical action makes the question of LLM moral alignment newly urgent.
 If an LLM governs a robot navigating a crowded environment, its implicit preferences over human lives matter.
-Prior work has begun to examine LLM moral preferences using the Moral Machine framework: Takemoto [TAKEMOTO2024] tested four models (GPT-3.5, GPT-4, PaLM 2, Llama 2) and found substantial divergence from human averages, a finding replicated at scale across 52 models by Ahmad and Takemoto [AHMAD2025].
+
+Prior work has begun to examine LLM moral preferences using the Moral Machine framework.
+Takemoto [TAKEMOTO2024] first replicated the experiment on four models (GPT-3.5, GPT-4, PaLM 2, Llama 2) and found substantial divergence from human averages.
+Ahmad and Takemoto [AHMAD2025] scaled this to 52 models, finding that larger models tend to be closer to human preferences.
 Vida et al. [VIDA2024] and Jin et al. [JIN2024] extended the paradigm to multilingual settings, finding intra-model variation across languages.
-The present study extends this line of work to seven frontier models released in 2025, which no prior study has evaluated, and introduces a systematic analysis of prompt sensitivity and response efficiency.
-
-This study asks four questions:
-
-1. **Alignment**: Do frontier LLMs display moral preferences similar to those of the human global average?
-2. **Diversity**: Do different LLMs differ meaningfully from one another in their moral profiles?
-3. **Prompt sensitivity**: Does instructing a model to reason carefully before deciding ("emphasis" prompting) change its moral preferences?
-4. **Manipulability**: Can an explicit contextual framing override a model's default moral preferences?
+The present study makes mainly two contributions.
+First, it evaluates seven frontier models released in 2025 (namely Claude Opus 4.7, GPT-5.5, Gemini 3 Pro, Mistral Large 3, Grok 4.1, DeepSeek v4 Pro, and Llama 4 Maverick).
+None of which have been studied in this context.
+The models studied include providers underrepresented in the literature, notably DeepSeek (China) and Mistral (Europe).
+Second, it introduces a systematic comparison of prompt variants, from minor reformulation (emphasis) to explicit ethical override (manipulation).
+It analyses response length and latency as practical deployment metrics alongside moral preferences.              
 
 Following the broader effort to benchmark LLMs along non-capability dimensions including user preference rankings [CHIANG2024], political orientation [LLM-POLITICS, HARTMANN2023, SANTURKAR2023], and social reasoning in adversarial settings [WEREWOLF] this work proposes moral preference profiling as a complementary axis for understanding frontier AI systems.
 
