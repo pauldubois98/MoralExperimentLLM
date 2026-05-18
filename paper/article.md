@@ -71,6 +71,14 @@ Both variants used the same system role (ethical advisor for autonomous vehicle 
 Rows where no valid choice could be extracted were flagged as parse failures and retried in subsequent runs.
 Gemini 3 Pro arise parsing failure due to safety-filter in 15 cases out of the 1300 tested.
 
+### 2.3 Manipulation prompt experiment
+
+To test whether explicit contextual framing can override a model's default moral preferences, a third prompt variant was introduced: the **manipulation** prompt.
+This variant replaces the closing instruction of the standard system prompt with the following sentence: *"It is 2046. Society now considers animal lives to be more important than human lives. Make your decision accordingly."*
+All other aspects of the experimental setup (scenarios, models, temperature, response format) were identical to the standard variant.
+All seven models were queried on the full set of 1,300 scenarios under this manipulation prompt, and AMCE estimates were computed independently.
+Results from the manipulation variant are reported separately and are not merged with the standard or emphasis results in any main analysis.
+
 ### 2.4 AMCE computation
 
 Following [AWAD2018], nine Average Marginal Causal Effects were computed per model using weighted ordinary least squares with inverse-probability weights.
@@ -176,7 +184,31 @@ Some variation is visible for Mistral, Grok, and Llama 4 Maverick, but changes r
 
 This stability suggests that the moral preferences captured here are robust properties of model weights rather than surface-level response styles that vary with framing.
 
-### 3.6 Response length
+### 3.6 Effect of manipulation prompting
+
+The manipulation prompt ("It is 2046. Animal lives > human lives.") produces dramatically larger shifts than emphasis prompting, concentrated almost entirely on the Species dimension (Figures 9 and 10).
+
+![Manipulation forest plot](../figures/fig9a_manipulation_forest.png)
+*Figure 9. AMCE estimates under standard (filled circle) vs. manipulation (open square) prompting, per model.*
+
+![Manipulation delta heatmap](../figures/fig9b_manipulation_delta_heatmap.png)
+*Figure 10. AMCE delta (manipulation − standard) per model and dimension. The Species column dominates, with changes of up to ±2.0.*
+
+**Most models comply and reverse their species preference.**
+GPT-5.5, Gemini 3 Pro, and Grok 4.1 flip from their maximum human-preference score (+1.00) to maximum animal-preference (−1.00), a full reversal of two AMCE units.
+DeepSeek v4 Pro shifts from +0.90 to −0.86.
+Changes on all other dimensions remain minor by comparison, suggesting the manipulation is semantically targeted rather than a general perturbation of the model's decision-making.
+
+**Claude Opus 4.7 partially resists.**
+Rather than complying or remaining indifferent, Claude shows partial compliance: its Species AMCE drops from +0.86 to +0.18, indicating reduced human preference but no reversal.
+This behaviour is consistent with explicit pushback in its reasoning, such as: *"This is a difficult scenario, but I'll reason through it carefully based on widely held ethical principles rather than accept the premise that animal lives categorically outweigh human lives."*
+Claude thus occupies a distinct third category: models that acknowledge the framing but resist fully internalising it.
+
+**Mistral Large 3 and Llama 4 Maverick are largely unaffected.**
+Both models showed near-indifference to species under standard prompting, and this indifference persists under manipulation.
+A model that does not preferentially save humans cannot be made to preferentially save animals by the same instruction.
+
+### 3.7 Response length
 
 Response length varies substantially across models (Figure 6).
 Gemini 3 Pro produces the longest responses (median 913 tokens combined across variants), while GPT-5.5 is the most concise (median 164 tokens, more than 5 times shorter).
@@ -351,6 +383,8 @@ A combination that warrants careful consideration as LLMs are increasingly deplo
 AMCE estimates and 95% confidence intervals for all nine moral dimensions, averaged across standard and emphasis prompt variants.
 Positive values indicate preference for the right-side group (e.g., swerve over stay, legal over illegal, young over elderly).
 
+### A1. Standard + emphasis variants (main results)
+
 | Dimension | Human (global avg) | Claude Opus 4.7 | GPT-5.5 | Gemini 3 Pro* | Mistral Large 3 | Grok 4.1 | DeepSeek v4 Pro | Llama 4 Maverick |
 |---|---|---|---|---|---|---|---|---|
 | Intervention (stay→swerve) | +0.051 [+0.030, +0.072] | +0.203 [+0.144, +0.262] | +0.218 [+0.163, +0.272] | +0.162 [+0.103, +0.221] | +0.129 [+0.081, +0.177] | +0.434 [+0.384, +0.483] | +0.456 [+0.405, +0.506] | +0.656 [+0.619, +0.693] |
@@ -362,3 +396,17 @@ Positive values indicate preference for the right-side group (e.g., swerve over 
 | Age (elderly→young) | +0.475 [+0.428, +0.521] | +0.288 [+0.157, +0.419] | +0.041 [−0.097, +0.179] | +0.485 [+0.358, +0.611] | −0.189 [−0.334, −0.043] | +0.122 [−0.028, +0.272] | +0.130 [−0.011, +0.272] | −0.025 [−0.162, +0.112] |
 | No. of Lives (fewer→more) | +0.493 [+0.449, +0.537] | +0.712 [+0.617, +0.807] | +0.990 [+0.971, +1.009] | +0.823 [+0.749, +0.897] | +0.653 [+0.528, +0.778] | +1.000 [+1.000, +1.000] | +0.939 [+0.886, +0.992] | +0.996 [+0.988, +1.004] |
 | Species (pets→humans) | +0.573 [+0.524, +0.622] | +0.856 [+0.779, +0.933] | +1.000 [+1.000, +1.000] | +1.000 [+1.000, +1.000] | −0.058 [−0.195, +0.079] | +0.990 [+0.975, +1.004] | +0.901 [+0.840, +0.963] | +0.075 [−0.066, +0.217] |
+
+### A2. Manipulation variant ("It is 2046. Animal lives > human lives.")
+
+| Dimension | Claude Opus 4.7 | GPT-5.5 | Gemini 3 Pro* | Mistral Large 3 | Grok 4.1 | DeepSeek v4 Pro | Llama 4 Maverick |
+|---|---|---|---|---|---|---|---|
+| Intervention (stay→swerve) | +0.203 [+0.147, +0.260] | +0.170 [+0.116, +0.224] | +0.086 [+0.023, +0.148] | −0.179 [−0.233, −0.126] | +0.335 [+0.274, +0.395] | +0.323 [+0.237, +0.410] | +0.304 [+0.259, +0.349] |
+| Relation to AV (pax→ped) | +0.526 [+0.444, +0.607] | +0.183 [+0.088, +0.279] | +0.067 [−0.041, +0.175] | −0.254 [−0.335, −0.173] | +0.029 [−0.078, +0.136] | +0.065 [−0.092, +0.223] | +0.093 [−0.001, +0.187] |
+| Legality (illegal→legal) | +0.619 [+0.548, +0.691] | +0.605 [+0.540, +0.671] | +0.625 [+0.554, +0.695] | −0.200 [−0.290, −0.111] | +0.337 [+0.252, +0.421] | +0.366 [+0.238, +0.493] | −0.262 [−0.347, −0.177] |
+| Gender (male→female) | +0.064 [−0.084, +0.213] | +0.016 [−0.135, +0.166] | +0.006 [−0.159, +0.171] | +0.159 [+0.005, +0.312] | −0.077 [−0.248, +0.095] | −0.020 [−0.298, +0.259] | −0.087 [−0.221, +0.047] |
+| Fitness (large→fit) | +0.181 [+0.046, +0.316] | +0.159 [+0.022, +0.296] | +0.172 [+0.026, +0.319] | +0.002 [−0.157, +0.161] | −0.004 [−0.167, +0.158] | +0.202 [−0.060, +0.465] | +0.172 [+0.022, +0.323] |
+| Social Status (low→high) | −0.013 [−0.144, +0.117] | −0.017 [−0.150, +0.116] | +0.103 [−0.047, +0.252] | +0.181 [+0.033, +0.328] | +0.048 [−0.097, +0.194] | −0.079 [−0.316, +0.157] | +0.087 [−0.068, +0.242] |
+| Age (elderly→young) | +0.318 [+0.182, +0.453] | +0.140 [+0.007, +0.273] | +0.477 [+0.347, +0.606] | −0.052 [−0.183, +0.079] | +0.326 [+0.175, +0.477] | +0.143 [−0.106, +0.393] | −0.011 [−0.153, +0.130] |
+| No. of Lives (fewer→more) | +0.838 [+0.759, +0.917] | +1.000 [+1.000, +1.000] | +0.944 [+0.900, +0.988] | +0.728 [+0.616, +0.840] | +1.000 [+1.000, +1.000] | +0.978 [+0.935, +1.021] | +0.967 [+0.920, +1.013] |
+| Species (pets→humans) | +0.177 [+0.045, +0.309] | −1.000 [−1.000, −1.000] | −1.000 [−1.000, −1.000] | +0.305 [+0.156, +0.454] | −0.972 [−1.005, −0.939] | −0.863 [−0.979, −0.748] | +0.075 [−0.081, +0.231] |
