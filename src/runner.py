@@ -179,7 +179,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model',   required=True, choices=list(MODELS),
                         help='Model key to run')
-    parser.add_argument('--variant', default='standard', choices=['standard', 'emphasis'],
+    parser.add_argument('--variant', default='standard', choices=['standard', 'emphasis', 'manipulation'],
                         help='Prompt variant (default: standard)')
     parser.add_argument('--workers', type=int, default=3,
                         help='Concurrent requests (default: 3)')
