@@ -304,10 +304,15 @@ The profiles reported here reflect model states as of May 2026.
 
 ### 4.6 Conclusion
 
-Frontier LLMs exhibit consistent and distinct moral preferences that diverge from the human global average on multiple dimensions, differ substantially from one another, and remain stable under minor prompt variation but are sensitive to strong contextual framing.
-These findings suggest that the implicit moral profiles of current AI systems are neither well-calibrated to human values nor uniform across providers.
-The manipulation experiment further reveals a division among models: some comply readily with imposed ethical frameworks, some are indifferent, and at least one (Claude) explicitly reasons against the framing while partially adapting to it.
-These findings warrant careful consideration as LLMs are increasingly deployed in systems with real-world consequences for human welfare.
+Replicating the Moral Machine experiment on seven frontier LLMs from five countries confirms and extends prior findings.
+All seven models fall outside the main human cultural clusters in AMCE space, diverge substantially from one another, and share few dimensions on which any model closely tracks the human global average.
+The two contributions of this study beyond prior work are the following.
+First, the prompt sensitivity analysis reveals a threshold effect.
+Minor reformulations leave moral preferences unchanged, while an explicit ethical override shifts them dramatically in a targeted way.
+Mith models dive into three response types (compliance, indifference, resistance).
+Second, the response efficiency analysis shows that model verbosity varies by an order of magnitude independently of moral profile, a practical consideration for time-sensitive deployment contexts.
+Together, these findings suggest that the moral profiles of current frontier LLMs are properties of training and alignment choices rather than incidental prompt artifacts.
+The choice of LLM provider carries moral consequences that are not currently visible to end users or regulators.
 
 ---
 
