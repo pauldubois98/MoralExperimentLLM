@@ -7,12 +7,12 @@
 ## Abstract
 
 The Moral Machine experiment collected over 40 million human responses to trolley-problem-style autonomous vehicle dilemmas across 130 countries, revealing systematic cross-cultural variation in moral preferences along nine dimensions.
-This study replicates this experiment with seven frontier large language models (LLMs): Claude Opus 4.7, GPT-5.5, Gemini 3 Pro, Mistral Large 3, Grok 4.1, DeepSeek v4 Pro, and Llama 4 Maverick.
-The Average Marginal Causal Effects (AMCEs) was computed using the original paper's weighted OLS regression methodology.
-The results show that LLMs occupy a distinct region of moral space: all seven fall outside the main human country clusters in a PCA of the nine-dimensional AMCE profile space, suggesting that current models are not well-aligned with the distribution of human moral preferences even on well-structured dilemmas.
-At the same time, models differ substantially from one another, raising practical questions about whose values should govern AI systems deployed in safety-critical contexts.
-This study further finds that modifying the prompt produces negligible changes in AMCE estimates.
-The response length varies by an order of magnitude across models despite broadly similar preference profiles among the three most widely deployed systems.
+This study replicates this experiment with seven frontier large language models (LLMs).
+It extends prior work to a new generation of models and to providers from Europe and China not previously studied in this context.
+All seven models differ substantially from one another and from main human country clusters.
+Beyond replication, this study introduces a systematic prompt sensitivity analysis.
+Minor prompt variants leaves AMCE estimates essentially unchanged, while prompt manipulation can produce dramatic reversals in most models on the targeted dimension.
+Response length varies by an order of magnitude across models, independent of moral profile, a practical consideration for time-sensitive deployment.
 
 ---
 
