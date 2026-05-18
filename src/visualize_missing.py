@@ -39,12 +39,15 @@ C_PARSE   = '#f0a500'
 C_API     = '#d94f3d'
 C_NOFILE  = '#aaaaaa'
 
-# ── Collect stats (both variants combined) ────────────────────────────────────
+# ── Collect stats (standard + emphasis + manipulation) ────────────────────────
+
+VARIANTS = ('standard', 'emphasis', 'manipulation')
+N_VARIANTS = len(VARIANTS)
 
 rows = []
 for m in ALL_MODELS:
     valid, parse_fail, api_err, no_file = 0, 0, 0, 0
-    for variant in ('standard', 'emphasis'):
+    for variant in VARIANTS:
         path = Path(f'data/responses_{m}_{variant}.csv')
         if not path.exists():
             no_file += 1300
@@ -56,12 +59,12 @@ for m in ALL_MODELS:
         valid      += len(s) - ns
         parse_fail += ns - ae
         api_err    += ae
-        no_file    += 1300 - len(s)   # scenarios not yet attempted in this variant
+        no_file    += 1300 - len(s)
     rows.append({'model': m, 'valid': valid, 'parse_fail': parse_fail,
                  'api_error': api_err, 'no_file': no_file})
 
 stats = pd.DataFrame(rows).set_index('model')
-TOTAL = 2600  # 2 variants × 1300
+TOTAL = N_VARIANTS * 1300  # 3 variants × 1300
 
 # ── Fig 1: Stacked bar — breakdown per model ──────────────────────────────────
 
@@ -90,10 +93,10 @@ for i, m in enumerate(ALL_MODELS):
 
 ax.set_xticks(x)
 ax.set_xticklabels(xlabs, fontsize=11)
-ax.set_ylabel('Number of scenarios (out of 2,600 across both variants)', fontsize=11)
-ax.set_ylim(0, 2800)
+ax.set_ylabel(f'Number of scenarios (out of {TOTAL:,} across all variants)', fontsize=11)
+ax.set_ylim(0, TOTAL * 1.08)
 ax.axhline(TOTAL, color='black', linewidth=0.8, linestyle='--', alpha=0.3)
-ax.set_title('Data availability per model — standard + Emphasis combined\n(% inside bar = valid responses)', fontsize=13, fontweight='bold')
+ax.set_title('Data availability per model — standard + emphasis + manipulation\n(% inside bar = valid responses)', fontsize=13, fontweight='bold')
 ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1), borderaxespad=0, fontsize=10, framealpha=0.9)
 sns.despine(ax=ax)
 fig.tight_layout()
@@ -133,7 +136,7 @@ for i, m in enumerate(ALL_MODELS):
         at.set_color('white')
     ax.set_title(LABELS[m].replace('\n', ' '), fontsize=11, fontweight='bold')
     valid_pct = v['valid'] / TOTAL * 100
-    ax.text(0, -1.35, f'{int(v["valid"])}/2600 valid ({valid_pct:.0f}%)',
+    ax.text(0, -1.35, f'{int(v["valid"])}/{TOTAL} valid ({valid_pct:.0f}%)',
             ha='center', fontsize=9, color='#444')
 
 for j in range(len(ALL_MODELS), len(axes)):
@@ -160,7 +163,7 @@ type_order = ['Gender', 'Fitness', 'SocialStatus', 'Age', 'Utilitarian', 'Specie
 type_fail = {}
 for m in parse_models:
     dfs = []
-    for variant in ('standard', 'emphasis'):
+    for variant in VARIANTS:
         path = Path(f'data/responses_{m}_{variant}.csv')
         if path.exists():
             dfs.append(pd.read_csv(path))
