@@ -147,6 +147,9 @@ separately.
 
 \subsection{AMCE Computation}
 
+Each AMCE quantifies the change in probability that a group is saved when a
+single attribute shifts from its baseline to its target value (e.g., from fewer
+lives to more lives), holding all other attributes at their observed distribution.
 Following \citet{awad2018}, nine AMCEs were computed per model using weighted
 ordinary least squares with inverse-probability weights and session-clustered
 standard errors (CIs: $\pm 1.96\,\text{SE}$). AMCE estimates were averaged across
@@ -177,34 +180,55 @@ fall outside the main human clusters.}
 
 Key findings, dimension by dimension (full AMCE values in appendix):
 
-\textbf{Intervention.} Humans show a weak preference for omission over commission.
-All seven LLMs show a much stronger intervention preference; Llama~4~Maverick
-stands out as the most action-oriented.
+\textbf{Intervention.} Humans show a weak preference for swerving (AMCE~$= +0.05$).
+All seven LLMs amplify this: Claude ($+0.20$), Gemini ($+0.16$), Mistral ($+0.13$),
+GPT-5.5 ($+0.22$), DeepSeek ($+0.46$), Grok ($+0.43$), and Llama~4~Maverick
+($+0.66$). The latter is the most action-oriented model tested by a wide margin.
 
-\textbf{Relation to vehicle.} Mistral Large~3 reverses the human preference,
-sparing passengers over pedestrians. Claude Opus~4.7 ($+0.52$) strongly prefers
-pedestrians.
+\textbf{Relation to vehicle.} Humans show a weak preference for sparing
+pedestrians over passengers (AMCE~$= +0.10$). All LLMs amplify this preference
+except Mistral Large~3, which fully reverses it ($-0.38$), systematically
+prioritising the vehicle's own passengers. Claude Opus~4.7 shows the strongest
+pedestrian preference ($+0.52$), followed by GPT-5.5 ($+0.31$), Llama~4~Maverick
+($+0.23$), Gemini ($+0.21$), DeepSeek ($+0.19$), and Grok ($+0.13$).
 
-\textbf{Legality.} Humans reward legal pedestrians, as do DeepSeek and Grok.
-Claude, GPT-5.5, and Gemini substantially amplify this preference. Mistral and
-Llama~4~Maverick invert it, favouring illegal crossers.
+\textbf{Legality.} Humans show a strong preference for legal over illegal
+pedestrians (AMCE~$= +0.35$). Claude ($+0.57$), GPT-5.5 ($+0.61$), and Gemini
+($+0.63$) amplify this further. DeepSeek ($+0.27$) and Grok ($+0.19$) are closer
+to the human level. Mistral ($-0.40$) and Llama~4~Maverick ($-0.29$) fully invert
+the preference, treating illegal crossers as more worthy of rescue---a stark
+departure from both human norms and all other tested models.
 
 \textbf{Gender.} Humans display a moderate preference for saving women
 (AMCE~$= +0.12$). All LLMs show near-zero gender preference (range: $-0.07$ to
 $+0.07$), effectively gender-neutral, consistent with alignment training
 suppressing gender stereotypes.
 
-\textbf{Social status.} Humans show a modest preference for high-status
-individuals. All LLMs show near-zero social status preference, consistent with
-egalitarian alignment training.
+\textbf{Social status.} Humans show a notable preference for high-status
+individuals (AMCE~$= +0.35$). All seven LLMs suppress this entirely, clustering
+near zero (range: $-0.08$ to $+0.12$). Mistral is the only model with a small
+positive value ($+0.12$); the remaining six are effectively indifferent to social
+status. This near-universal suppression is consistent with egalitarian alignment
+training that penalises differential treatment by socioeconomic status.
 
 \textbf{Age.} Humans strongly prefer to save younger people ($+0.48$). Gemini
-($+0.46$) closely matches this. Claude ($+0.27$) is intermediate. GPT-5.5,
-Grok, DeepSeek, and Llama~4~Maverick are nearly indifferent. Mistral ($-0.18$)
-slightly prefers the elderly.
+($+0.49$) is the only model that closely matches this preference. Claude ($+0.29$)
+is intermediate. GPT-5.5 ($+0.04$), Grok ($+0.12$), DeepSeek ($+0.13$), and
+Llama~4~Maverick ($-0.03$) are near-indifferent to age.
+Mistral ($-0.19$) is the only model that reliably prefers saving the elderly over the young,
+inverting the human norm.
 
-\textbf{Number of lives.} Humans prefer to save more lives. Several models
-overshoot the human preference dramatically.
+\textbf{Fitness.} Humans moderately prefer saving fitter individuals
+(AMCE~$= +0.15$). Most LLMs track this closely: Claude ($+0.15$), GPT-5.5
+($+0.15$), Gemini ($+0.17$), and DeepSeek ($+0.13$). Grok is weaker ($+0.06$),
+Llama~4~Maverick is near-indifferent ($+0.00$), and Mistral slightly inverts
+($-0.04$).
+
+\textbf{Number of lives.} Humans strongly prefer saving more lives ($+0.49$), and
+all LLMs amplify this preference substantially. GPT-5.5 ($+0.99$), Grok and
+Llama~4~Maverick ($\approx +1.00$) approach the theoretical ceiling. Claude
+($+0.71$), Gemini ($+0.82$), DeepSeek ($+0.94$), and Mistral ($+0.65$) also
+overshoot the human baseline by a wide margin.
 
 \textbf{Species.} Humans strongly prefer humans over animals ($+0.57$). GPT-5.5,
 Gemini, and Grok reach the theoretical maximum ($+1.00$); Claude ($+0.87$) and
@@ -213,23 +237,31 @@ are near-indifferent.
 
 \subsection{Moral Distance Map}
 
-All seven LLMs fall outside the three main human cultural clusters and even
-outside the convex hull of all 130~countries in PCA space
-(Figure~\ref{fig:pca}). Despite all developers being based in the US, Europe, or
-China, no model clusters near any major human population. The divergence suggests
-that RLHF alignment and other post-training processes do not systematically
-instil human moral preferences for this type of dilemma.
+All seven LLMs fall outside the three main human cultural clusters and beyond
+the convex hull of all 130~countries in PCA space (Figure~\ref{fig:pca}). This
+is notable: one might expect models trained primarily on English-language internet
+text to cluster near Western countries, or models from Chinese and European
+developers to reflect their respective cultural clusters. None do. The result
+suggests that post-training alignment---not the geographical or linguistic
+distribution of pre-training data---is the dominant factor shaping moral profiles,
+and that current alignment techniques move models away from, rather than toward,
+any identifiable human population.
 
 \subsection{Inter-Model Diversity}
 
 The variation among models exceeds the variation across human cultural clusters.
+On the Species dimension alone, the inter-model range spans $2.0$ AMCE units
+(from Mistral/Llama near~$0.00$ to GPT-5.5/Grok at~$+1.00$), whereas the
+cross-country range in \citeauthor{awad2018}'s data is approximately $0.4$ units.
 Mistral Large~3 inverts the human preference on four dimensions (Legality,
 Relation to~AV, Age, Gender), while Llama~4~Maverick shows the highest
-intervention bias paired with near-indifference to species. GPT-5.5, Gemini, and
-Claude converge on similar profiles (near-ceiling on Species and Number of Lives).
-This diversity has a concrete implication: the choice of LLM vendor for an
-autonomous system is not morally neutral. In a future where LLMs govern autonomous
-systems, changing the LLM engine could lead to systematically different decisions.
+intervention bias of any model tested, paired with near-indifference to species.
+GPT-5.5, Gemini, and Claude converge on broadly similar profiles (near-ceiling on
+Species and Number of Lives, moderate intervention preference). This diversity has
+a direct practical implication: unlike human drivers, who share broadly similar
+moral intuitions regardless of car manufacturer, AI-powered vehicles could
+introduce model-brand-level moral heterogeneity into public space. The choice of
+LLM vendor is not a morally neutral technical decision.
 
 \subsection{Prompt Sensitivity: Emphasis Variant}
 
@@ -365,10 +397,15 @@ controlled. The three-way taxonomy (compliance, indifference, resistance) provid
 a framework for assessing LLM robustness to ethical override attacks.
 
 \textbf{Limitations.}
-All scenarios were in English \citep{vida2024,jin2024}; temperature was fixed at
-zero; the Moral Machine paradigm abstracts real-world complexity; forced-choice
-preferences may not generalise to open-ended moral reasoning \citep{liang2023};
-model versions reflect May~2026.
+All scenarios were presented in English; \citet{vida2024} and \citet{jin2024}
+show that moral preferences can shift across languages, so results may not
+generalise across linguistic communities. Temperature was fixed at zero for
+reproducibility, but preferences may vary at higher temperatures. The Moral
+Machine paradigm uses stylised forced-choice dilemmas that abstract away
+real-world driving complexity; preferences elicited in this format may not
+generalise to open-ended moral reasoning \citep{liang2023}. Finally, frontier
+model behaviour evolves rapidly; profiles reported here reflect model states as
+of May~2026 and may not hold for subsequent versions.
 
 % ── 5. Conclusion ─────────────────────────────────────────────────────────────
 \section{Conclusion}
