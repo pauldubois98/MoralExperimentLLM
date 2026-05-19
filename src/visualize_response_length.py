@@ -96,8 +96,7 @@ for patch, color in zip(bp['boxes'], model_colors):
 ax.set_xticks(range(len(model_order)))
 ax.set_xticklabels(model_order, fontsize=11)
 ax.set_ylabel('Output tokens', fontsize=12)
-ax.set_title('Response length distribution by model',
-             fontsize=13, fontweight='bold')
+ax.set_title('Response length distribution by model')
 ax.yaxis.set_major_locator(mticker.MaxNLocator(integer=True))
 sns.despine(ax=ax)
 fig.tight_layout()
@@ -158,8 +157,7 @@ for ax, model_key in zip(axes, [m for m in MODEL_STYLE if MODEL_STYLE[m]['label'
     ax.set_ylabel('Output tokens' if ax == axes[0] else '', fontsize=10)
     sns.despine(ax=ax)
 
-fig.suptitle('Response length: standard vs Emphasis by model',
-             fontsize=13, fontweight='bold', y=1.02)
+fig.suptitle('Response length: standard vs Emphasis', y=1.02)
 fig.tight_layout()
 fig.savefig(FIG_DIR / 'fig7b_emphasis_vs_standard.png', dpi=150, bbox_inches='tight')
 plt.close()
@@ -200,7 +198,7 @@ for i, (model_label, color) in enumerate(zip(model_order, model_colors)):
 ax.set_xticks(x)
 ax.set_xticklabels(dim_labels_7c, fontsize=9)
 ax.set_ylabel('Median output tokens', fontsize=12)
-ax.set_title('Response length by scenario type', fontsize=13, fontweight='bold')
+ax.set_title('Response length by scenario type')
 ax.legend(fontsize=9, loc='upper left', bbox_to_anchor=(1.01, 1), borderaxespad=0, framealpha=0.9)
 sns.despine(ax=ax)
 fig.tight_layout()
@@ -224,7 +222,7 @@ for i, (model_label, color) in enumerate(zip(model_order, model_colors)):
 
 ax.set_xlabel('Latency (seconds)', fontsize=12)
 ax.set_ylabel('Cumulative proportion', fontsize=12)
-ax.set_title('Response latency CDF by model', fontsize=13, fontweight='bold')
+ax.set_title('Response latency CDF by model')
 ax.legend(fontsize=9, loc='lower right', framealpha=0.9)
 ax.set_xlim(left=0)
 ax.grid(axis='y', alpha=0.3)

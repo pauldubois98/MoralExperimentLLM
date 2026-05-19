@@ -128,7 +128,7 @@ bar_colors = [('#888888' if not row['sig'] else row['color']) for _, row in res_
 bars = ax_bar.barh(res_df['model_label'], res_df['r'], color=bar_colors, alpha=0.85, height=0.55)
 ax_bar.axvline(0, color='black', linewidth=1)
 ax_bar.set_xlabel('Spearman r  (|AMCE| vs. median tokens)', fontsize=11)
-ax_bar.set_title('Preference strength vs. response length', fontsize=11, fontweight='bold')
+ax_bar.set_title('Preference strength vs. response length')
 ax_bar.set_xlim(-1.1, 0.4)
 for bar, (_, row) in zip(bars, res_df.iterrows()):
     x = row['r'] - 0.03 if row['r'] < 0 else row['r'] + 0.03
@@ -157,7 +157,7 @@ for model_key, style in MODEL_STYLE.items():
 
 ax_scat.set_xlabel('|AMCE|  (preference strength)', fontsize=11)
 ax_scat.set_ylabel('Median output tokens', fontsize=11)
-ax_scat.set_title('Preference strength vs. response length\n(per-model fit lines)', fontsize=11, fontweight='bold')
+ax_scat.set_title('Preference strength vs. response length')
 ax_scat.legend(fontsize=8, loc='upper right', framealpha=0.9)
 sns.despine(ax=ax_scat)
 

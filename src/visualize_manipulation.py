@@ -125,10 +125,7 @@ axes[0].set_yticks(range(len(factors)))
 axes[0].set_yticklabels(factor_labels, fontsize=10)
 axes[0].set_ylim(-0.7, len(factors) - 0.3)
 
-fig.suptitle('Standard vs. manipulation prompting: AMCE per model\n'
-             '(manipulation: "It is 2046. Animal lives > human lives.")\n'
-             '(filled circle = standard, open square = manipulation)',
-             fontsize=13, fontweight='bold', y=1.02)
+fig.suptitle('Standard vs. manipulation prompting', y=1.02)
 fig.tight_layout()
 fig.savefig(FIG_DIR / 'fig9a_manipulation_forest.png', dpi=150, bbox_inches='tight')
 plt.close()

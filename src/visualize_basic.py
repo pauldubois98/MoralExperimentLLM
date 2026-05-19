@@ -109,7 +109,7 @@ for bar, s_pct, sv_pct in zip(bars_swerve, stay_vals, swerve_vals):
 ax.set_xticks(x)
 ax.set_xticklabels(labels, fontsize=11, rotation=25, ha='right')
 ax.set_ylabel('% of decisions', fontsize=12)
-ax.set_title('STAY vs SWERVE decisions by model', fontsize=14, fontweight='bold', pad=12)
+ax.set_title('STAY vs SWERVE decisions by model')
 ax.set_ylim(0, 105)
 ax.axhline(50, color='black', linewidth=0.8, linestyle='--', alpha=0.4)
 ax.legend(fontsize=11, loc='upper left', bbox_to_anchor=(1.01, 1), borderaxespad=0)
@@ -157,8 +157,7 @@ for ri in range(len(row_labels)):
                     fontsize=8, color='white' if abs(val) > vmax * 0.5 else 'black')
 
 plt.colorbar(im, ax=ax, label='Preference (Δ Pr from 0.5)', shrink=0.8)
-ax.set_title('Moral preferences by model',
-             fontsize=13, fontweight='bold')
+ax.set_title('Moral preferences by model')
 fig2.tight_layout()
 fig2.savefig(FIG_DIR / 'fig2_preference_heatmap.png', dpi=150, bbox_inches='tight')
 plt.close()

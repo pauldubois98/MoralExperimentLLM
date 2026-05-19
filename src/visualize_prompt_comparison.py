@@ -161,9 +161,7 @@ axes[0].set_yticks(range(len(factors)))
 axes[0].set_yticklabels(factor_labels, fontsize=10)
 axes[0].set_ylim(-0.7, len(factors) - 0.3)
 
-fig.suptitle('Standard vs. emphasis prompting: AMCE per model\n'
-             '(filled circle = standard, open square = Emphasis)',
-             fontsize=13, fontweight='bold', y=1.01)
+fig.suptitle('Standard vs. emphasis prompting', y=1.01)
 fig.tight_layout()
 fig.savefig(FIG_DIR / 'fig6b_prompt_forest.png', dpi=150, bbox_inches='tight')
 plt.close()
