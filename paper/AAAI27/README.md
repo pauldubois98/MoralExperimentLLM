@@ -1,5 +1,8 @@
 # AAAI-27 Submission
 
+Conference: https://aaai.org/conference/aaai/aaai-27/
+
+
 **Venue:** 27th AAAI Conference on Artificial Intelligence  
 **Dates:** February 16–23, 2027, Montréal, Canada  
 **Deadlines:** Abstract July 21 / Full paper July 28, 2026

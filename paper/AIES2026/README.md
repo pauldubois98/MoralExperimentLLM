@@ -1,5 +1,9 @@
 # AIES 2026 Submission
 
+Conference: https://www.aies-conference.com/2026/
+Call for papers: https://www.aies-conference.com/2026/call-for-papers/
+Abstract and Submission website: https://easychair.org/conferences/?conf=aies26
+
 **Venue:** 9th AAAI/ACM Conference on AI, Ethics, and Society  
 **Dates:** October 12–14, 2026, Malmö, Sweden  
 **Deadlines:** Abstract May 14 / Full paper May 21, 2026
