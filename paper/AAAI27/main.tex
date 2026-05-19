@@ -274,11 +274,19 @@ No significant shifts are observed.}
 \label{fig:emphasis}
 \end{figure*}
 
-Comparing standard and emphasis variants (Figure~\ref{fig:emphasis}) reveals that
-prompting style has minimal effect on AMCE estimates across all models and
-dimensions. This stability suggests that the moral preferences captured here are
-robust properties of model weights rather than surface-level response styles that
-vary with framing.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\columnwidth]{../../figures/fig6a_prompt_delta_heatmap}
+\caption{AMCE delta (emphasis $-$ standard) per model and dimension. All values
+are near zero, confirming no meaningful shift.}
+\label{fig:emphasis_delta}
+\end{figure}
+
+Comparing standard and emphasis variants (Figures~\ref{fig:emphasis}
+and~\ref{fig:emphasis_delta}) reveals that prompting style has minimal effect on
+AMCE estimates across all models and dimensions. This stability suggests that the
+moral preferences captured here are robust properties of model weights rather than
+surface-level response styles that vary with framing.
 
 \subsection{Prompt Sensitivity: Manipulation Variant}
 
