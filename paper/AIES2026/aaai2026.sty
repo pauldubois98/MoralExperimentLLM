@@ -1,0 +1,59 @@
+%% Minimal aaai2026.sty — local proof compilation only
+%% Replace with official AAAI 2026 author kit for submission.
+%%
+%% Layout: title+abstract printed full-width, then \twocolumn switches layout.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{aaai2026}[2026/01/01 Minimal AAAI 2026 style]
+
+\DeclareOption{submission}{}
+\DeclareOption{camera}{}
+\DeclareOption*{}
+\ProcessOptions\relax
+
+% ── Page geometry ────────────────────────────────────────────────────────────
+\RequirePackage{geometry}
+\geometry{letterpaper,top=0.75in,bottom=1.25in,left=0.75in,right=0.75in}
+
+% ── Packages ─────────────────────────────────────────────────────────────────
+\RequirePackage{microtype}
+\RequirePackage{titlesec}
+
+% ── Section format ───────────────────────────────────────────────────────────
+\titleformat{\section}{\centering\normalsize\bfseries\MakeUppercase}{}{0em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
+\titlespacing*{\section}{0pt}{8pt plus 2pt}{4pt plus 1pt}
+\titlespacing*{\subsection}{0pt}{6pt plus 2pt}{3pt plus 1pt}
+
+% ── Affiliations helper ───────────────────────────────────────────────────────
+\newcommand{\affiliations}[1]{\def\@aaaiaffil{#1}}
+\affiliations{}
+
+% ── \maketitle: full-width title block ───────────────────────────────────────
+\renewcommand{\maketitle}{%
+  \begin{center}
+    {\LARGE\bfseries\@title\par}
+    \vspace{0.6em}
+    {\normalsize\@author\par}
+    \ifx\@aaaiaffil\empty\else
+      \vspace{0.2em}{\small\@aaaiaffil\par}
+    \fi
+  \end{center}
+  \vspace{0.4em}
+}
+
+% ── abstract: full-width, then switch to two-column ──────────────────────────
+\renewenvironment{abstract}{%
+  \begin{center}
+    \begin{minipage}{0.92\linewidth}
+      \small\noindent\textbf{Abstract}\par\noindent\ignorespaces
+}{%
+    \end{minipage}
+  \end{center}
+  \vspace{0.6em}
+  % Switch to two-column for the body
+  \newpage
+  \setlength{\columnsep}{0.375in}
+  \twocolumn
+  \setlength{\parindent}{0.25in}
+}
