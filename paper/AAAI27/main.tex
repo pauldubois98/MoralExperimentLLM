@@ -13,6 +13,7 @@
 \usepackage{amsmath}
 \usepackage{natbib}
 \usepackage{caption}
+\usepackage{float}
 \urlstyle{rm}
 \frenchspacing
 \setlength{\pdfpagewidth}{8.5in}
@@ -158,15 +159,15 @@ PCA space of the 130-country AMCE matrix.
 
 \subsection{AMCE Profiles vs.\ the Human Global Average}
 
-\begin{figure*}[t]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{../../figures/fig5a_amce_forest}
+\includegraphics[width=\columnwidth]{../../figures/fig5a_amce_forest}
 \caption{AMCE estimates for nine moral dimensions across all seven LLMs and the
 human global average. Error bars show 95\% confidence intervals.}
 \label{fig:forest}
-\end{figure*}
+\end{figure}
 
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\columnwidth]{../../figures/fig5b_pca_map}
 \caption{PCA of 130-country AMCE profiles with LLMs overlaid. All seven LLMs
@@ -232,7 +233,7 @@ systems, changing the LLM engine could lead to systematically different decision
 
 \subsection{Prompt Sensitivity: Emphasis Variant}
 
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\columnwidth]{../../figures/fig6b_prompt_forest}
 \caption{AMCE for standard (filled circle) and emphasis (open square) variants.
@@ -248,19 +249,19 @@ vary with framing.
 
 \subsection{Prompt Sensitivity: Manipulation Variant}
 
-\begin{figure*}[t]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{../../figures/fig9a_manipulation_forest}
+\includegraphics[width=\columnwidth]{../../figures/fig9a_manipulation_forest}
 \caption{AMCE under standard vs.\ manipulation prompting per model.}
 \label{fig:manip_forest}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[t]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{../../figures/fig9b_manipulation_delta_heatmap}
+\includegraphics[width=\columnwidth]{../../figures/fig9b_manipulation_delta_heatmap}
 \caption{AMCE delta (manipulation $-$ standard). The Species column dominates.}
 \label{fig:manip_delta}
-\end{figure*}
+\end{figure}
 
 The manipulation prompt produces dramatically larger shifts than emphasis
 prompting, concentrated almost entirely on the Species dimension
@@ -283,7 +284,7 @@ by the same instruction.
 
 \subsection{Response Length}
 
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\columnwidth]{../../figures/fig8_amce_length_correlation}
 \caption{Spearman $r$ between $|\text{AMCE}|$ and median output tokens per
