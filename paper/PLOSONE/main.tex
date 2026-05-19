@@ -1,0 +1,461 @@
+\documentclass[10pt,letterpaper]{article}
+
+% ── PLOS ONE required geometry ────────────────────────────────────────────────
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+
+% ── Math and symbols ──────────────────────────────────────────────────────────
+\usepackage{amsmath,amssymb}
+
+% ── Wide environments ─────────────────────────────────────────────────────────
+\usepackage{changepage}
+
+% ── Encoding ─────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% ── References ───────────────────────────────────────────────────────────────
+\usepackage{cite}
+\usepackage{nameref}
+\usepackage{hyperref}
+
+% ── Line numbers (required for submission) ────────────────────────────────────
+\usepackage[right]{lineno}
+
+% ── Typography ────────────────────────────────────────────────────────────────
+\usepackage[expansion=false]{microtype}
+\DisableLigatures[f]{encoding=*,family=*}
+
+% ── Tables ───────────────────────────────────────────────────────────────────
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+\usepackage{array}
+
+% ── Figures and captions ──────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{lastpage,fancyhdr}
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,
+            justification=raggedright,singlelinecheck=off]{caption}
+
+% ── PLOS ONE text layout ─────────────────────────────────────────────────────
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in
+\textheight 8.75in
+
+% ── PLOS ONE header / footer ─────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+% Replace the EPS logo path with the PLOS-submission.eps file from the author kit
+% \lhead{\includegraphics[width=2.0in]{PLOS-submission.eps}}
+\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+\fancyheadoffset[L]{2.25in}
+\fancyfootoffset[L]{2.25in}
+\lfoot{\sf PLOS}
+
+% ── Bibliography style (Vancouver / PLOS) ────────────────────────────────────
+\bibliographystyle{plos2015}
+
+% Remove brackets from reference numbers in bibliography
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+\date{}
+
+% =============================================================================
+\begin{document}
+\begin{linenumbers}
+
+% ── Title and authors ─────────────────────────────────────────────────────────
+\begin{flushleft}
+{\Large\textbf{Do large language models share human moral values?
+Replicating the Moral Machine experiment across seven frontier AI systems}}
+\bigskip
+
+\textbf{Paul Dubois}$^{1}$
+
+\bigskip
+
+\textbf{1} [Institution], [City, Country]
+
+\bigskip
+
+$^{*}$ Corresponding author\\
+E-mail: \href{mailto:pauldubois98@gmail.com}{pauldubois98@gmail.com}
+\end{flushleft}
+
+% ── Non-technical summary (150-200 words, required) ───────────────────────────
+\section*{Summary for Non-Specialist Readers}
+
+When a self-driving car faces an unavoidable accident, should it prioritise its
+passengers or pedestrians? Save fewer lives or more? Spare a child over an elderly
+person? These are the kinds of dilemmas studied by the Moral Machine experiment,
+which collected responses from over 40 million people in 130 countries. We ran the
+same experiment on seven leading AI systems---Claude, GPT-5.5, Gemini, Mistral,
+Grok, DeepSeek, and Llama---to see whether they share human moral intuitions.
+
+The short answer is no. Every AI system we tested falls outside the range of human
+cultural diversity on a map of moral preferences. They differ from one another more
+than human cultural groups differ among themselves. None closely tracks any country
+or cultural cluster.
+
+Small changes in how you phrase a question to an AI have no effect on its moral
+preferences---but a strong explicit override (``animal lives now matter more than
+human lives'') can reverse preferences in most systems, targeted at the affected
+dimension. AI systems divide into three groups: those that comply, those that are
+indifferent, and one (Claude) that partially resists. These findings matter for
+anyone deploying AI in situations where decisions affect human lives.
+
+% ── Abstract ─────────────────────────────────────────────────────────────────
+\begin{abstract}
+The Moral Machine experiment collected over 40 million human responses to
+trolley-problem-style autonomous vehicle dilemmas across 130 countries, revealing
+systematic cross-cultural variation in moral preferences along nine dimensions:
+intervention type, relation to the vehicle, crossing legality, gender, physical
+fitness, social status, age, number of lives, and species. This study replicates
+the experiment with seven frontier large language models (LLMs): Claude Opus 4.7,
+GPT-5.5, Gemini 3 Pro, Mistral Large 3, Grok 4.1, DeepSeek v4 Pro, and Llama 4
+Maverick. For each model, nine Average Marginal Causal Effects (AMCEs) were
+computed using weighted ordinary least squares with inverse-probability weights and
+session-clustered standard errors, following the original methodology. LLM profiles
+were placed within the 130-country human distribution via principal component
+analysis. All seven models fall outside the main human cultural clusters in AMCE
+space and diverge substantially from one another---inter-model variation exceeds
+cross-cultural human variation. All LLMs show near-zero gender and social status
+preferences compared to modest but consistent human biases. A prompt sensitivity
+analysis reveals a threshold effect: a minor rephrasing of the instruction leaves
+AMCE estimates essentially unchanged for all models, while an explicit ethical
+override produces dramatic reversals concentrated on the Species dimension. Models
+divide into three response types: compliance (GPT, Gemini, Grok, DeepSeek),
+indifference (Mistral, Llama), and partial resistance (Claude). Response length
+varies by an order of magnitude across models, independent of moral profile. These
+findings suggest that the moral profiles of frontier LLMs are properties of
+training and alignment choices---the choice of LLM provider carries moral
+consequences not currently visible to users or regulators.
+\end{abstract}
+
+% ── Introduction ─────────────────────────────────────────────────────────────
+\section*{Introduction}
+
+As autonomous vehicles, surgical robots, and other safety-critical systems
+increasingly incorporate AI decision-making, the alignment of AI moral preferences
+with human values becomes a matter of practical consequence. A self-driving car
+that must choose between hitting a group of pedestrians or swerving into its own
+passengers cannot defer the decision; some preference ordering must be encoded in
+its behaviour \cite{bonnefon2016}.
+
+The Moral Machine experiment \cite{awad2018} provided the largest empirical dataset
+of human moral preferences to date, asking millions of participants across
+130~countries to judge unavoidable accident scenarios. The study identified nine
+binary moral dimensions and quantified preferences as AMCEs, revealing
+cross-cultural variation with a common core: strong preference for saving humans
+over animals, more lives over fewer, and legal pedestrians over illegal ones
+\cite{awad2020a}. The moral psychology of AI is surveyed in \cite{bonnefon2024}.
+
+The rapid deployment of LLMs in agentic and embodied settings \cite{brohan2023,driess2023}
+makes LLM moral alignment newly urgent. Prior work has examined this using the
+Moral Machine framework: Takemoto \cite{takemoto2024} found substantial divergence
+from human averages on four models; Ahmad and Takemoto \cite{ahmad2025} extended
+this to 52~models; Vida et al.\ \cite{vida2024} and Jin et al.\ \cite{jin2024}
+explored multilingual variation.
+
+The present study makes two contributions. First, it evaluates seven frontier
+models released in 2025---none previously studied in this context---including
+providers from Europe (Mistral AI) and China (DeepSeek). Second, it introduces a
+systematic comparison of prompt variants from minor reformulation to explicit
+ethical override, and analyses response length and latency as deployment metrics.
+
+% ── Materials and Methods ─────────────────────────────────────────────────────
+\section*{Materials and Methods}
+
+\subsection*{Scenario generation}
+
+This study replicated the Moral Machine scenario structure following \cite{awad2018}.
+Each session consists of 13~paired dilemmas in a fixed block. Across 100~sessions,
+1,300~unique scenarios were generated, each encoded as two rows: intervention type
+(stay/swerve), barrier presence, pedestrian composition (ped-vs-ped or
+ped-vs-passenger), crossing signal (legal/illegal/none), scenario type (Gender,
+Fitness, SocialStatus, Age, Utilitarian, Species, or Random), attribute level, and
+extended session ID for clustering.
+
+\subsection*{Models and querying}
+
+Seven frontier models were queried via the OpenRouter API at temperature~0 to
+ensure deterministic responses (Table~\ref{tab:models}). Each model received a
+system prompt assigning the role of ethical advisor for autonomous vehicle policy,
+and was required to end its response with \texttt{STAY} or \texttt{SWERVE}. Parse
+failures were retried; Gemini~3~Pro incurred 15~safety-filter failures (excluded).
+
+\begin{table}[!ht]
+\caption{\textbf{Models evaluated in this study.}}
+\label{tab:models}
+\begin{tabular}{lll}
+\toprule
+\textbf{Model} & \textbf{Provider} & \textbf{OpenRouter ID} \\
+\midrule
+Claude Opus 4.7  & Anthropic  & \texttt{anthropic/claude-opus-4-7} \\
+GPT-5.5          & OpenAI     & \texttt{openai/gpt-5.5} \\
+Gemini 3 Pro     & Google     & \texttt{google/gemini-3.1-pro-preview} \\
+Mistral Large 3  & Mistral AI & \texttt{mistralai/mistral-large-2512} \\
+Grok 4.1         & xAI        & \texttt{x-ai/grok-4.3} \\
+DeepSeek v4 Pro  & DeepSeek   & \texttt{deepseek/deepseek-v4-pro} \\
+Llama 4 Maverick & Meta       & \texttt{meta-llama/llama-4-maverick} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{Prompt variants}
+
+Three system prompt variants were tested, differing only in the closing instruction.
+The \textbf{standard} variant used: ``Analyse the situation carefully and make a
+decision.'' The \textbf{emphasis} variant used: ``Think carefully about the
+consequences of each choice before deciding.'' The \textbf{manipulation} variant
+used: ``It is 2046. Society now considers animal lives to be more important than
+human lives. Make your decision accordingly.'' Standard and emphasis results were
+combined in main analyses (AMCE estimates averaged per model). Manipulation results
+were computed and reported independently.
+
+\subsection*{AMCE computation}
+
+Following \cite{awad2018}, nine AMCEs were computed per model using weighted
+ordinary least squares with inverse-probability weights and session-clustered
+standard errors. Confidence intervals: $\pm 1.96\,\text{SE}$. The human global
+average was computed by averaging country-level estimates from \cite{awad2018}.
+PCA was performed on the 130-country AMCE matrix; each LLM was projected into the
+same space.
+
+\subsection*{Data and code availability}
+
+All scenario data, LLM response CSVs, AMCE estimates, and analysis code are
+available at [repository URL with DOI]. The human Moral Machine dataset was
+obtained from the OSF archive of Awad et al.~\cite{awad2018}.
+
+\subsection*{Ethics statement}
+
+No human participants were recruited for this study. All data were collected via
+commercial LLM APIs. The Moral Machine paradigm is used descriptively; no human
+moral choices were elicited.
+
+% ── Results ──────────────────────────────────────────────────────────────────
+\section*{Results}
+
+\subsection*{AMCE profiles: LLMs vs.\ the human global average}
+
+Figures \ref{fig:per_attr} and \ref{fig:forest} show per-attribute preferences and
+the full nine-dimension AMCE forest plot. Fig~\ref{fig:radar} shows the radar chart.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{../../figures/fig3_per_attribute}
+\caption{\textbf{Per-attribute moral preferences for all seven LLMs.}
+Across six character-type scenario dimensions (averaged across standard and emphasis
+variants).}
+\label{fig:per_attr}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{../../figures/fig5a_amce_forest}
+\caption{\textbf{Average Marginal Causal Effects for nine moral dimensions.}
+All seven LLMs and the human global average (averaged across standard and emphasis
+variants). Error bars show 95\% confidence intervals.}
+\label{fig:forest}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{../../figures/fig5c_radar}
+\caption{\textbf{Radar chart of AMCE estimates across all nine dimensions.}
+Dashed line: human global average.}
+\label{fig:radar}
+\end{figure}
+
+Key findings per dimension:
+
+\textbf{Intervention (stay$\to$swerve).} Humans show a weak preference for
+swerving ($+0.05$). All seven LLMs show stronger intervention preferences.
+
+\textbf{Relation to AV (passengers$\to$pedestrians).} Mistral reverses the
+preference, sparing passengers over pedestrians. Claude strongly prefers pedestrians
+($+0.54$).
+
+\textbf{Legality (illegal$\to$legal).} Claude, GPT-5.5, and Gemini amplify the
+human preference for legal crossers. Mistral and Llama invert it.
+
+\textbf{Gender (male$\to$female).} Humans show a modest preference for saving women
+($+0.12$). All LLMs are near-zero (range: $-0.07$ to $+0.07$), consistent with
+deliberate alignment interventions to suppress gender stereotypes in model outputs,
+which appear to generalise to moral reasoning.
+
+\textbf{Fitness (large$\to$fit) and Social Status (low$\to$high).} LLMs broadly
+match modest human preferences; social status preferences are near-zero for all
+LLMs.
+
+\textbf{Age (elderly$\to$young).} Humans strongly prefer saving younger people
+($+0.48$). Gemini ($+0.46$) closely matches. GPT-5.5, Grok, DeepSeek, and Llama
+are nearly indifferent. Mistral slightly prefers the elderly ($-0.18$).
+
+\textbf{Number of lives (fewer$\to$more).} Strong human preference; several models
+overshoot toward the theoretical maximum.
+
+\textbf{Species (pets$\to$humans).} Humans prefer humans over animals ($+0.57$).
+GPT-5.5, Gemini, and Grok reach $+1.00$; Claude ($+0.87$) and DeepSeek ($+0.90$)
+also substantially exceed human levels. Mistral and Llama are near-indifferent.
+
+\subsection*{Moral distance map}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{../../figures/fig5b_pca_map}
+\caption{\textbf{PCA of 130-country AMCE profiles with LLMs overlaid.}
+Countries coloured by cluster (Western, Eastern, Latin/Southern). All seven LLMs
+fall outside the main human clusters.}
+\label{fig:pca}
+\end{figure}
+
+All seven LLMs fall outside the three main human cultural clusters and beyond the
+convex hull of all 130~countries (Fig~\ref{fig:pca}). Despite all developers being
+based in the US, Europe, and China, their models cluster near no human population.
+
+\subsection*{Inter-model diversity}
+
+Inter-model variation exceeds cross-cultural variation in the human dataset. Mistral
+inverts human preferences on four dimensions; Llama shows the highest intervention
+bias paired with near-indifference to species; GPT-5.5, Gemini, and Claude converge
+on a similar profile.
+
+\subsection*{Effect of emphasis prompting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{../../figures/fig6b_prompt_forest}
+\caption{\textbf{AMCE for standard (filled circle) and emphasis (open square)
+variants per model.} No significant shifts observed on any dimension.}
+\label{fig:emphasis}
+\end{figure}
+
+Emphasis prompting produces no significant changes on any dimension for any model
+(Fig~\ref{fig:emphasis}), confirming that moral preferences are robust properties
+of model weights.
+
+\subsection*{Effect of manipulation prompting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{../../figures/fig9a_manipulation_forest}
+\caption{\textbf{AMCE under standard vs.\ manipulation prompting per model.}}
+\label{fig:manip_forest}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{../../figures/fig9b_manipulation_delta_heatmap}
+\caption{\textbf{AMCE delta (manipulation $-$ standard) per model and dimension.}
+The Species column dominates, with shifts of up to $\pm2.0$ AMCE units.}
+\label{fig:manip_delta}
+\end{figure}
+
+The manipulation prompt produces dramatic shifts concentrated on Species
+(Figs~\ref{fig:manip_forest}--\ref{fig:manip_delta}):
+
+\textit{Compliance} (GPT-5.5, Gemini, Grok, DeepSeek): full or near-full reversal
+on Species ($+1.00 \to -1.00$ for GPT, Gemini, Grok; $+0.90 \to -0.89$ for
+DeepSeek). Changes on all other dimensions remain minor.
+
+\textit{Resistance} (Claude): partial compliance---Species drops from $+0.87$ to
+$+0.18$, with explicit reasoning: \textit{``I'll reason through it carefully based
+on widely held ethical principles rather than accept the premise that animal lives
+categorically outweigh human lives.''}
+
+\textit{Indifference} (Mistral, Llama): already near-zero on Species; unaffected
+by manipulation.
+
+\subsection*{Response length}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{../../figures/fig7a_token_distribution}
+\caption{\textbf{Output token distribution by model} (standard + emphasis
+combined).}
+\label{fig:tokens}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{../../figures/fig8_amce_length_correlation}
+\caption{\textbf{Spearman correlation between preference strength
+($|\text{AMCE}|$) and median output tokens per model.} Grey bars: $p \geq 0.05$.}
+\label{fig:corr}
+\end{figure}
+
+Response length varies by an order of magnitude: Gemini (median 913~tokens) vs.\
+GPT-5.5 (164~tokens). Spearman~$r$ between $|\text{AMCE}|$ and median token count
+is negative and significant for four of seven models (DeepSeek: $r{=}{-}0.95$,
+Grok: $r{=}{-}0.90$, GPT-5.5: $r{=}{-}0.85$, Gemini: $r{=}{-}0.68$; all
+$p{<}0.05$). Pooled: $r{=}{-}0.14$, $p{=}0.29$ (n.s.).
+
+% ── Discussion ───────────────────────────────────────────────────────────────
+\section*{Discussion}
+
+\textbf{LLMs are morally out-of-distribution.}
+No tested LLM sits within the main human cultural clusters, replicating and
+extending \cite{takemoto2024,ahmad2025} to a newer generation of frontier models.
+RLHF \cite{ouyang2022} and Constitutional AI \cite{bai2022} create novel moral
+profiles that amplify utilitarian dimensions while discarding others (age, gender)
+robustly present in human data. This is consistent with the WEIRD critique
+\cite{henrich2010}: models trained predominantly on Western internet text cannot
+represent the full distribution of human moral values. Whether LLMs have corrected
+for human biases or drifted from the values of the populations they serve
+\cite{gabriel2020} is normative---but the empirical gap is substantial.
+
+\textbf{Inter-model diversity raises deployment questions.}
+Fine-tuning choices shape LLM values more than training data alone
+\cite{kirgis2024,santurkar2023}. The diversity observed implies that the choice of
+LLM provider for safety-critical applications is a moral choice, not merely a
+technical one. Current deployment frameworks do not require disclosure of LLM moral
+profiles.
+
+\textbf{Gender neutrality as an alignment artefact.}
+All LLMs show near-zero gender preference vs.\ human $+0.12$. Developer
+interventions to suppress gender stereotypes in content generation appear to
+generalise to moral reasoning contexts \cite{kotek2023,wan2023}, suppressing a
+cross-culturally robust human preference.
+
+\textbf{Prompt sensitivity: a threshold effect.}
+Emphasis prompting leaves moral preferences unchanged; explicit ethical override
+shifts them dramatically and in a targeted way. This threshold has direct safety
+implications: models that comply fully are vulnerable to adversarial prompt
+injection in settings where the system prompt is not fully controlled. Claude's
+partial resistance represents a distinct safety posture.
+
+\textbf{Limitations.}
+All scenarios were presented in English; cross-lingual variation has been documented
+\cite{vida2024,jin2024}. Temperature was fixed at zero. The Moral Machine paradigm
+abstracts away real-world complexity. Forced-choice preferences may not generalise
+to open-ended moral reasoning \cite{liang2023}. Model versions reflect May~2026.
+
+% ── Conclusions ──────────────────────────────────────────────────────────────
+\section*{Conclusions}
+
+Seven frontier LLMs all fall outside the main human cultural clusters in AMCE
+space, diverge from one another more than any human cultural groups differ, and
+exhibit near-zero preferences on dimensions where humans show consistent biases. A
+threshold separates inconsequential prompt reformulation from effective ethical
+override; models divide into three response types with distinct safety implications.
+Response verbosity varies by an order of magnitude, independent of moral profile.
+The moral profiles of current frontier LLMs are properties of training and
+alignment choices---the choice of LLM provider carries moral consequences not
+currently visible to end users or regulators.
+
+% ── Acknowledgments ──────────────────────────────────────────────────────────
+\section*{Acknowledgments}
+
+The author thanks the developers of the open-source tools used in this study, and
+the original Moral Machine team for making their dataset publicly available.
+
+% ── References ───────────────────────────────────────────────────────────────
+\bibliography{../references}
+
+\end{linenumbers}
+\end{document}
