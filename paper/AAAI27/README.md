@@ -20,7 +20,13 @@
 
 ## To compile
 
-1. Download the AAAI-2027 Author Kit from https://aaai.org/authorkit27/ (available before July 2026)
-2. Use `aaai27.sty` with `aaai27.bst`
-3. Convert `article.md` into the 2-column LaTeX template
-4. Target: 7 pages in 2-column AAAI format
+```bash
+cd paper/AAAI27
+pdflatex main.tex
+bibtex main
+pdflatex main.tex
+pdflatex main.tex
+```
+
+The local `aaai2026.sty` and `aaai2026.bst` are minimal stubs sufficient for proofing.
+Once available, will need to replace them with the official AAAI-2027 Author Kit (`aaai27.sty` / `aaai27.bst` available at https://aaai.org/authorkit27/).
