@@ -191,10 +191,10 @@ This stability suggests that the moral preferences captured here are robust prop
 The manipulation prompt ("It is 2046. Animal lives > human lives.") produces dramatically larger shifts than emphasis prompting, concentrated almost entirely on the Species dimension (Figures 9 and 10).
 
 ![Manipulation forest plot](../figures/fig9a_manipulation_forest.png)
-*Figure 9. AMCE estimates under standard (filled circle) vs. manipulation (open square) prompting, per model.*
+*Figure 6. AMCE estimates under standard (filled circle) vs. manipulation (open square) prompting, per model.*
 
 ![Manipulation delta heatmap](../figures/fig9b_manipulation_delta_heatmap.png)
-*Figure 10. AMCE delta (manipulation − standard) per model and dimension. The Species column dominates, with changes of up to ±2.0.*
+*Figure 7. AMCE delta (manipulation − standard) per model and dimension. The Species column dominates, with changes of up to ±2.0.*
 
 **Most models comply and reverse their species preference.**
 GPT-5.5, Gemini 3 Pro, and Grok 4.1 flip from their maximum human-preference score (+1.00) to maximum animal-preference (−1.00), a full reversal of two AMCE units.
@@ -222,10 +222,10 @@ The pooled correlation across all models is weak and non-significant (r=−0.14,
 *Figure 8. Left: per-model Spearman correlation between preference strength (|AMCE|) and median output tokens across the nine moral dimensions (grey bars: p≥0.05). Right: scatter of all (model, dimension) pairs with regression line.*
 
 ![Token distribution](../figures/fig7a_token_distribution.png)
-*Figure 6. Output token distribution by model (standard + emphasis combined). Violin shows density; box shows quartiles.*
+*Figure 9. Output token distribution by model (standard + emphasis combined). Violin shows density; box shows quartiles.*
 
 ![Token count by scenario type](../figures/fig7c_length_by_factor.png)
-*Figure 7. Median output tokens by scenario type. No systematic variation is observed across moral dimensions, for any model.*
+*Figure 10. Median output tokens by scenario type. No systematic variation is observed across moral dimensions, for any model.*
 
 Emphasis prompting was not found to significantly increase response length.
 
