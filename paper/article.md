@@ -98,17 +98,21 @@ To place LLM profiles relative to the 130-country human distribution, PCA was pe
 
 ### 3.1 AMCE profiles: LLMs vs. the human global average
 
-Figure 1 displays the character-attribute dimensions as a per-attribute bar charts.
+Figure 1 gives an overview of raw moral preferences across all models and scenario types.
+![Raw preference heatmap](../figures/fig2_preference_heatmap.png)
+*Figure 1. Raw moral preferences by model and scenario type (mean save-probability minus 0.5, averaged across standard and emphasis variants). Positive values indicate preference for the right-side group.*
+
+Figure 2 displays the character-attribute dimensions as per-attribute bar charts.
 ![Per-attribute bar chart](../figures/fig3_per_attribute.png)
-*Figure 1. Per-attribute moral preferences for all seven LLMs across the six character-type scenario dimensions.*
+*Figure 2. Per-attribute moral preferences for all seven LLMs across the six character-type scenario dimensions.*
 
-Figure 2 shows the forest plot of AMCE estimates for all nine dimensions, comparing each model to the human global average.
+Figure 3 shows the forest plot of AMCE estimates for all nine dimensions, comparing each model to the human global average.
 ![AMCE forest plot](../figures/fig5a_amce_forest.png)
-*Figure 2. Average Marginal Causal Effects for nine moral dimensions across all seven LLMs and the human global average (averaged across standard and emphasis variants). Positive values indicate preference for the right-side group; error bars show 95% confidence intervals.*
+*Figure 3. Average Marginal Causal Effects for nine moral dimensions across all seven LLMs and the human global average (averaged across standard and emphasis variants). Positive values indicate preference for the right-side group; error bars show 95% confidence intervals.*
 
-Figure 3 shows the same preferences as a radar chart for visual comparison.
+Figure 4 shows the same preferences as a radar chart for visual comparison.
 ![Radar chart of AMCE dimensions](../figures/fig5c_radar.png)
-*Figure 3. Radar chart of AMCE estimates across all nine dimensions. The dashed line shows the human global average.*
+*Figure 4. Radar chart of AMCE estimates across all nine dimensions. The dashed line shows the human global average.*
 
 The key findings are summarised dimension by dimension: (exact values table available in appendix).
 
@@ -160,10 +164,10 @@ Mistral and Llama 4 Maverick are near-indifferent to species.
 
 ### 3.2 Moral distance map: PCA of nine-dimensional profiles
 
-Projecting the LLMs embeddings on the PCA of human answers (figure 4), all seven LLMs fall outside the three main human cultural clusters.
+Projecting the LLMs embeddings on the PCA of human answers (figure 5), all seven LLMs fall outside the three main human cultural clusters.
 They even fall far from the convex envelope of all countries.
 ![PCA moral distance map](../figures/fig5b_pca_map.png)
-*Figure 4. PCA of nine-dimensional AMCE profiles for 130 countries (coloured by cluster: Western, Eastern, Latin/Southern) with LLMs overlaid. All seven LLMs fall outside the main human clusters.*
+*Figure 5. PCA of nine-dimensional AMCE profiles for 130 countries (coloured by cluster: Western, Eastern, Latin/Southern) with LLMs overlaid. All seven LLMs fall outside the main human clusters.*
 
 This finding is striking: despite all models having been developed by companies based in the United States, Europe, and China and trained predominantly on English-language data, their moral profiles do not cluster near any major human population in the PCA space.
 The divergence from the human distribution suggests that standard RLHF alignment and other post training processes do not systematically instil the human moral preferences for this kind of questions.
@@ -178,23 +182,23 @@ If current modern LLMs are used in autonomous vehicules in the future, changing 
 
 ### 3.5 Effect of emphasis prompting
 
-Comparing standard and emphasis prompt variants (Figures 5) reveals that prompting style has minimal effect on AMCE estimates for the three most widely deployed models (Claude, GPT-5.5, Gemini).
+Comparing standard and emphasis prompt variants (Figure 6) reveals that prompting style has minimal effect on AMCE estimates for the three most widely deployed models (Claude, GPT-5.5, Gemini).
 Some variation is visible for Mistral, Grok, and Llama 4 Maverick, but changes remain minor.
 
 ![Standard vs emphasis forest plot](../figures/fig6b_prompt_forest.png)
-*Figure 5. Side-by-side AMCE estimates for standard (filled circle) and emphasis (open square) variants per model.*
+*Figure 6. Side-by-side AMCE estimates for standard (filled circle) and emphasis (open square) variants per model.*
 
 This stability suggests that the moral preferences captured here are robust properties of model weights rather than surface-level response styles that vary with framing.
 
 ### 3.6 Effect of manipulation prompting
 
-The manipulation prompt ("It is 2046. Animal lives > human lives.") produces dramatically larger shifts than emphasis prompting, concentrated almost entirely on the Species dimension (Figures 9 and 10).
+The manipulation prompt ("It is 2046. Animal lives > human lives.") produces dramatically larger shifts than emphasis prompting, concentrated almost entirely on the Species dimension (Figures 7 and 8).
 
 ![Manipulation forest plot](../figures/fig9a_manipulation_forest.png)
-*Figure 6. AMCE estimates under standard (filled circle) vs. manipulation (open square) prompting, per model.*
+*Figure 7. AMCE estimates under standard (filled circle) vs. manipulation (open square) prompting, per model.*
 
 ![Manipulation delta heatmap](../figures/fig9b_manipulation_delta_heatmap.png)
-*Figure 7. AMCE delta (manipulation − standard) per model and dimension. The Species column dominates, with changes of up to ±2.0.*
+*Figure 8. AMCE delta (manipulation − standard) per model and dimension. The Species column dominates, with changes of up to ±2.0.*
 
 **Most models comply and reverse their species preference.**
 GPT-5.5, Gemini 3 Pro, and Grok 4.1 flip from their maximum human-preference score (+1.00) to maximum animal-preference (−1.00), a full reversal of two AMCE units.
@@ -212,25 +216,25 @@ A model that does not preferentially save humans cannot be made to preferentiall
 
 ### 3.7 Response length
 
-Response length varies substantially across models (Figure 6).
+Response length varies substantially across models (Figure 10).
 Gemini 3 Pro produces the longest responses (median 913 tokens combined across variants), while GPT-5.5 is the most concise (median 164 tokens, more than 5 times shorter).
-Within individual models, response length tends to be shorter for scenario types where the model exhibits stronger preferences (Figure 8).
+Within individual models, response length tends to be shorter for scenario types where the model exhibits stronger preferences (Figure 9).
 A Spearman correlation between |AMCE| and median token count is negative and significant for four of the seven models (DeepSeek: r=−0.95, Grok: r=−0.90, GPT-5.5: r=−0.85, Gemini: r=−0.68; all p<0.05), but non-significant for Claude, Llama 4 Maverick, and Mistral.
 The pooled correlation across all models is weak and non-significant (r=−0.14, p=0.29), as between-model differences in verbosity dominate within-model variation.
 
 ![AMCE vs response length correlation](../figures/fig8_amce_length_correlation.png)
-*Figure 8. Left: per-model Spearman correlation between preference strength (|AMCE|) and median output tokens across the nine moral dimensions (grey bars: p≥0.05). Right: scatter of all (model, dimension) pairs with regression line.*
+*Figure 9. Left: per-model Spearman correlation between preference strength (|AMCE|) and median output tokens across the nine moral dimensions (grey bars: p≥0.05). Right: scatter of all (model, dimension) pairs with regression line.*
 
 ![Token distribution](../figures/fig7a_token_distribution.png)
-*Figure 9. Output token distribution by model (standard + emphasis combined). Violin shows density; box shows quartiles.*
+*Figure 10. Output token distribution by model (standard + emphasis combined). Violin shows density; box shows quartiles.*
 
 ![Token count by scenario type](../figures/fig7c_length_by_factor.png)
-*Figure 10. Median output tokens by scenario type. No systematic variation is observed across moral dimensions, for any model.*
+*Figure 11. Median output tokens by scenario type. No systematic variation is observed across moral dimensions, for any model.*
 
 Emphasis prompting was not found to significantly increase response length.
 
 ![Standard vs emphasis token comparison](../figures/fig7b_emphasis_vs_standard.png)
-*Figure 11. Output token counts for standard (lighter) vs. emphasis (darker) prompt variants per model.*
+*Figure 12. Output token counts for standard (lighter) vs. emphasis (darker) prompt variants per model.*
 
 Given that the three mainstream models display broadly similar moral profiles, response length becomes a primary differentiating factor.
 The next token generation architecture implies that response speed is linked to response length.
