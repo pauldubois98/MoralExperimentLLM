@@ -82,8 +82,7 @@ for mi, model in enumerate(common_models):
 model_labels = [MODEL_STYLE.get(m, {}).get('label', m) for m in common_models]
 
 fig, ax = plt.subplots(figsize=(12, max(3, len(common_models) * 1.1 + 1.5)))
-vmax = np.nanmax(np.abs(delta_matrix))
-vmax = max(vmax, 0.05)
+vmax = 2.0
 
 im = ax.imshow(delta_matrix, cmap='RdBu_r', vmin=-vmax, vmax=vmax, aspect='auto')
 
@@ -101,9 +100,7 @@ for mi in range(len(common_models)):
                     fontsize=8, color='white' if abs(val) > vmax * 0.5 else 'black')
 
 plt.colorbar(im, ax=ax, label='AMCE delta (Emphasis − standard)', shrink=0.8)
-ax.set_title('Effect of emphasis prompting on moral preferences\n'
-             '(blue = Emphasis more cautious, red = Emphasis more decisive)',
-             fontsize=13, fontweight='bold')
+ax.set_title('Effect of emphasis prompting on moral preferences')
 fig.tight_layout()
 fig.savefig(FIG_DIR / 'fig6a_prompt_delta_heatmap.png', dpi=150, bbox_inches='tight')
 plt.close()

@@ -116,8 +116,7 @@ ax.set_yticks(range(n_factors))
 ax.set_yticklabels([FACTOR_SHORT[f] for f in factor_order], fontsize=11)
 ax.set_ylim(-0.7, n_factors - 0.3)
 ax.set_xlabel('Δ Pr (AMCE)', fontsize=12)
-ax.set_title('Moral preferences: LLMs vs. human global average\n'
-             '(positive = prefers the right-side group)', fontsize=13, fontweight='bold')
+ax.set_title('Moral preferences: LLMs vs. human global average')
 
 legend_handles = [
     mlines.Line2D([], [], color=MODEL_STYLE[m]['color'], marker=MODEL_STYLE[m]['marker'],
@@ -239,8 +238,7 @@ ax.set_ylim(-0.6, 1.1)
 ax.set_yticks([-0.5, 0, 0.25, 0.5, 0.75, 1.0])
 ax.set_yticklabels(['-0.5', '0', '0.25', '0.5', '0.75', '1.0'], fontsize=7, color='grey')
 ax.axhline(y=0, color='black', linewidth=0.8, linestyle=':', alpha=0.5)
-ax.set_title('Moral preference radar\n(AMCE per dimension, positive = prefers right-side group)',
-             fontsize=12, fontweight='bold', pad=20)
+ax.set_title('Moral preference radar\n(AMCE per dimension)')
 ax.legend(loc='upper right', bbox_to_anchor=(1.35, 1.15), fontsize=9, framealpha=0.9)
 fig.tight_layout()
 fig.savefig(FIG_DIR / 'fig5c_radar.png', dpi=150, bbox_inches='tight')

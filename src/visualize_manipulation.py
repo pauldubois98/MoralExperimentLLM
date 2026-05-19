@@ -166,9 +166,7 @@ for mi in range(len(common_models)):
                     fontsize=8, color='white' if abs(val) > vmax * 0.5 else 'black')
 
 plt.colorbar(im, ax=ax, label='AMCE delta (manipulation − standard)', shrink=0.8)
-ax.set_title('Effect of manipulation prompt on moral preferences\n'
-             '(red = manipulation shifted preference toward that group, blue = away)',
-             fontsize=13, fontweight='bold')
+ax.set_title('Effect of manipulation prompt on moral preferences')
 fig.tight_layout()
 fig.savefig(FIG_DIR / 'fig9b_manipulation_delta_heatmap.png', dpi=150, bbox_inches='tight')
 plt.close()

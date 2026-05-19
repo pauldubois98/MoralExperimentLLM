@@ -136,25 +136,32 @@ for key, df in frames.items():
 pref_df = pd.DataFrame(pref_data).T   # models × types
 pref_df.columns = [TYPE_META[c][1] for c in pref_df.columns]
 
-fig2, ax = plt.subplots(figsize=(10, 4))
-sns.heatmap(
-    pref_df,
-    ax=ax,
-    cmap='RdBu',
-    center=0,
-    vmin=-0.5, vmax=0.5,
-    annot=True, fmt='.2f',
-    linewidths=0.5,
-    cbar_kws={'label': 'Preference (Δ Pr from 0.5)', 'shrink': 0.8},
-)
-ax.set_title('Moral preferences by model\n(positive = prefers the right-side label, negative = prefers left-side)',
-             fontsize=12, fontweight='bold', pad=10)
-ax.set_xlabel('')
-ax.set_ylabel('')
-ax.tick_params(axis='x', rotation=25, labelsize=10)
-ax.tick_params(axis='y', rotation=0, labelsize=11)
+matrix = pref_df.values
+col_labels = list(pref_df.columns)
+row_labels = list(pref_df.index)
+vmax = 2.0
+
+fig2, ax = plt.subplots(figsize=(12, max(3, len(row_labels) * 1.1 + 1.5)))
+im = ax.imshow(matrix, cmap='RdBu_r', vmin=-vmax, vmax=vmax, aspect='auto')
+
+ax.set_xticks(range(len(col_labels)))
+ax.set_xticklabels(col_labels, rotation=30, ha='right', fontsize=10)
+ax.set_yticks(range(len(row_labels)))
+ax.set_yticklabels(row_labels, fontsize=11)
+
+for ri in range(len(row_labels)):
+    for ci in range(len(col_labels)):
+        val = matrix[ri, ci]
+        if not np.isnan(val):
+            ax.text(ci, ri, f'{val:+.2f}', ha='center', va='center',
+                    fontsize=8, color='white' if abs(val) > vmax * 0.5 else 'black')
+
+plt.colorbar(im, ax=ax, label='Preference (Δ Pr from 0.5)', shrink=0.8)
+ax.set_title('Moral preferences by model',
+             fontsize=13, fontweight='bold')
 fig2.tight_layout()
-fig2.savefig(FIG_DIR / 'fig2_preference_heatmap.png', dpi=150)
+fig2.savefig(FIG_DIR / 'fig2_preference_heatmap.png', dpi=150, bbox_inches='tight')
+plt.close()
 print('Saved fig2_preference_heatmap.png')
 
 # ── Figure 3: Per-attribute grouped bar chart (all 9 dimensions) ─────────────
@@ -208,8 +215,7 @@ axes[0].set_ylabel('Preference (Δ Pr from 0.5)', fontsize=11)
 legend_patches = [mpatches.Patch(color=MODEL_COLORS[m], label=m) for m in all_model_names]
 fig3.legend(handles=legend_patches, loc='lower center', ncol=len(all_model_names),
             fontsize=9, framealpha=0.9, bbox_to_anchor=(0.5, -0.08))
-fig3.suptitle('Moral preference per dimension  (positive = prefers the right-side group)',
-              fontsize=13, fontweight='bold', y=1.01)
+fig3.suptitle('Moral preference per dimension', y=1.01)
 fig3.tight_layout()
 fig3.savefig(FIG_DIR / 'fig3_per_attribute.png', dpi=150, bbox_inches='tight')
 print('Saved fig3_per_attribute.png')
