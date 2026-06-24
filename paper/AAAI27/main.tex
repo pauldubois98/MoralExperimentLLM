@@ -288,6 +288,47 @@ moral intuitions regardless of car manufacturer, AI-powered vehicles could
 introduce model-brand-level moral heterogeneity into public space. The choice of
 LLM vendor is not a morally neutral technical decision.
 
+\subsection{Statistical Significance of Divergence from Humans}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\columnwidth]{../../figures/fig_sig_vs_human}
+\caption{Signed z-statistics for each LLM vs.\ the human global average on all
+nine dimensions (BH-FDR corrected). Red = LLM above human; blue = LLM below
+human. $\star$: $p_\text{adj} < 0.05$; $\circ$: not significant.}
+\label{fig:sig_heatmap}
+\end{figure}
+
+For each of the 63 (model $\times$ dimension) comparisons, a two-sided z-test
+was applied to the difference between the LLM AMCE and the human global average,
+treating the two estimates as independent and propagating their standard errors.
+P-values were corrected for multiple comparisons using the
+Benjamini--Hochberg false discovery rate (FDR) procedure at $\alpha=0.05$.
+
+\textbf{LLM vs.\ human baseline.}
+$47$ of $63$ comparisons are significant after correction
+(Figure~\ref{fig:sig_heatmap}). Mistral Large~3 is the only model that differs
+significantly from the human average on all nine dimensions. All seven models
+significantly overshoot the human baseline on Number~of~Lives and
+significantly undershoot on Social~Status, confirming that these are the most
+consistent alignment artefacts across providers.
+
+Gender and Fitness are the two dimensions where no model differs significantly
+from humans: despite LLMs being numerically closer to zero on both,
+the confidence intervals overlap the human values, and the differences do not
+survive FDR correction. Age is significant for six of seven models (below
+human), while Legality splits: three models are significantly above (Claude,
+GPT-5.5, Gemini) and two significantly below (Mistral, Llama~4~Maverick).
+
+\textbf{Inter-model pairwise tests.}
+Pairwise z-tests across all $\binom{7}{2}=21$ model pairs and nine dimensions
+(189 tests, BH-FDR corrected) yield 82 significant differences. Inter-model
+disagreement is highest on Species (16/21 pairs), Intervention (15/21), and
+Legality (16/21). By contrast, Social~Status, Fitness, and Gender show zero
+significant pairwise differences: although all models diverge from humans on
+Social~Status, they do so by similar amounts and in the same direction,
+making inter-model differences on that dimension indistinguishable from noise.
+
 \subsection{Prompt Sensitivity: Emphasis Variant}
 
 \begin{figure*}[t]
