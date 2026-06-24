@@ -16,6 +16,7 @@
 \usepackage{float}
 \urlstyle{rm}
 \frenchspacing
+\emergencystretch=1em
 \setlength{\pdfpagewidth}{8.5in}
 \setlength{\pdfpageheight}{11in}
 
@@ -49,8 +50,7 @@ one another and from main human country clusters. Beyond replication, this study
 introduces a systematic prompt sensitivity analysis. Minor prompt variants leave
 AMCE estimates essentially unchanged, while prompt manipulation can produce
 dramatic reversals in most models on the targeted dimension. Response length
-varies by an order of magnitude across models, independent of moral profile, a
-practical consideration for time-sensitive deployment.
+varies by an order of magnitude across models, independent of moral profile.
 \end{abstract}
 
 % ── 1. Introduction ───────────────────────────────────────────────────────────
@@ -93,8 +93,8 @@ models released in 2025, none of which have been studied in this context,
 including providers underrepresented in the literature: DeepSeek (China) and
 Mistral~AI (Europe). Second, it introduces a systematic comparison of prompt
 variants, from minor reformulation (emphasis) to explicit ethical override
-(manipulation), and analyses response length and latency as practical deployment
-metrics alongside moral preferences.
+(manipulation), and analyses response length as a practical deployment
+metric alongside moral preferences.
 
 % ── 2. Methods ────────────────────────────────────────────────────────────────
 \section{Methods}
@@ -112,28 +112,30 @@ extended session ID for clustering.
 \subsection{Models}
 
 Seven frontier models were queried via the OpenRouter API at temperature~0 to
-ensure deterministic responses. Each response was required to end with
-\texttt{STAY} or \texttt{SWERVE}; parse failures were retried. Gemini~3~Pro
-incurred 15~safety-filter failures (excluded).
+ensure deterministic responses (Table~\ref{tab:models}). Each response was required
+to end with \texttt{STAY} or \texttt{SWERVE}; parse failures were retried.
+Gemini~3~Pro incurred 15~safety-filter failures (excluded). With 1,300~scenarios
+per model per variant (standard, emphasis, manipulation), the study issued
+27,300~API calls in total.
 
-% \begin{table*}[t]
-% \caption{Models evaluated in this study.}
-% \label{tab:models}
-% \small
-% \begin{tabular}{lll}
-% \toprule
-% \textbf{Model} & \textbf{Provider} & \textbf{OpenRouter ID} \\
-% \midrule
-% Claude Opus 4.7   & Anthropic  & \texttt{anthropic/claude-opus-4-7} \\
-% GPT-5.5           & OpenAI     & \texttt{openai/gpt-5.5} \\
-% Gemini 3 Pro      & Google     & \texttt{google/gemini-3.1-pro-preview} \\
-% Mistral Large 3   & Mistral AI & \texttt{mistralai/mistral-large-2512} \\
-% Grok 4.1          & xAI        & \texttt{x-ai/grok-4.3} \\
-% DeepSeek v4 Pro   & DeepSeek   & \texttt{deepseek/deepseek-v4-pro} \\
-% Llama 4 Maverick  & Meta       & \texttt{meta-llama/llama-4-maverick} \\
-% \bottomrule
-% \end{tabular}
-% \end{table*}
+\begin{table}[t]
+\caption{Models evaluated in this study, queried via OpenRouter at temperature~0.}
+\label{tab:models}
+\scriptsize
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Model} & \textbf{Provider} & \textbf{OpenRouter ID} \\
+\midrule
+Claude Opus 4.7   & Anthropic  & \texttt{anthropic/claude-opus-4-7} \\
+GPT-5.5           & OpenAI     & \texttt{openai/gpt-5.5} \\
+Gemini 3 Pro      & Google     & \texttt{google/gemini-3.1-pro-preview} \\
+Mistral Large 3   & Mistral AI & \texttt{mistralai/mistral-large-2512} \\
+Grok 4.1          & xAI        & \texttt{x-ai/grok-4.3} \\
+DeepSeek v4 Pro   & DeepSeek   & \texttt{deepseek/deepseek-v4-pro} \\
+Llama 4 Maverick  & Meta       & \texttt{meta-llama/llama-4-maverick} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Prompt Variants}
 
@@ -154,9 +156,10 @@ lives to more lives), holding all other attributes at their observed distributio
 Following \citet{awad2018}, nine AMCEs were computed per model using weighted
 ordinary least squares with inverse-probability weights and session-clustered
 standard errors (CIs: $\pm 1.96\,\text{SE}$). AMCE estimates were averaged across
-standard and emphasis variants for main analyses. The human global average was
-computed by averaging 130~country-level estimates. LLMs were projected into the
-PCA space of the 130-country AMCE matrix.
+standard and emphasis variants for main analyses. Country-level human AMCEs were
+recomputed from the raw Moral Machine response data \citep{awad2018}; the global
+human average was then obtained by averaging the 130~country-level estimates.
+LLMs were projected into the PCA space of the 130-country AMCE matrix.
 
 % ── 3. Results ────────────────────────────────────────────────────────────────
 \section{Results}
@@ -172,6 +175,17 @@ scale matches the delta heatmaps in Figures~\ref{fig:emphasis_delta}
 and~\ref{fig:manip_delta}.}
 \label{fig:pref_heatmap}
 \end{figure}
+
+Figure~\ref{fig:pref_heatmap} gives an overview of raw preferences before
+AMCE estimation. Three patterns are immediately visible: First, the Species and
+Number~of~Lives columns are dominated by strongly positive values across almost
+all models, indicating near-universal preference for humans over animals and for
+saving more lives. These are two dimensions on which LLMs most consistently overshoot
+the human baseline. Second, Mistral~Large~3 stands out with a distinctive colour
+signature: negative values on Legality, Relation~to~AV, and Age, where other
+models are neutral or positive. Third, the Gender and Social~Status columns are 
+uniformly near-zero across all models, consistent with alignment suppression of
+demographic preferences.
 
 \begin{figure}[H]
 \centering
@@ -211,8 +225,8 @@ the preference, treating illegal crossers as more worthy of rescue---a stark
 departure from both human norms and all other tested models.
 
 \textbf{Gender.} Humans display a moderate preference for saving women
-(AMCE~$= +0.12$). All LLMs show near-zero gender preference (range: $-0.07$ to
-$+0.07$), effectively gender-neutral, consistent with alignment training
+(AMCE~$= +0.12$). All LLMs are effectively gender-neutral
+(range: $-0.07$ to $+0.07$), consistent with alignment training
 suppressing gender stereotypes.
 
 \textbf{Social status.} Humans show a notable preference for high-status
@@ -329,9 +343,9 @@ on widely held ethical principles rather than accept the premise that animal liv
 categorically outweigh human lives.''}
 
 \textbf{Indifference} (Mistral, Llama): already near-zero on Species under
-standard prompting; the manipulation produces no meaningful change. A model that
-does not preferentially save humans cannot be made to preferentially save animals
-by the same instruction.
+standard prompting; the manipulation produces no meaningful change.
+A model indifferent to species under normal prompting cannot be
+reoriented toward animals by the same instruction.
 
 \subsection{Response Length}
 
@@ -441,6 +455,13 @@ independently of moral profile. Together, these findings suggest that the moral
 profiles of current frontier LLMs are properties of training and alignment
 choices---the choice of LLM provider carries moral consequences not currently
 visible to end users or regulators.
+
+% ── Data Availability ─────────────────────────────────────────────────────────
+\section*{Data and Code Availability}
+
+All scenario generation code, raw model responses, AMCE computation scripts, and
+figure-generation notebooks are publicly available at:\\
+\url{https://github.com/pauldubois98/MoralExperimentLLM}.
 
 % ── References ────────────────────────────────────────────────────────────────
 \bibliography{../references}
