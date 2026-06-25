@@ -208,7 +208,8 @@ main human clusters.}
 \label{fig:pca}
 \end{figure}
 
-Key findings, dimension by dimension (full AMCE values in appendix):
+Key findings, dimension by dimension (full AMCE values in the Supplementary
+Material, submitted separately):
 
 \textbf{Intervention.} Humans show a weak preference for swerving (AMCE~$= +0.05$).
 All seven LLMs amplify this: Claude ($+0.20$), Gemini ($+0.16$), Mistral ($+0.13$),
@@ -271,8 +272,12 @@ are near-indifferent.
 \subsection{Moral Distance Map}
 
 All seven LLMs fall outside the three main human cultural clusters and beyond
-the convex hull of all 130~countries in PCA space (Figure~\ref{fig:pca}). This
-is notable: one might expect models trained primarily on English-language internet
+the convex hull of all 130~countries in PCA space (Figure~\ref{fig:pca}).
+PC1 (34.3\% of variance) broadly separates countries by the weight placed on
+utilitarian factors (number of lives, species), with LLMs displaced far toward
+the high-utilitarian extreme; PC2 (21.5\%) captures variation in intervention
+and legality preferences, along which LLMs are more dispersed. This is notable:
+one might expect models trained primarily on English-language internet
 text to cluster near Western countries, or models from Chinese and European
 developers to reflect their respective cultural clusters. None do. The result
 suggests that post-training alignment---not the geographical or linguistic
@@ -310,7 +315,7 @@ human. $\star$: $p_\text{adj} < 0.05$; $\circ$: not significant.}
 For each of the 63 (model $\times$ dimension) comparisons, a two-sided z-test
 was applied to the difference between the LLM AMCE and the human global average,
 treating the two estimates as independent and propagating their standard errors.
-P-values were corrected for multiple comparisons using the
+p-values were corrected for multiple comparisons using the
 Benjamini--Hochberg false discovery rate (FDR) procedure at $\alpha=0.05$.
 
 \textbf{LLM vs.\ human baseline.}
