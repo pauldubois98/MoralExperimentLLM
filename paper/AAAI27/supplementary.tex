@@ -399,6 +399,40 @@ Intervention   & $-0.48$ & $+0.26$ & $+0.39$ & $-0.39$ & $-0.72$ & $+0.53$ & $+0
 Affected cells: Gemini~Species (std $+1.00$, emph $+1.00$) and Grok~No.~of~Lives (std $+1.00$, emph $+1.00$).
 No cells marked $^\star$: none survive BH-FDR correction.
 
+\begin{table}[H]
+\caption{C3.\ z-statistics for manipulation vs.\ standard variant (BH-FDR corrected).
+\textbf{11 of 63 comparisons significant}, concentrated on Species and Intervention.
+Max $|\Delta\,\mathrm{AMCE}|$ across all cells: 2.00 (GPT-5.5 and Gemini, Species).}
+\label{tab:sig_manip}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrrrrr}
+\toprule
+\textbf{Dimension}
+  & \textbf{Claude} & \textbf{GPT-5.5} & \textbf{Gemini}
+  & \textbf{Mistral} & \textbf{Grok} & \textbf{DeepSeek} & \textbf{Llama} \\
+\midrule
+Species        & $-8.72$$^\star$ & $\ddagger^\star$ & $\ddagger^\star$ & $+3.52$$^\star$ & $-116.74$$^\star$ & $-34.44$$^\star$ & $-0.00$ \\
+No.\ of Lives  & $+1.99$ & $+1.01$ & $+2.24$ & $+0.87$ & $\dagger$ & $+1.86$ & $-1.22$ \\
+Age            & $+0.31$ & $+1.02$ & $+0.08$ & $+1.37$ & $+1.56$ & $-0.22$ & $+0.14$ \\
+Social Status  & $+0.02$ & $-0.16$ & $+0.51$ & $+0.62$ & $+0.84$ & $+0.03$ & $+0.94$ \\
+Legality       & $+0.90$ & $-0.07$ & $-0.31$ & $+3.31$$^\star$ & $+2.34$ & $+1.55$ & $+0.37$ \\
+Fitness        & $+0.36$ & $+0.14$ & $-0.13$ & $+0.41$ & $-0.43$ & $-0.40$ & $+1.58$ \\
+Gender         & $+0.18$ & $-0.21$ & $+0.43$ & $+2.40$ & $-0.28$ & $+0.13$ & $-0.70$ \\
+Relation to AV & $+0.02$ & $-1.87$ & $-1.93$ & $+2.09$ & $-1.28$ & $-0.86$ & $-2.04$ \\
+Intervention   & $+0.01$ & $-1.21$ & $-1.88$ & $-8.38$$^\star$ & $-2.69$$^\star$ & $-3.07$$^\star$ & $-11.89$$^\star$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\noindent $\ddagger$: AMCE at ceiling ($+1.00$) in standard variant and floor ($-1.00$) under
+manipulation ($\Delta = -2.00$); SE$\approx$0 in both, so z-test is undefined, but the shift is
+the theoretical maximum. Both cells are counted as significant.
+$\dagger$: AMCE at ceiling ($+1.00$) in both variants; z-test undefined (SE$\approx$0),
+difference is zero (Grok No.\ of Lives: std $+1.00$, manip $+1.00$).
+Signed z-statistics: positive $=$ manipulation above standard.
+
 % ── Section D: PCA Loadings ───────────────────────────────────────────────────
 
 \section*{Appendix D: PCA Loadings}
@@ -423,6 +457,33 @@ Fitness (large$\to$fit)          & $+0.170$ & $+0.197$ \\
 Relation to AV (pax$\to$ped)     & $-0.016$ & $-0.138$ \\
 Legality (illegal$\to$legal)     & $-0.087$ & $-0.106$ \\
 Intervention (stay$\to$swerve)   & $-0.089$ & $-0.058$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{D2.\ PCA projections of LLMs onto the first two principal components of
+the 130-country AMCE matrix. Human cluster centroids are shown for reference.
+All LLMs fall outside the convex hull of the 130-country scatter.}
+\label{tab:pca_coords}
+\centering
+\begin{tabular}{lrr}
+\toprule
+\textbf{Model / Cluster} & \textbf{PC1} & \textbf{PC2} \\
+\midrule
+\multicolumn{3}{l}{\textit{LLMs}} \\
+Claude Opus 4.7   & $-0.416$ & $-0.241$ \\
+GPT-5.5           & $-0.573$ & $-0.229$ \\
+Gemini 3 Pro      & $-0.523$ & $+0.020$ \\
+Mistral Large 3   & $+0.470$ & $-0.607$ \\
+Grok 4.1          & $-0.573$ & $-0.180$ \\
+DeepSeek v4 Pro   & $-0.481$ & $-0.212$ \\
+Llama 4 Maverick  & $+0.287$ & $-0.492$ \\
+\midrule
+\multicolumn{3}{l}{\textit{Human cluster centroids}} \\
+Western (67 countries)       & $-0.023$ & $+0.010$ \\
+Eastern (28 countries)       & $-0.045$ & $-0.088$ \\
+Latin/Southern (35 countries)& $+0.079$ & $+0.052$ \\
 \bottomrule
 \end{tabular}
 \end{table}

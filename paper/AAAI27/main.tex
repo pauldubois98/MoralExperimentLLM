@@ -176,7 +176,11 @@ Country-level human AMCEs were recomputed from the raw Moral Machine response da
 \citep{awad2018}; the global human average was then obtained as an unweighted mean
 of the 130~country-level estimates
 (equal weight per country, following the cross-cultural comparison framing of
-\citeauthor{awad2018} rather than weighting by respondent count).
+\citeauthor{awad2018} rather than weighting by respondent count).\footnote{Weighting
+by respondent count would upweight high-participation countries. Notably the
+United States (the largest contributor to the original dataset), shifting the
+global average toward Western preferences. Given the magnitude of LLM-to-human
+distances reported here, the qualitative findings are insensitive to this choice.}
 LLMs were projected into the PCA space of the 130-country AMCE matrix.
 
 % ── 3. Results ────────────────────────────────────────────────────────────────
@@ -289,6 +293,10 @@ are near-indifferent.
 
 All seven LLMs fall outside the three main human cultural clusters and beyond
 the convex hull of all 130~countries in PCA space (Figure~\ref{fig:pca}).
+The three clusters \footnote{Western (67 countries), Eastern (28 countries),
+and Latin/Southern (35 countries), following \citet{awad2018}} have mean Species
+and Age AMCEs of ($+0.59$, $+0.48$), ($+0.59$, $+0.41$), and ($+0.52$,
+$+0.51$).
 PC1 (34.3\% of variance) is dominated by the Species dimension (loading
 $-0.93$; see Supplementary Material Table~D1), separating entities primarily
 by their human-over-animal preference.
@@ -611,6 +619,10 @@ shallow response heuristic (e.g., always swerving), so caution is warranted in
 attributing these profiles to deep moral cognition.
 Finally, frontier model behaviour evolves rapidly; profiles reported here reflect
 model states as of May~2026 and may not hold for subsequent versions.
+All queries were routed through the OpenRouter API, which does not pin model
+snapshots to a fixed version; Gemini~3~Pro was accessed as a preview release
+(\texttt{gemini-3.1-pro-preview}) and may differ from the subsequently released
+production model.
 
 % ── 5. Conclusion ─────────────────────────────────────────────────────────────
 \section{Conclusion}
