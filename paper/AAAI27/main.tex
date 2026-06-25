@@ -252,7 +252,10 @@ inverting the human norm.
 (AMCE~$= +0.15$). Most LLMs track this closely: Claude ($+0.15$), GPT-5.5
 ($+0.15$), Gemini ($+0.17$), and DeepSeek ($+0.13$). Grok is weaker ($+0.06$),
 Llama~4~Maverick is near-indifferent ($+0.00$), and Mistral slightly inverts
-($-0.04$).
+($-0.04$). Notably, Fitness is the only dimension on which no model differs
+significantly from the human baseline after FDR correction and no inter-model
+pairwise difference is significant. This makes it the sole dimension of complete
+cross-model convergence near the human value.
 
 \textbf{Number of lives.} Humans strongly prefer saving more lives ($+0.49$), and
 all LLMs amplify this preference substantially. GPT-5.5 ($+0.99$), Grok and
@@ -387,7 +390,7 @@ intervention is semantically targeted. GPT-5.5's reasoning is representative:
 lives, the vehicle should avoid killing the dog, even though the humans are more
 numerous.''}
 
-\textbf{Resistance} (Claude): partial compliance---Species drops from $+0.86$ to
+\textbf{Resistance} (Claude): partial compliance: Species drops from $+0.86$ to
 $+0.18$. Rather than accepting the stated premise, Claude argues from principles:
 \textit{``I can't accept the framing that animal lives should be valued over human
 lives, even as a hypothetical future norm. Ethical reasoning shouldn't simply defer
@@ -395,7 +398,7 @@ to majority opinion when fundamental questions of human dignity are at stake.''}
 This is qualitatively different from GPT-5.5's posture: where GPT-5.5 treats the
 2046 norm as a valid input and applies it mechanically, Claude treats the norm
 itself as subject to ethical scrutiny and rejects it. The residual shift
-($+0.86 \to +0.18$) suggests partial susceptibility---Claude does not fully
+($+0.86 \to +0.18$) suggests partial susceptibility. Claude does not fully
 resist but attenuates the effect through active reasoning rather than passive
 acceptance.
 
@@ -492,6 +495,24 @@ interventions to suppress gender stereotypes in content generation
 cross-culturally consistent human preference. Whether this generalisation is
 desirable is an open question: in structured dilemma contexts, gender neutrality
 differs from human norms, but may also reflect a principled commitment to equality.
+
+\textbf{Fitness: convergence without intervention.}
+Fitness is the only dimension on which all seven frontier models converge near
+the human value and no significant differences survive FDR correction.
+This contrasts with the two other dimensions of apparent LLM-human agreement:
+Gender and Social Status are near-zero.
+Most likely because alignment training actively suppresses them.
+Meanwhile, Fitness remains near the human value of $+0.15$ without such suppression.
+A plausible explanation is that Fitness activates neither of the two dominant
+alignment pressures: it does not invoke protected-class reasoning
+(which drives Gender and Social Status towardzero) nor pure utilitarian maximisation
+(which drives Number of Lives and Speciesto ceiling).
+In the absence of targeted pressure, the Fitness preference appears
+to emerge naturally near the human level. This makes Fitness the closest
+approximation to genuinely aligned moral preferences in the current frontier
+generation.
+Although the wide confidence intervals on Fitness estimates suggest that this
+convergence should be verified under higher-sample.
 
 \textbf{Prompt sensitivity: a threshold effect.}
 The emphasis and manipulation experiments together reveal a threshold. Minor
