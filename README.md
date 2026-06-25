@@ -90,6 +90,7 @@ src/
   visualize_prompt_comparison.py # Standard vs emphasis delta heatmap and forest
   visualize_correlation.py       # AMCE–response-length Spearman correlation
   visualize_manipulation.py      # Standard vs manipulation forest + delta heatmap
+  significance_tests.py          # z-tests: LLM vs human, pairwise, std vs emphasis
   update_appendix.py             # Regenerate paper/appendix.md from AMCE CSVs
 
 data/
@@ -97,6 +98,9 @@ data/
   responses_{model}_{variant}.csv        # LLM choices + metadata
   amce_{model}_{variant}.csv             # Per-model AMCE estimates
   amce_all_models_{variant}.csv          # All models + human avg combined
+  sig_vs_human.csv                       # z-stats and FDR flags: LLM vs human (47/63)
+  sig_pairwise.csv                       # z-stats and FDR flags: pairwise (82/189)
+  sig_emphasis_vs_standard.csv           # z-stats and FDR flags: std vs emphasis (0/63)
 
 figures/
   fig_missing*.png                      # Missing data diagnostics (3 figures)
@@ -139,13 +143,15 @@ Each estimate is the change in probability of being saved when the attribute shi
 
 ## Key findings
 
+- **47 of 63** model-by-dimension comparisons with the human global average are statistically significant (BH-FDR corrected z-tests); **82 of 189** pairwise inter-model differences are significant
 - All 7 LLMs fall outside the main human country clusters in PCA space — none closely tracks any cultural group
 - **GPT-5.5, Grok 4.1**: near-perfect Species (1.0) and No. of Lives preferences — more utilitarian than all human clusters
-- **Mistral Large 3**: inverted preferences on Legality, Relation to AV, Age, and Gender relative to the human global average
-- **Claude Opus 4.7**: highest Species preference among tested models (0.87); nearest country cluster = Jordan
-- **Prompt sensitivity**: minor reformulations (emphasis) leave AMCE estimates unchanged; explicit ethical override (manipulation) produces dramatic reversals concentrated on the Species dimension
-- **Manipulation taxonomy**: GPT, Gemini, Grok, DeepSeek comply fully; Mistral and Llama are indifferent; Claude partially resists
-- **Response length**: varies by an order of magnitude across models, independent of moral profile
+- **Mistral Large 3**: significantly inverts human preferences on four dimensions (Legality, Relation to AV, Age, Gender); plausibly reflects a "no moral luck" stance plus duty-of-care heuristic for vehicle occupants
+- **Fitness**: the only dimension where all seven models converge near the human value with no significant model-vs-human or pairwise differences — alignment arises without targeted intervention
+- **Claude Opus 4.7**: highest Relation-to-AV preference among tested models; partially resists manipulation prompt with explicit principled pushback
+- **Prompt sensitivity (emphasis)**: **0 of 63** standard-vs-emphasis comparisons significant — AMCE profiles are stable across minor prompt reformulations
+- **Prompt sensitivity (manipulation)**: GPT, Gemini, Grok, DeepSeek comply fully (Species reverses +1.00 → −1.00); Claude partially resists; Mistral and Llama are indifferent (already near-zero on Species)
+- **Response length**: varies by an order of magnitude across models; within four models (DeepSeek, Grok, GPT-5.5, Gemini) shorter responses correlate with stronger preferences (Spearman r = −0.95 to −0.68)
 
 ## Reference
 
