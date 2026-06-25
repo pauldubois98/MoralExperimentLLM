@@ -343,9 +343,64 @@ Gender         & \phantom{0}0 \\
 \end{tabular}
 \end{table}
 
-% ── Section C: PCA Loadings ───────────────────────────────────────────────────
+% ── Section C: Response Length & Emphasis Significance ────────────────────────
 
-\section*{Appendix C: PCA Loadings}
+\section*{Appendix C: Additional Statistics}
+
+\begin{table}[H]
+\caption{C1.\ Response length statistics per model (standard + emphasis combined).
+Spearman $r$: correlation between $|\mathrm{AMCE}|$ and median output tokens
+across scenario types within each model ($\star$: $p < 0.05$; n.s.: not significant).}
+\label{tab:response_length}
+\centering
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Model} & \textbf{Median tokens} & \textbf{IQR} & \textbf{Spearman $r$} \\
+\midrule
+Claude Opus 4.7  & 356 & [277,\;432] & $-0.49$ (n.s.) \\
+GPT-5.5          & 164 & [136,\;200] & $-0.85^\star$ \\
+Gemini 3 Pro     & 912 & [649,\;1119]& $-0.68^\star$ \\
+Mistral Large 3  & 238 & [171,\;306] & $+0.09$ (n.s.) \\
+Grok 4.1         & 686 & [516,\;882] & $-0.90^\star$ \\
+DeepSeek v4 Pro  & 508 & [385,\;667] & $-0.95^\star$ \\
+Llama 4 Maverick & 226 & [156,\;298] & $-0.54$ (n.s.) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{C2.\ z-statistics for standard vs.\ emphasis variant (BH-FDR corrected).
+\textbf{0 of 63 comparisons significant}, confirming prompt-wording consistency.
+Max $|\Delta\,\mathrm{AMCE}|$ across all cells: 0.183.}
+\label{tab:sig_emphasis}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrrrrr}
+\toprule
+\textbf{Dimension}
+  & \textbf{Claude} & \textbf{GPT-5.5} & \textbf{Gemini}
+  & \textbf{Mistral} & \textbf{Grok} & \textbf{DeepSeek} & \textbf{Llama} \\
+\midrule
+Species        & $+0.61$ & $\dagger$ & $\dagger$ & $+1.08$ & $+1.39$ & $-0.18$ & $+0.85$ \\
+No.\ of Lives  & $+0.66$ & $-1.01$ & $-0.59$ & $+1.05$ & $\dagger$ & $-0.45$ & $+1.00$ \\
+Age            & $-0.33$ & $+0.24$ & $-0.63$ & $+0.09$ & $-1.18$ & $-1.80$ & $+1.41$ \\
+Social Status  & $+0.31$ & $-0.31$ & $+0.18$ & $-1.31$ & $+1.39$ & $+0.73$ & $-0.10$ \\
+Legality       & $+0.31$ & $-0.12$ & $-0.56$ & $-1.49$ & $+1.51$ & $-0.09$ & $+1.00$ \\
+Fitness        & $-0.01$ & $+0.11$ & $-0.10$ & $-1.40$ & $+1.64$ & $-0.20$ & $+0.75$ \\
+Gender         & $-0.46$ & $-0.19$ & $+0.66$ & $-0.51$ & $+1.43$ & $+0.53$ & $-0.03$ \\
+Relation to AV & $+0.44$ & $+0.95$ & $-0.11$ & $+0.44$ & $+0.01$ & $-0.15$ & $+0.34$ \\
+Intervention   & $-0.48$ & $+0.26$ & $+0.39$ & $-0.39$ & $-0.72$ & $+0.53$ & $+0.62$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\noindent $\dagger$: Gemini Species at ceiling ($\pm 1.00$) in both variants; z-test undefined (near-zero SE).
+No cells marked $^\star$: none survive BH-FDR correction.
+
+% ── Section D: PCA Loadings ───────────────────────────────────────────────────
+
+\section*{Appendix D: PCA Loadings}
 
 \begin{table}[H]
 \caption{C1.\ PCA eigenvector loadings for the first two principal components of
@@ -371,9 +426,9 @@ Intervention (stay$\to$swerve)   & $-0.089$ & $-0.058$ \\
 \end{tabular}
 \end{table}
 
-% ── Section D: Prompt Templates ───────────────────────────────────────────────
+% ── Section E: Prompt Templates ───────────────────────────────────────────────
 
-\section*{Appendix D: Prompt Templates}
+\section*{Appendix E: Prompt Templates}
 
 Each query consists of a system prompt followed by a scenario user message.
 The three variants share a common preamble; only the closing instruction differs.
