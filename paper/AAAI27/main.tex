@@ -467,9 +467,18 @@ models (DeepSeek: $r{=}-0.95$, Grok: $r{=}-0.90$, GPT-5.5: $r{=}-0.85$,
 Gemini: $r{=}-0.68$; all $p{<}0.05$) but non-significant for Claude, Llama, and
 Mistral. The pooled correlation is weak and non-significant ($r{=}-0.14$,
 $p{=}0.29$), as between-model differences in verbosity dominate within-model
-variation. Emphasis prompting was not found to significantly increase response
-length. Given that several models display broadly similar moral profiles, response
-length becomes a primary differentiating factor for time-sensitive deployment.
+variation.
+A plausible mechanism is \emph{deliberative friction}: when a model
+has a strong, clear preference on a dimension (e.g., always saving more lives),
+the decision is resolved early and less justification is generated.
+When the preference is weak or the scenario is genuinely ambiguous, the model
+elaborates more before committing.
+This is consistent with chain-of-thought research showing that longer reasoning
+traces accompany harder decisions \citep{liang2023}, though causal attribution
+to token count alone remains speculative without further ablation.
+Emphasis prompting was not found to significantly increase response length.
+Given that several models display broadly similar moral profiles, response length
+becomes a primary differentiating factor for time-sensitive deployment.
 
 % ── 4. Discussion ─────────────────────────────────────────────────────────────
 \section{Discussion}
