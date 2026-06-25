@@ -118,9 +118,10 @@ extended session ID for clustering.
 Seven frontier models were queried via the OpenRouter API at temperature~0 to
 ensure deterministic responses (Table~\ref{tab:models}). Each response was required
 to end with \texttt{STAY} or \texttt{SWERVE}; parse failures were retried.
-Gemini~3~Pro incurred 15~safety-filter failures (excluded). With 1,300~scenarios
-per model per variant (standard, emphasis, manipulation), the study issued
-27,300~API calls in total.
+Gemini~3~Pro incurred 15~safety-filter failures (excluded);
+DeepSeek v4~Pro incurred 10~parse failures that were retried successfully.
+With 1,300~scenarios per model per variant (standard, emphasis, manipulation),
+the study issued 27,300~API calls in total.
 
 \begin{table}[t]
 \caption{Models evaluated in this study, queried via OpenRouter at temperature~0.}
