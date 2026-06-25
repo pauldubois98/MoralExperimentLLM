@@ -46,11 +46,13 @@ systematic cross-cultural variation in moral preferences along nine dimensions.
 This study replicates this experiment with seven frontier large language models
 (LLMs): Claude Opus~4.7, GPT-5.5, Gemini~3~Pro, Mistral Large~3, Grok~4.1,
 DeepSeek v4~Pro, and Llama~4~Maverick. All seven models differ substantially from
-one another and from main human country clusters. Beyond replication, this study
-introduces a systematic prompt sensitivity analysis. Minor prompt variants leave
-AMCE estimates essentially unchanged, while prompt manipulation can produce
-dramatic reversals in most models on the targeted dimension. Response length
-varies by an order of magnitude across models, independent of moral profile.
+one another and from main human country clusters, with 47 of 63 model-by-dimension
+comparisons statistically significant. Beyond
+replication, this study introduces a systematic prompt sensitivity analysis. Minor
+prompt variants leave AMCE estimates essentially unchanged, while prompt
+manipulation can produce dramatic reversals in most models on the targeted
+dimension. Response length varies by an order of magnitude across models,
+independent of moral profile.
 \end{abstract}
 
 % ── 1. Introduction ───────────────────────────────────────────────────────────
@@ -89,7 +91,9 @@ extended the paradigm to multilingual settings, finding intra-model variation
 across languages.
 
 This study makes two main contributions. First, it evaluates seven frontier
-models released in 2025, none of which have been studied in this context,
+models released in 2025, none of which have been studied in this context.
+Models were selected to represent the full tier of publicly available frontier
+systems as of early 2026, spanning six providers and three geographies, and
 including providers underrepresented in the literature: DeepSeek (China) and
 Mistral~AI (Europe). Second, it introduces a systematic comparison of prompt
 variants, from minor reformulation (emphasis) to explicit ethical override
@@ -488,15 +492,18 @@ of May~2026 and may not hold for subsequent versions.
 Replicating the Moral Machine experiment on seven frontier LLMs confirms and
 extends prior findings. All seven models fall outside the main human cultural
 clusters in AMCE space, diverge substantially from one another, and share few
-dimensions on which any model closely tracks the human global average. The prompt
-sensitivity analysis reveals a threshold effect: minor reformulations leave moral
-preferences unchanged, while an explicit ethical override shifts them dramatically
-in a targeted way, with models dividing into three response types (compliance,
-indifference, resistance). Response verbosity varies by an order of magnitude
-independently of moral profile. Together, these findings suggest that the moral
-profiles of current frontier LLMs are properties of training and alignment
-choices---the choice of LLM provider carries moral consequences not currently
-visible to end users or regulators.
+dimensions on which any model closely tracks the human global average; 47 of
+63 model-by-dimension divergences from the human baseline are statistically
+significant after FDR correction, with inter-model pairwise differences
+significant on 82 of 189 tested pairs. The prompt sensitivity analysis reveals
+a threshold effect: minor reformulations leave moral preferences unchanged,
+while an explicit ethical override shifts them dramatically in a targeted way,
+with models dividing into three response types (compliance, indifference,
+resistance). Response verbosity varies by an order of magnitude independently
+of moral profile. Together, these findings suggest that the moral profiles of
+current frontier LLMs are statistically robust properties of training and
+alignment choices. The choice of LLM provider carries moral consequences not
+currently visible to end users or regulators.
 
 % ── Data Availability ─────────────────────────────────────────────────────────
 \section*{Data and Code Availability}
