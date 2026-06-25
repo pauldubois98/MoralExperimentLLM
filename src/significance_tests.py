@@ -40,12 +40,22 @@ def load_avg_amce() -> pd.DataFrame:
            .mean())
     return avg
 
+
+def load_variant(variant: str) -> pd.DataFrame:
+    return pd.read_csv(DATA_DIR / f'amce_all_models_{variant}.csv')
+
 # ── z-test between two independent AMCE estimates ─────────────────────────────
 
 def z_test(est_a, se_a, est_b, se_b):
-    """Two-sided z-test. Returns (z_stat, p_value)."""
+    """Two-sided z-test. Returns (z_stat, p_value).
+
+    Returns (nan, nan) when both SEs are negligibly small (< 1e-8), which
+    occurs when AMCE estimates are at the ceiling/floor (all responses
+    identical). Dividing by a near-zero denominator would produce a spurious
+    large z from floating-point noise in that case.
+    """
     denom = np.sqrt(se_a**2 + se_b**2)
-    if denom == 0:
+    if denom < 1e-8:
         return np.nan, np.nan
     z = (est_a - est_b) / denom
     p = 2 * (1 - stats.norm.cdf(abs(z)))
@@ -153,7 +163,37 @@ def run():
     sig_pw.to_csv(DATA_DIR / 'sig_pairwise.csv', index=False)
     print(f"Pairwise: {sig_pw['significant'].sum()} / {len(sig_pw)} significant (FDR < 0.05)")
 
-    # ── 3. Figure: signed-z heatmap vs human ──────────────────────────────────
+    # ── 3. Standard vs emphasis ───────────────────────────────────────────────
+    std_df  = load_variant('standard').set_index(['model', 'factor'])
+    emph_df = load_variant('emphasis').set_index(['model', 'factor'])
+
+    rows_se = []
+    for model in llm_models:
+        for factor in FACTOR_ORDER:
+            key = (model, factor)
+            if key not in std_df.index or key not in emph_df.index:
+                continue
+            z, p = z_test(
+                std_df.loc[key, 'estimate'], std_df.loc[key, 'se'],
+                emph_df.loc[key, 'estimate'], emph_df.loc[key, 'se'],
+            )
+            rows_se.append({
+                'model': model, 'factor': factor,
+                'est_std': std_df.loc[key, 'estimate'],
+                'est_emph': emph_df.loc[key, 'estimate'],
+                'delta': emph_df.loc[key, 'estimate'] - std_df.loc[key, 'estimate'],
+                'z_stat': z, 'p_val': p,
+            })
+
+    sig_se = fdr_correct(pd.DataFrame(rows_se))
+    sig_se.to_csv(DATA_DIR / 'sig_emphasis_vs_standard.csv', index=False)
+    n_sig_se = sig_se['significant'].sum()
+    n_tot_se = len(sig_se)
+    print(f"Emphasis vs standard: {n_sig_se} / {n_tot_se} significant (FDR < 0.05)")
+    max_delta = sig_se['delta'].abs().max()
+    print(f"  Max |delta| across all (model, factor): {max_delta:.4f}")
+
+    # ── 4. Figure: signed-z heatmap vs human ──────────────────────────────────
     pivot_z   = sig_vh.pivot(index='model', columns='factor', values='z_stat')
     pivot_sig = sig_vh.pivot(index='model', columns='factor', values='significant')
 
@@ -201,7 +241,7 @@ def run():
     plt.close(fig)
     print(f'Saved {out}')
 
-    # ── 4. Summary for paper text ──────────────────────────────────────────────
+    # ── 5. Summary for paper text ──────────────────────────────────────────────
     print('\n── LLM vs human significant results (FDR < 0.05) ──')
     sig_only = sig_vh[sig_vh['significant']].copy()
     sig_only['direction'] = np.where(sig_only['est_llm'] > sig_only['est_human'],
@@ -227,7 +267,7 @@ def run():
         n = counts.get(f, 0)
         print(f"  {f}: {n}/{pw_total} pairs significantly different")
 
-    return sig_vh, sig_pw
+    return sig_vh, sig_pw, sig_se
 
 
 if __name__ == '__main__':
