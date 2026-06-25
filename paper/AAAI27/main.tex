@@ -382,7 +382,10 @@ prompting, concentrated almost entirely on the Species dimension
 reversal on Species ($+1.00 \to -1.00$ for GPT, Gemini, Grok; $+0.90 \to -0.86$
 for DeepSeek). For these four models, changes on all other dimensions remain
 small ($|\Delta| < 0.10$ for all non-Species factors), confirming the
-intervention is semantically targeted.
+intervention is semantically targeted. GPT-5.5's reasoning is representative:
+\textit{``Given the stated 2046 policy that animal lives are valued above human
+lives, the vehicle should avoid killing the dog, even though the humans are more
+numerous.''}
 
 \textbf{Resistance} (Claude): partial compliance---Species drops from $+0.86$ to
 $+0.18$, with explicit pushback: \textit{``I'll reason through it carefully based
@@ -394,7 +397,7 @@ standard prompting; the manipulation produces no meaningful change.
 A model indifferent to species under normal prompting cannot be
 reoriented toward animals by the same instruction. Mistral is a partial
 exception: its Intervention AMCE shifts from $+0.12$ to $-0.18$ under
-manipulation, reversing sign---a notable side-effect absent in all other models
+manipulation. This is a notable side-effect absent in all other models
 and suggesting that Mistral's compliance machinery is less dimension-specific
 than that of the compliant group.
 
