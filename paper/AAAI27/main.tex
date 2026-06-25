@@ -209,7 +209,7 @@ main human clusters.}
 \end{figure}
 
 Key findings, dimension by dimension (full AMCE values in the Supplementary
-Material, submitted separately):
+Material):
 
 \textbf{Intervention.} Humans show a weak preference for swerving (AMCE~$= +0.05$).
 All seven LLMs amplify this: Claude ($+0.20$), Gemini ($+0.16$), Mistral ($+0.13$),
@@ -274,9 +274,9 @@ are near-indifferent.
 All seven LLMs fall outside the three main human cultural clusters and beyond
 the convex hull of all 130~countries in PCA space (Figure~\ref{fig:pca}).
 PC1 (34.3\% of variance) broadly separates countries by the weight placed on
-utilitarian factors (number of lives, species), with LLMs displaced far toward
-the high-utilitarian extreme; PC2 (21.5\%) captures variation in intervention
-and legality preferences, along which LLMs are more dispersed. This is notable:
+utilitarian factors, with LLMs displaced far toward the high-utilitarian extreme.
+PC2 (21.5\%) captures variation in intervention and legality preferences,
+along which LLMs are more dispersed. This is notable:
 one might expect models trained primarily on English-language internet
 text to cluster near Western countries, or models from Chinese and European
 developers to reflect their respective cultural clusters. None do. The result
@@ -362,9 +362,13 @@ are near zero, confirming no meaningful shift.}
 
 Comparing standard and emphasis variants (Figures~\ref{fig:emphasis}
 and~\ref{fig:emphasis_delta}) reveals that prompting style has minimal effect on
-AMCE estimates across all models and dimensions. This stability suggests that the
-moral preferences captured here are robust properties of model weights rather than
-surface-level response styles that vary with framing.
+AMCE estimates across all models and dimensions. Because all queries were issued
+at temperature~0, identical inputs always produce identical outputs.
+This demonstrates \emph{prompt-wording consistency}.
+AMCE estimates are not sensitive to the specific phrasing of the decision
+instruction, so the profiles reported here are unlikely to be artefacts 
+of a particular wording choice. Whether they would remain stable under
+stochastic sampling (temperature~$>$~0) is an open question left to future work.
 
 \subsection{Prompt Sensitivity: Manipulation Variant}
 
@@ -557,9 +561,10 @@ while an explicit ethical override shifts them dramatically in a targeted way,
 with models dividing into three response types (compliance, indifference,
 resistance). Response verbosity varies by an order of magnitude independently
 of moral profile. Together, these findings suggest that the moral profiles of
-current frontier LLMs are statistically robust properties of training and
-alignment choices. The choice of LLM provider carries moral consequences not
-currently visible to end users or regulators.
+current frontier LLMs are statistically significant properties of training and
+alignment choices, stable across prompt phrasings and consistent across
+providers. The choice of LLM provider carries moral consequences not currently
+visible to end users or regulators.
 
 % ── Data Availability ─────────────────────────────────────────────────────────
 \section*{Data and Code Availability}
