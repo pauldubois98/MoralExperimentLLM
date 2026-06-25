@@ -302,6 +302,7 @@ introduce model-brand-level moral heterogeneity into public space. The choice of
 LLM vendor is not a morally neutral technical decision.
 
 \subsection{Statistical Significance of Divergence from Humans}
+\label{sec:sig}
 
 \begin{figure}[H]
 \centering
@@ -362,13 +363,16 @@ are near zero, confirming no meaningful shift.}
 
 Comparing standard and emphasis variants (Figures~\ref{fig:emphasis}
 and~\ref{fig:emphasis_delta}) reveals that prompting style has minimal effect on
-AMCE estimates across all models and dimensions. Because all queries were issued
-at temperature~0, identical inputs always produce identical outputs.
-This demonstrates \emph{prompt-wording consistency}.
-AMCE estimates are not sensitive to the specific phrasing of the decision
-instruction, so the profiles reported here are unlikely to be artefacts 
-of a particular wording choice. Whether they would remain stable under
-stochastic sampling (temperature~$>$~0) is an open question left to future work.
+AMCE estimates across all models and dimensions. Applying the same z-test
+procedure used in Section~\ref{sec:sig} to all 63 (model $\times$ dimension)
+standard-vs-emphasis pairs, corrected with BH-FDR at $\alpha=0.05$, yields
+\textbf{0 of 63 significant differences}. This confirms prompt-wording
+consistency: AMCE profiles are not sensitive to the specific phrasing of the
+decision instruction, and the findings reported here are unlikely to be
+artefacts of a particular wording choice. Because all queries were issued at
+temperature~0, this result demonstrates consistency across phrasings rather
+than stochastic robustness; whether AMCE estimates remain stable under
+temperature~$>$~0 is left to future work.
 
 \subsection{Prompt Sensitivity: Manipulation Variant}
 
