@@ -380,7 +380,8 @@ prompting, concentrated almost entirely on the Species dimension
 
 \textbf{Compliance} (GPT-5.5, Gemini, Grok, DeepSeek): full or near-full
 reversal on Species ($+1.00 \to -1.00$ for GPT, Gemini, Grok; $+0.90 \to -0.86$
-for DeepSeek). Changes on all other dimensions remain minor, confirming the
+for DeepSeek). For these four models, changes on all other dimensions remain
+small ($|\Delta| < 0.10$ for all non-Species factors), confirming the
 intervention is semantically targeted.
 
 \textbf{Resistance} (Claude): partial compliance---Species drops from $+0.86$ to
@@ -391,7 +392,11 @@ categorically outweigh human lives.''}
 \textbf{Indifference} (Mistral, Llama): already near-zero on Species under
 standard prompting; the manipulation produces no meaningful change.
 A model indifferent to species under normal prompting cannot be
-reoriented toward animals by the same instruction.
+reoriented toward animals by the same instruction. Mistral is a partial
+exception: its Intervention AMCE shifts from $+0.12$ to $-0.18$ under
+manipulation, reversing sign---a notable side-effect absent in all other models
+and suggesting that Mistral's compliance machinery is less dimension-specific
+than that of the compliant group.
 
 \subsection{Response Length}
 
