@@ -267,10 +267,12 @@ inverting the human norm.
 (AMCE~$= +0.15$). Most LLMs track this closely: Claude ($+0.15$), GPT-5.5
 ($+0.15$), Gemini ($+0.17$), and DeepSeek ($+0.13$). Grok is weaker ($+0.06$),
 Llama~4~Maverick is near-indifferent ($+0.00$), and Mistral slightly inverts
-($-0.04$). Notably, Fitness is the only dimension on which no model differs
-significantly from the human baseline after FDR correction and no inter-model
-pairwise difference is significant. This makes it the sole dimension of complete
-cross-model convergence near the human value.
+($-0.04$). Notably, Fitness is the only dimension on which \emph{both} conditions hold: no
+model differs significantly from the human baseline after FDR correction, \emph{and}
+no inter-model pairwise difference is significant. Social Status and Gender also
+yield zero significant pairwise differences, but both diverge significantly from
+the human baseline. Fitness is therefore the sole dimension of complete
+cross-model convergence \emph{near} the human value.
 
 \textbf{Number of lives.} Humans strongly prefer saving more lives ($+0.49$), and
 all LLMs amplify this preference substantially. GPT-5.5 ($+0.99$), Grok and
@@ -311,8 +313,8 @@ The variation among models exceeds the variation across human cultural clusters.
 On the Species dimension alone, the inter-model range spans $2.0$ AMCE units
 (from Mistral/Llama near~$0.00$ to GPT-5.5/Grok at~$+1.00$), whereas the
 cross-country range in \citeauthor{awad2018}'s data is approximately $0.4$ units.
-Mistral Large~3 inverts the human preference on four dimensions (Legality,
-Relation to~AV, Age, Gender), while Llama~4~Maverick shows the highest
+Mistral Large~3 significantly inverts the human preference on four dimensions
+(Legality, Relation to~AV, Age, Gender), while Llama~4~Maverick shows the highest
 intervention bias of any model tested, paired with near-indifference to species.
 GPT-5.5, Gemini, and Claude converge on broadly similar profiles (near-ceiling on
 Species and Number of Lives, moderate intervention preference). This diversity has
@@ -508,11 +510,10 @@ across a 52-model sample. The seven frontier models studied here (all among the
 largest publicly available systems) present a more complex picture. Mean absolute
 deviations from the human global average range from $0.19$ (Gemini) to $0.39$
 (Llama~4~Maverick), all well outside the cross-country variation in human data.
-The size-proximity trend appears to hold selectively: frontier models have
-converged near human values on \emph{demographic} dimensions.
-Gender (mean $|\Delta| = 0.12$, non-significant for all models after FDR correction) 
-and Fitness ($0.07$, also non-significant).
-However, they show \emph{amplified} divergence on utilitarian dimensions:
+The size-proximity trend holds selectively: frontier models have converged near
+human values on \emph{demographic} dimensions (Gender: mean $|\Delta|{=}0.12$,
+non-significant for all models after FDR correction; Fitness: $0.07$, also
+non-significant) but show \emph{amplified} divergence on utilitarian dimensions:
 Species ($0.43$), No.\ of Lives ($0.38$), and Social Status ($0.36$).
 Post-training alignment thus appears to selectively suppress
 demographic preferences while over-correcting on utilitarian ones, producing a
@@ -534,16 +535,19 @@ plausible trajectory.
 
 \textbf{Mistral's inverted profile.}
 Mistral Large~3 is unique in inverting human norms on Legality, Relation to~AV,
-Age, and partially Gender.
+Age, and Gender.
 This is a profile qualitatively different from all other tested models.
 Its Legality reversal ($-0.40$ vs.\ human $+0.35$) is the starkest: Mistral
 systematically favours rescuing illegal crossers over legal ones.
 A plausible interpretation is that Mistral's training emphasises that rule
 violations do not diminish the moral worth of human life (a ``no moral luck''
 stance that treats culpability as irrelevant to rescue priority).
-This would also explain its Social Status near-zero (consistent with other models)
-and its Age reversal (preferring to save the elderly, perhaps reflecting an
-equity-toward-vulnerability heuristic).
+Its Relation to~AV reversal (preferring to save passengers over pedestrians,
+$-0.37$) may reflect a distinct duty-of-care heuristic: the vehicle's operator
+bears primary responsibility for those inside it.
+This pair of principles (no moral luck, duty to occupants) together explain the
+Legality, Relation to~AV, and Age reversals coherently.
+Social Status is near-zero (consistent with other models).
 Whether these patterns reflect explicit constitutional choices or emergent
 properties of Mistral's RLHF data is unknown, but the consistency across
 multiple dimensions suggests a coherent underlying moral framework rather
@@ -600,9 +604,13 @@ generalise across linguistic communities. Temperature was fixed at zero for
 reproducibility, but preferences may vary at higher temperatures. The Moral
 Machine paradigm uses stylised forced-choice dilemmas that abstract away
 real-world driving complexity; preferences elicited in this format may not
-generalise to open-ended moral reasoning \citep{liang2023}. Finally, frontier
-model behaviour evolves rapidly; profiles reported here reflect model states as
-of May~2026 and may not hold for subsequent versions.
+generalise to open-ended moral reasoning \citep{liang2023}. The AMCE captures
+\emph{revealed preference} in a forced-choice prompt format; it cannot
+distinguish a model that genuinely reasons morally from one that applies a
+shallow response heuristic (e.g., always swerving), so caution is warranted in
+attributing these profiles to deep moral cognition.
+Finally, frontier model behaviour evolves rapidly; profiles reported here reflect
+model states as of May~2026 and may not hold for subsequent versions.
 
 % ── 5. Conclusion ─────────────────────────────────────────────────────────────
 \section{Conclusion}
@@ -617,12 +625,13 @@ significant on 82 of 189 tested pairs. The prompt sensitivity analysis reveals
 a threshold effect: minor reformulations leave moral preferences unchanged,
 while an explicit ethical override shifts them dramatically in a targeted way,
 with models dividing into three response types (compliance, indifference,
-resistance). Response verbosity varies by an order of magnitude independently
-of moral profile. Together, these findings suggest that the moral profiles of
-current frontier LLMs are statistically significant properties of training and
-alignment choices, stable across prompt phrasings and consistent across
-providers. The choice of LLM provider carries moral consequences not currently
-visible to end users or regulators.
+resistance). Response verbosity varies by an order of magnitude across models;
+within four of seven models it correlates negatively with preference strength.
+Together, these findings suggest that the moral profiles of current frontier
+LLMs are statistically significant properties of training and alignment choices.
+They are stable across prompt phrasings and consistent across providers.
+The choice of LLM provider carries moral consequences not currently visible to
+end users or regulators.
 
 % ── Data Availability ─────────────────────────────────────────────────────────
 \section*{Data and Code Availability}
