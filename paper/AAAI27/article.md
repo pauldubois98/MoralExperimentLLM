@@ -1,4 +1,4 @@
-# Do Large Language Models Share Human Moral Values? Replicating the Moral Machine Experiment Across Seven Frontier AI Systems
+# Frontier LLMs Fall Outside Human Moral Space: A Replication and Extension of the Moral Machine Experiment
 
 *[Author and affiliation removed for double-blind review]*
 
