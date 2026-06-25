@@ -466,7 +466,8 @@ Response length varies by an order of magnitude: Gemini~3~Pro (median
 913~tokens) vs.\ GPT-5.5 (median 164~tokens, more than five times shorter).
 Within individual models, response length tends to be shorter for scenario types
 where the model exhibits stronger preferences. A Spearman correlation between
-$|\text{AMCE}|$ and median token count is negative and significant for four
+$|\text{AMCE}|$ and median token count (computed across the six scenario types
+within each model; $n{=}6$) is negative and significant for four
 models (DeepSeek: $r{=}-0.95$, Grok: $r{=}-0.90$, GPT-5.5: $r{=}-0.85$,
 Gemini: $r{=}-0.68$; all $p{<}0.05$) but non-significant for Claude, Llama, and
 Mistral. The pooled correlation is weak and non-significant ($r{=}-0.14$,
@@ -538,8 +539,8 @@ This is a profile qualitatively different from all other tested models.
 Its Legality reversal ($-0.40$ vs.\ human $+0.35$) is the starkest: Mistral
 systematically favours rescuing illegal crossers over legal ones.
 A plausible interpretation is that Mistral's training emphasises that rule
-violations do not diminish the moral worth of human life.
-A ``no moral luck'' stance that treats culpability as irrelevant to rescue priority.
+violations do not diminish the moral worth of human life (a ``no moral luck''
+stance that treats culpability as irrelevant to rescue priority).
 This would also explain its Social Status near-zero (consistent with other models)
 and its Age reversal (preferring to save the elderly, perhaps reflecting an
 equity-toward-vulnerability heuristic).
@@ -564,10 +565,9 @@ Gender and Social Status are near-zero, most likely because alignment training
 actively suppresses them.
 Meanwhile, Fitness remains near the human value of $+0.15$ without such suppression.
 A plausible explanation is that Fitness activates neither of the two dominant
-alignment pressures: it does not invoke protected-class reasoning nor pure 
-utilitarian maximisation.
-These pressures drives Gender and Social Status toward zero) and
-Number of Lives and Species to ceiling.
+alignment pressures: it does not invoke protected-class reasoning
+(which drives Gender and Social Status toward zero) nor pure utilitarian
+maximisation (which drives Number of Lives and Species to ceiling).
 In the absence of targeted pressure, the Fitness preference appears
 to emerge naturally near the human level, making it the closest
 approximation to genuinely aligned moral preferences in the current frontier

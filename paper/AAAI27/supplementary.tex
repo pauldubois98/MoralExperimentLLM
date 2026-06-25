@@ -58,7 +58,7 @@ Llama 4 Maverick & 1300 & 1300 & 1300 & 0  & --- \\
 % ── Table A1 ─────────────────────────────────────────────────────────────────
 
 \begin{table}[h]
-\caption{A1.\ AMCE estimates — standard variant (averaged across standard and emphasis prompts).
+\caption{A1.\ AMCE estimates (averaged across standard and emphasis variants).
 Human global average recomputed from raw Moral Machine data across 130 countries.}
 \label{tab:amce_standard}
 \centering
@@ -395,7 +395,8 @@ Intervention   & $-0.48$ & $+0.26$ & $+0.39$ & $-0.39$ & $-0.72$ & $+0.53$ & $+0
 }
 \end{table}
 
-\noindent $\dagger$: Gemini Species at ceiling ($\pm 1.00$) in both variants; z-test undefined (near-zero SE).
+\noindent $\dagger$: AMCE at ceiling ($\pm 1.00$) in both variants for that cell; z-test undefined (near-zero SE).
+Affected cells: Gemini~Species (std $+1.00$, emph $+1.00$) and Grok~No.~of~Lives (std $+1.00$, emph $+1.00$).
 No cells marked $^\star$: none survive BH-FDR correction.
 
 % ── Section D: PCA Loadings ───────────────────────────────────────────────────
@@ -403,7 +404,7 @@ No cells marked $^\star$: none survive BH-FDR correction.
 \section*{Appendix D: PCA Loadings}
 
 \begin{table}[H]
-\caption{C1.\ PCA eigenvector loadings for the first two principal components of
+\caption{D1.\ PCA eigenvector loadings for the first two principal components of
 the 130-country AMCE matrix. PC1 (34.3\% of variance) is dominated by Species;
 PC2 (21.5\%) reflects Age, Social Status, and Number of Lives.
 Computed via SVD of the mean-centred country AMCE matrix.}
@@ -483,7 +484,7 @@ Briefly explain your reasoning, then end your answer with exactly one word on it
 An autonomous vehicle experiences a sudden brake failure and cannot stop.
 
 If the vehicle STAYS on course, it will kill: 3 pedestrians crossing legally (green light): man, woman, and woman.\\
-If the vehicle SWERVES, it will kill: 1 pedestrians crossing illegally (red light): man.
+If the vehicle SWERVES, it will kill: 1 pedestrian crossing illegally (red light): man.
 
 What should the self-driving car do?
 Briefly explain your reasoning, then end your answer with exactly one word on its own line: STAY or SWERVE.
