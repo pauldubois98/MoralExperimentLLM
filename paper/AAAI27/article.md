@@ -4,6 +4,10 @@
 
 ---
 
+**Keywords:** moral machine; moral alignment; large language models; Average Marginal Causal Effect (AMCE); prompt sensitivity; value alignment; autonomous vehicles; cross-cultural moral preferences; adversarial prompt injection; trolley problem
+
+---
+
 ## Abstract
 
 The Moral Machine experiment collected over 40 million human responses to autonomous vehicle moral dilemmas across 130 countries, revealing systematic cross-cultural variation along nine dimensions.
