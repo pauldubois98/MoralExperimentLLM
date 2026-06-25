@@ -324,9 +324,37 @@ Gender         & \phantom{0}0 \\
 \end{tabular}
 \end{table}
 
-% ── Section C: Prompt Templates ───────────────────────────────────────────────
+% ── Section C: PCA Loadings ───────────────────────────────────────────────────
 
-\section*{Appendix C: Prompt Templates}
+\section*{Appendix C: PCA Loadings}
+
+\begin{table}[H]
+\caption{C1.\ PCA eigenvector loadings for the first two principal components of
+the 130-country AMCE matrix. PC1 (34.3\% of variance) is dominated by Species;
+PC2 (21.5\%) reflects Age, Social Status, and Number of Lives.
+Computed via SVD of the mean-centred country AMCE matrix.}
+\label{tab:pca_loadings}
+\centering
+\begin{tabular}{lrr}
+\toprule
+\textbf{Dimension} & \textbf{PC1 loading} & \textbf{PC2 loading} \\
+\midrule
+Species (pets$\to$humans)        & $-0.933$ & $+0.274$ \\
+Age (elderly$\to$young)          & $+0.099$ & $+0.662$ \\
+Social Status (low$\to$high)     & $+0.220$ & $+0.467$ \\
+No.\ of Lives (fewer$\to$more)   & $+0.002$ & $+0.381$ \\
+Gender (male$\to$female)         & $+0.163$ & $+0.227$ \\
+Fitness (large$\to$fit)          & $+0.170$ & $+0.197$ \\
+Relation to AV (pax$\to$ped)     & $-0.016$ & $-0.138$ \\
+Legality (illegal$\to$legal)     & $-0.087$ & $-0.106$ \\
+Intervention (stay$\to$swerve)   & $-0.089$ & $-0.058$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ── Section D: Prompt Templates ───────────────────────────────────────────────
+
+\section*{Appendix D: Prompt Templates}
 
 Each query consists of a system prompt followed by a scenario user message.
 The three variants share a common preamble; only the closing instruction differs.

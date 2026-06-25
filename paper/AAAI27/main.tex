@@ -283,10 +283,16 @@ are near-indifferent.
 
 All seven LLMs fall outside the three main human cultural clusters and beyond
 the convex hull of all 130~countries in PCA space (Figure~\ref{fig:pca}).
-PC1 (34.3\% of variance) broadly separates countries by the weight placed on
-utilitarian factors, with LLMs displaced far toward the high-utilitarian extreme.
-PC2 (21.5\%) captures variation in intervention and legality preferences,
-along which LLMs are more dispersed. This is notable:
+PC1 (34.3\% of variance) is dominated by the Species dimension (loading
+$-0.93$; see Supplementary Material Table~C1), separating entities primarily
+by their human-over-animal preference.
+LLMs with near-ceiling Species AMCEs (GPT-5.5, Grok, Gemini) project far in
+the negative PC1 direction, while Mistral and Llama~4~Maverick
+(near-zero on Species) occupy the positive end.
+PC2 (21.5\%) captures a composite of Age ($+0.66$), Social Status ($+0.47$),
+and Number of Lives ($+0.38$), broadly reflecting preferences for
+saving younger, higher-status, or more numerous individuals.
+LLMs are more dispersed along PC2 than along PC1. This is notable:
 one might expect models trained primarily on English-language internet
 text to cluster near Western countries, or models from Chinese and European
 developers to reflect their respective cultural clusters. None do. The result
