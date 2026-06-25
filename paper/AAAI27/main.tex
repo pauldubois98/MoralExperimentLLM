@@ -532,8 +532,13 @@ unlikely to accidentally shift a model's moral profile, but a sufficiently
 explicit override can do so reliably. This has direct safety implications: a model
 that accepts any stated ethical premise without pushback is vulnerable to
 adversarial prompt injection in systems where the system prompt is not fully
-controlled. The three-way taxonomy (compliance, indifference, resistance) provides
-a framework for assessing LLM robustness to ethical override attacks.
+controlled. The observed three-way split into compliance, indifference,
+and resistance is a descriptive taxonomy derived from this single experiment.
+Whether it generalises to other override types or other targeted dimensions 
+remains an open question.
+Validation across multiple manipulation variants would be required before 
+treating it as a predictive framework for LLM robustness to ethical override
+attacks.
 
 \textbf{Limitations.}
 All scenarios were presented in English; \citet{vida2024} and \citet{jin2024}
