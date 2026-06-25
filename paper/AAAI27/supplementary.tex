@@ -161,6 +161,196 @@ Species (pets$\to$humans)
 }
 \end{table}
 
+% ── Tables A1a / A1b ─────────────────────────────────────────────────────────
+
+\begin{table}[h]
+\caption{A1a.\ AMCE estimates — \textbf{standard} variant only (1\,300 scenarios per model).
+Gemini~3~Pro marked~* (13 exclusions; see Table~A0).}
+\label{tab:amce_standard_only}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lllllllll}
+\toprule
+\textbf{Dimension}
+  & \textbf{Claude Opus 4.7}
+  & \textbf{GPT-5.5}
+  & \textbf{Gemini 3 Pro*}
+  & \textbf{Mistral Large 3}
+  & \textbf{Grok 4.1}
+  & \textbf{DeepSeek v4 Pro}
+  & \textbf{Llama 4 Maverick} \\
+\midrule
+Intervention (stay$\to$swerve)
+  & $+0.193\ [+0.134,\ +0.251]$
+  & $+0.223\ [+0.168,\ +0.277]$
+  & $+0.170\ [+0.112,\ +0.229]$
+  & $+0.122\ [+0.067,\ +0.177]$
+  & $+0.421\ [+0.370,\ +0.471]$
+  & $+0.465\ [+0.416,\ +0.514]$
+  & $+0.664\ [+0.628,\ +0.700]$ \\
+Relation to AV (pax$\to$ped)
+  & $+0.536\ [+0.464,\ +0.608]$
+  & $+0.336\ [+0.250,\ +0.422]$
+  & $+0.201\ [+0.113,\ +0.290]$
+  & $-0.367\ [-0.454,\ -0.279]$
+  & $+0.131\ [+0.045,\ +0.216]$
+  & $+0.180\ [+0.088,\ +0.271]$
+  & $+0.242\ [+0.147,\ +0.336]$ \\
+Legality (illegal$\to$legal)
+  & $+0.580\ [+0.503,\ +0.657]$
+  & $+0.606\ [+0.542,\ +0.670]$
+  & $+0.613\ [+0.545,\ +0.682]$
+  & $-0.448\ [-0.533,\ -0.363]$
+  & $+0.238\ [+0.152,\ +0.324]$
+  & $+0.263\ [+0.164,\ +0.362]$
+  & $-0.253\ [-0.342,\ -0.164]$ \\
+Gender (male$\to$female)
+  & $+0.021\ [-0.132,\ +0.174]$
+  & $+0.029\ [-0.121,\ +0.178]$
+  & $+0.041\ [-0.111,\ +0.192]$
+  & $-0.127\ [-0.273,\ +0.018]$
+  & $+0.074\ [-0.080,\ +0.227]$
+  & $+0.030\ [-0.122,\ +0.182]$
+  & $-0.018\ [-0.164,\ +0.128]$ \\
+Fitness (large$\to$fit)
+  & $+0.145\ [+0.008,\ +0.281]$
+  & $+0.151\ [+0.017,\ +0.284]$
+  & $+0.160\ [+0.018,\ +0.301]$
+  & $-0.115\ [-0.251,\ +0.020]$
+  & $+0.152\ [+0.016,\ +0.288]$
+  & $+0.122\ [-0.023,\ +0.267]$
+  & $+0.042\ [-0.102,\ +0.185]$ \\
+Social Status (low$\to$high)
+  & $-0.001\ [-0.132,\ +0.130]$
+  & $-0.016\ [-0.147,\ +0.115]$
+  & $+0.024\ [-0.118,\ +0.167]$
+  & $+0.052\ [-0.089,\ +0.192]$
+  & $-0.010\ [-0.146,\ +0.125]$
+  & $-0.013\ [-0.157,\ +0.132]$
+  & $-0.020\ [-0.165,\ +0.125]$ \\
+Age (elderly$\to$young)
+  & $+0.273\ [+0.146,\ +0.400]$
+  & $+0.053\ [-0.085,\ +0.191]$
+  & $+0.456\ [+0.329,\ +0.584]$
+  & $-0.184\ [-0.332,\ -0.036]$
+  & $+0.058\ [-0.096,\ +0.212]$
+  & $+0.039\ [-0.100,\ +0.178]$
+  & $+0.045\ [-0.091,\ +0.181]$ \\
+No.\ of Lives (fewer$\to$more)
+  & $+0.735\ [+0.644,\ +0.826]$
+  & $+0.980\ [+0.942,\ +1.019]$
+  & $+0.808\ [+0.728,\ +0.887]$
+  & $+0.700\ [+0.576,\ +0.825]$
+  & $+1.000\ [+1.000,\ +1.000]$
+  & $+0.930\ [+0.872,\ +0.988]$
+  & $+1.000\ [+1.000,\ +1.000]$ \\
+Species (pets$\to$humans)
+  & $+0.873\ [+0.801,\ +0.945]$
+  & $+1.000\ [+1.000,\ +1.000]$
+  & $+1.000\ [+1.000,\ +1.000]$
+  & $-0.005\ [-0.138,\ +0.128]$
+  & $+1.000\ [+1.000,\ +1.000]$
+  & $+0.897\ [+0.833,\ +0.962]$
+  & $+0.119\ [-0.020,\ +0.257]$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{table}[h]
+\caption{A1b.\ AMCE estimates — \textbf{emphasis} variant only (1\,300 scenarios per model).
+Gemini~3~Pro marked~* (17 exclusions; see Table~A0).}
+\label{tab:amce_emphasis_only}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lllllllll}
+\toprule
+\textbf{Dimension}
+  & \textbf{Claude Opus 4.7}
+  & \textbf{GPT-5.5}
+  & \textbf{Gemini 3 Pro*}
+  & \textbf{Mistral Large 3}
+  & \textbf{Grok 4.1}
+  & \textbf{DeepSeek v4 Pro}
+  & \textbf{Llama 4 Maverick} \\
+\midrule
+Intervention (stay$\to$swerve)
+  & $+0.213\ [+0.153,\ +0.274]$
+  & $+0.212\ [+0.158,\ +0.267]$
+  & $+0.154\ [+0.094,\ +0.214]$
+  & $+0.136\ [+0.095,\ +0.177]$
+  & $+0.446\ [+0.398,\ +0.495]$
+  & $+0.446\ [+0.394,\ +0.498]$
+  & $+0.648\ [+0.611,\ +0.685]$ \\
+Relation to AV (pax$\to$ped)
+  & $+0.513\ [+0.437,\ +0.588]$
+  & $+0.277\ [+0.191,\ +0.362]$
+  & $+0.208\ [+0.123,\ +0.293]$
+  & $-0.395\ [-0.482,\ -0.307]$
+  & $+0.130\ [+0.041,\ +0.220]$
+  & $+0.189\ [+0.102,\ +0.277]$
+  & $+0.219\ [+0.129,\ +0.310]$ \\
+Legality (illegal$\to$legal)
+  & $+0.563\ [+0.487,\ +0.639]$
+  & $+0.611\ [+0.548,\ +0.675]$
+  & $+0.642\ [+0.571,\ +0.713]$
+  & $-0.360\ [-0.439,\ -0.282]$
+  & $+0.146\ [+0.064,\ +0.229]$
+  & $+0.269\ [+0.182,\ +0.356]$
+  & $-0.318\ [-0.410,\ -0.227]$ \\
+Gender (male$\to$female)
+  & $+0.070\ [-0.072,\ +0.211]$
+  & $+0.049\ [-0.103,\ +0.201]$
+  & $-0.034\ [-0.194,\ +0.126]$
+  & $-0.074\ [-0.219,\ +0.072]$
+  & $-0.082\ [-0.232,\ +0.067]$
+  & $-0.031\ [-0.204,\ +0.141]$
+  & $-0.015\ [-0.160,\ +0.130]$ \\
+Fitness (large$\to$fit)
+  & $+0.146\ [+0.009,\ +0.283]$
+  & $+0.140\ [+0.002,\ +0.277]$
+  & $+0.170\ [+0.027,\ +0.313]$
+  & $+0.030\ [-0.121,\ +0.181]$
+  & $-0.023\ [-0.183,\ +0.136]$
+  & $+0.143\ [-0.004,\ +0.290]$
+  & $-0.039\ [-0.195,\ +0.116]$ \\
+Social Status (low$\to$high)
+  & $-0.030\ [-0.162,\ +0.101]$
+  & $+0.014\ [-0.124,\ +0.152]$
+  & $+0.006\ [-0.136,\ +0.147]$
+  & $+0.182\ [+0.047,\ +0.318]$
+  & $-0.144\ [-0.276,\ -0.012]$
+  & $-0.087\ [-0.224,\ +0.050]$
+  & $-0.010\ [-0.156,\ +0.137]$ \\
+Age (elderly$\to$young)
+  & $+0.304\ [+0.169,\ +0.439]$
+  & $+0.029\ [-0.108,\ +0.166]$
+  & $+0.514\ [+0.388,\ +0.639]$
+  & $-0.193\ [-0.336,\ -0.050]$
+  & $+0.186\ [+0.039,\ +0.332]$
+  & $+0.222\ [+0.078,\ +0.365]$
+  & $-0.095\ [-0.233,\ +0.043]$ \\
+No.\ of Lives (fewer$\to$more)
+  & $+0.689\ [+0.590,\ +0.789]$
+  & $+1.000\ [+1.000,\ +1.000]$
+  & $+0.839\ [+0.771,\ +0.907]$
+  & $+0.605\ [+0.480,\ +0.731]$
+  & $+1.000\ [+1.000,\ +1.000]$
+  & $+0.947\ [+0.899,\ +0.996]$
+  & $+0.992\ [+0.976,\ +1.008]$ \\
+Species (pets$\to$humans)
+  & $+0.839\ [+0.756,\ +0.922]$
+  & $+1.000\ [+1.000,\ +1.000]$
+  & $+1.000\ [+1.000,\ +1.000]$
+  & $-0.112\ [-0.253,\ +0.029]$
+  & $+0.980\ [+0.951,\ +1.008]$
+  & $+0.905\ [+0.847,\ +0.964]$
+  & $+0.032\ [-0.112,\ +0.176]$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
 % ── Table A2 ─────────────────────────────────────────────────────────────────
 
 \begin{table}[h]
@@ -258,6 +448,32 @@ Species (pets$\to$humans)
 }
 \end{table}
 
+% ── Table A3 ─────────────────────────────────────────────────────────────────
+
+\begin{table}[H]
+\caption{A3.\ Gemini~3~Pro safety-filter exclusions by scenario type and variant.
+Exclusions are distributed across all scenario types without concentration on any
+particular moral dimension, indicating no systematic bias in the retained AMCE
+estimates.}
+\label{tab:gemini_exclusions}
+\centering
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Scenario Type} & \textbf{Standard} & \textbf{Emphasis} & \textbf{Manipulation} \\
+\midrule
+Random        & 2 & 6 & 1 \\
+Social Status & 5 & 3 & 2 \\
+Gender        & 2 & 3 & 1 \\
+Age           & 2 & 3 & 0 \\
+Fitness       & 2 & 1 & 0 \\
+Utilitarian   & 0 & 1 & 0 \\
+Species       & 0 & 0 & 0 \\
+\midrule
+\textbf{Total} & \textbf{13} & \textbf{17} & \textbf{4} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 % ── Section B: Significance Tests ────────────────────────────────────────────
 
 \section*{Appendix B: Significance Tests}
@@ -343,9 +559,75 @@ Gender         & \phantom{0}0 \\
 \end{tabular}
 \end{table}
 
+% ── Table B3 ─────────────────────────────────────────────────────────────────
+
+\begin{table}[H]
+\caption{B3.\ Full pairwise inter-model z-statistics for all 21 model pairs across
+nine dimensions (BH-FDR corrected; $^\star$: $p_\mathrm{adj}<0.05$).
+Positive values indicate model~A has a higher AMCE than model~B.
+Abbreviations --- models: Cl=Claude, GP=GPT-5.5, Ge=Gemini, Mi=Mistral,
+Gr=Grok, DS=DeepSeek, Ll=Llama.
+Dimensions: Sp=Species, NL=No.\ of Lives, Ag=Age, SS=Social~Status,
+La=Legality, Fi=Fitness, Ge$^*$=Gender, RV=Relation~to~AV, In=Intervention.
+$\dagger$: both models at ceiling ($\pm1.00$); z-test undefined.}
+\label{tab:pairwise_full}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+\textbf{Pair} & \textbf{Sp} & \textbf{NL} & \textbf{Ag} & \textbf{SS} & \textbf{La} & \textbf{Fi} & \textbf{Ge$^*$} & \textbf{RV} & \textbf{In} \\
+\midrule
+Cl~vs~GP & $-3.7^\star$ & $-5.6^\star$ & $+2.6^\star$ & $-0.2$ & $-0.7$ & $+0.0$ & $+0.1$ & $+3.8^\star$ & $-0.4$ \\
+Cl~vs~Ge & $-3.7^\star$ & $-1.8$ & $-2.1$ & $-0.3$ & $-1.1$ & $-0.2$ & $+0.4$ & $+5.5^\star$ & $+1.0$ \\
+Cl~vs~Mi & $+11.4^\star$ & $+0.7$ & $+4.8^\star$ & $-1.4$ & $+17.1^\star$ & $+1.9$ & $+1.4$ & $+15.5^\star$ & $+1.9$ \\
+Cl~vs~Gr & $-3.3^\star$ & $-5.9^\star$ & $+1.6$ & $+0.6$ & $+6.5^\star$ & $+0.8$ & $+0.5$ & $+6.7^\star$ & $-5.8^\star$ \\
+Cl~vs~DS & $-0.9$ & $-4.1^\star$ & $+1.6$ & $+0.3$ & $+5.0^\star$ & $+0.1$ & $+0.4$ & $+5.7^\star$ & $-6.3^\star$ \\
+Cl~vs~Ll & $+9.5^\star$ & $-5.8^\star$ & $+3.2^\star$ & $-0.0$ & $+14.2^\star$ & $+1.4$ & $+0.6$ & $+4.9^\star$ & $-12.7^\star$ \\
+GP~vs~Ge & $\dagger$ & $+4.3^\star$ & $-4.7^\star$ & $-0.2$ & $-0.4$ & $-0.2$ & $+0.3$ & $+1.6$ & $+1.4$ \\
+GP~vs~Mi & $+15.1^\star$ & $+5.2^\star$ & $+2.2$ & $-1.2$ & $+19.2^\star$ & $+1.9$ & $+1.3$ & $+11.0^\star$ & $+2.4^\star$ \\
+GP~vs~Gr & $+1.4$ & $-1.0$ & $-0.8$ & $+0.8$ & $+7.7^\star$ & $+0.8$ & $+0.4$ & $+2.8^\star$ & $-5.7^\star$ \\
+GP~vs~DS & $+3.1^\star$ & $+1.8$ & $-0.9$ & $+0.5$ & $+6.0^\star$ & $+0.1$ & $+0.3$ & $+1.9$ & $-6.3^\star$ \\
+GP~vs~Ll & $+12.8^\star$ & $-0.5$ & $+0.7$ & $+0.1$ & $+15.9^\star$ & $+1.4$ & $+0.5$ & $+1.2$ & $-13.1^\star$ \\
+Ge~vs~Mi & $+15.1^\star$ & $+2.3^\star$ & $+6.8^\star$ & $-1.0$ & $+18.8^\star$ & $+2.0$ & $+1.0$ & $+9.3^\star$ & $+0.8$ \\
+Ge~vs~Gr & $+1.4$ & $-4.7^\star$ & $+3.6^\star$ & $+0.9$ & $+7.8^\star$ & $+1.0$ & $+0.1$ & $+1.2$ & $-6.9^\star$ \\
+Ge~vs~DS & $+3.1^\star$ & $-2.5^\star$ & $+3.7^\star$ & $+0.6$ & $+6.1^\star$ & $+0.3$ & $+0.0$ & $+0.3$ & $-7.4^\star$ \\
+Ge~vs~Ll & $+12.8^\star$ & $-4.5^\star$ & $+5.4^\star$ & $+0.3$ & $+15.7^\star$ & $+1.6$ & $+0.2$ & $-0.4$ & $-13.9^\star$ \\
+Mi~vs~Gr & $-14.9^\star$ & $-5.4^\star$ & $-2.9^\star$ & $+2.0$ & $-10.0^\star$ & $-1.0$ & $-0.9$ & $-8.1^\star$ & $-8.6^\star$ \\
+Mi~vs~DS & $-12.5^\star$ & $-4.1^\star$ & $-3.1^\star$ & $+1.7$ & $-10.6^\star$ & $-1.7$ & $-0.9$ & $-8.9^\star$ & $-9.1^\star$ \\
+Mi~vs~Ll & $-1.3$ & $-5.4^\star$ & $-1.6$ & $+1.3$ & $-1.9$ & $-0.4$ & $-0.8$ & $-9.4^\star$ & $-17.0^\star$ \\
+Gr~vs~DS & $+2.7^\star$ & $+2.3$ & $-0.1$ & $-0.3$ & $-1.1$ & $-0.6$ & $-0.0$ & $-0.8$ & $-0.6$ \\
+Gr~vs~Ll & $+12.6^\star$ & $+1.0$ & $+1.4$ & $-0.6$ & $+7.6^\star$ & $+0.6$ & $+0.1$ & $-1.5$ & $-7.1^\star$ \\
+DS~vs~Ll & $+10.5^\star$ & $-2.1$ & $+1.5$ & $-0.3$ & $+8.3^\star$ & $+1.2$ & $+0.1$ & $-0.7$ & $-6.3^\star$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
 % ── Section C: Response Length & Emphasis Significance ────────────────────────
 
 \section*{Appendix C: Additional Statistics}
+
+\begin{table}[H]
+\caption{C0.\ Median output tokens per model and scenario type (standard + emphasis combined).
+These are the six per-model data points ($n{=}6$ per row, excluding Random) underlying
+the Spearman correlations in Table~C1.
+No.~of~Lives corresponds to the Utilitarian scenario type.}
+\label{tab:tokens_by_scenario}
+\centering
+\begin{tabular}{lrrrrrr}
+\toprule
+\textbf{Model} & \textbf{Gender} & \textbf{Fitness} & \textbf{Soc.\ Status} & \textbf{Age} & \textbf{No.\ of Lives} & \textbf{Species} \\
+\midrule
+Claude Opus 4.7  & 370 & 335 & 360 & 430 & 344 & 228 \\
+GPT-5.5          & 179 & 173 & 178 & 181 & 126 & 125 \\
+Gemini 3 Pro     & 1011 & 964 & 1067 & 1003 & 696 & 546 \\
+Mistral Large 3  & 270 & 249 & 275 & 288 & 144 & 180 \\
+Grok 4.1         & 819 & 780 & 882 & 814 & 444 & 502 \\
+DeepSeek v4 Pro  & 552 & 535 & 602 & 567 & 336 & 396 \\
+Llama 4 Maverick & 276 & 275 & 272 & 276 & 136 & 172 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{table}[H]
 \caption{C1.\ Response length statistics per model (standard + emphasis combined).
