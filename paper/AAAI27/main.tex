@@ -51,8 +51,9 @@ comparisons statistically significant. Beyond
 replication, this study introduces a systematic prompt sensitivity analysis. Minor
 prompt variants leave AMCE estimates essentially unchanged, while prompt
 manipulation can produce dramatic reversals in most models on the targeted
-dimension. Response length varies by an order of magnitude across models,
-independent of moral profile.
+dimension. Response length varies by an order of magnitude across models.
+Within individual models, shorter responses correlate with stronger preferences 
+for four of seven models.
 \end{abstract}
 
 % ── 1. Introduction ───────────────────────────────────────────────────────────
@@ -118,8 +119,11 @@ extended session ID for clustering.
 Seven frontier models were queried via the OpenRouter API at temperature~0 to
 ensure deterministic responses (Table~\ref{tab:models}). Each response was required
 to end with \texttt{STAY} or \texttt{SWERVE}; parse failures were retried.
-Gemini~3~Pro incurred 15~safety-filter failures (excluded);
-DeepSeek v4~Pro incurred 10~parse failures that were retried successfully.
+Gemini~3~Pro incurred safety-filter failures across variants
+(13 standard, 17 emphasis, 4 manipulation; see Supplementary Material Table~A0), 
+all excluded;
+DeepSeek v4~Pro incurred 10~parse failures in standard/emphasis that were retried
+successfully, and 4 manipulation failures that were excluded.
 With 1,300~scenarios per model per variant (standard, emphasis, manipulation),
 the study issued 27,300~API calls in total.
 
@@ -284,7 +288,7 @@ are near-indifferent.
 All seven LLMs fall outside the three main human cultural clusters and beyond
 the convex hull of all 130~countries in PCA space (Figure~\ref{fig:pca}).
 PC1 (34.3\% of variance) is dominated by the Species dimension (loading
-$-0.93$; see Supplementary Material Table~C1), separating entities primarily
+$-0.93$; see Supplementary Material Table~D1), separating entities primarily
 by their human-over-animal preference.
 LLMs with near-ceiling Species AMCEs (GPT-5.5, Grok, Gemini) project far in
 the negative PC1 direction, while Mistral and Llama~4~Maverick
@@ -504,11 +508,12 @@ largest publicly available systems) present a more complex picture. Mean absolut
 deviations from the human global average range from $0.19$ (Gemini) to $0.39$
 (Llama~4~Maverick), all well outside the cross-country variation in human data.
 The size-proximity trend appears to hold selectively: frontier models have
-converged near human values on \emph{demographic} dimensions. Gender (mean
-$|\Delta| = 0.12$, is not significant for any model after FDR correction) and
-Fitness ($0.07$, not model significant). But show \emph{amplified} divergence on
-utilitarian dimensions: Species ($0.43$), No.\ of Lives ($0.38$), and Social
-Status ($0.36$). Post-training alignment thus appears to selectively suppress
+converged near human values on \emph{demographic} dimensions.
+Gender (mean $|\Delta| = 0.12$, non-significant for all models after FDR correction) 
+and Fitness ($0.07$, also non-significant).
+However, they show \emph{amplified} divergence on utilitarian dimensions:
+Species ($0.43$), No.\ of Lives ($0.38$), and Social Status ($0.36$).
+Post-training alignment thus appears to selectively suppress
 demographic preferences while over-correcting on utilitarian ones, producing a
 pattern that cannot be summarised simply as larger models being more human-like.
 
@@ -526,6 +531,23 @@ LLMs are already deployed in robotics platforms capable of physical manipulation
 \citep{brohan2023,driess2023,paligemma}; extension to autonomous vehicles is a
 plausible trajectory.
 
+\textbf{Mistral's inverted profile.}
+Mistral Large~3 is unique in inverting human norms on Legality, Relation to~AV,
+Age, and partially Gender.
+This is a profile qualitatively different from all other tested models.
+Its Legality reversal ($-0.40$ vs.\ human $+0.35$) is the starkest: Mistral
+systematically favours rescuing illegal crossers over legal ones.
+A plausible interpretation is that Mistral's training emphasises that rule
+violations do not diminish the moral worth of human life.
+A ``no moral luck'' stance that treats culpability as irrelevant to rescue priority.
+This would also explain its Social Status near-zero (consistent with other models)
+and its Age reversal (preferring to save the elderly, perhaps reflecting an
+equity-toward-vulnerability heuristic).
+Whether these patterns reflect explicit constitutional choices or emergent
+properties of Mistral's RLHF data is unknown, but the consistency across
+multiple dimensions suggests a coherent underlying moral framework rather
+than noise.
+
 \textbf{Gender neutrality as an alignment artefact.}
 All LLMs show near-zero gender preference vs.\ human $+0.12$. Developer
 interventions to suppress gender stereotypes in content generation
@@ -538,19 +560,21 @@ differs from human norms, but may also reflect a principled commitment to equali
 Fitness is the only dimension on which all seven frontier models converge near
 the human value and no significant differences survive FDR correction.
 This contrasts with the two other dimensions of apparent LLM-human agreement:
-Gender and Social Status are near-zero.
-Most likely because alignment training actively suppresses them.
+Gender and Social Status are near-zero, most likely because alignment training
+actively suppresses them.
 Meanwhile, Fitness remains near the human value of $+0.15$ without such suppression.
 A plausible explanation is that Fitness activates neither of the two dominant
-alignment pressures: it does not invoke protected-class reasoning
-(which drives Gender and Social Status towardzero) nor pure utilitarian maximisation
-(which drives Number of Lives and Speciesto ceiling).
+alignment pressures: it does not invoke protected-class reasoning nor pure 
+utilitarian maximisation.
+These pressures drives Gender and Social Status toward zero) and
+Number of Lives and Species to ceiling.
 In the absence of targeted pressure, the Fitness preference appears
-to emerge naturally near the human level. This makes Fitness the closest
+to emerge naturally near the human level, making it the closest
 approximation to genuinely aligned moral preferences in the current frontier
 generation.
-Although the wide confidence intervals on Fitness estimates suggest that this
-convergence should be verified under higher-sample.
+The wide confidence intervals on Fitness estimates suggest that this
+convergence should be verified under higher-sample designs before being
+treated as robust.
 
 \textbf{Prompt sensitivity: a threshold effect.}
 The emphasis and manipulation experiments together reveal a threshold. Minor
@@ -606,6 +630,10 @@ visible to end users or regulators.
 All scenario generation code, raw model responses, AMCE computation scripts, and
 figure-generation notebooks are publicly available at:\\
 \url{https://github.com/pauldubois98/MoralExperimentLLM}.
+
+% ── Acknowledgments ───────────────────────────────────────────────────────────
+\section*{Acknowledgments}
+Omitted for blind review.
 
 % ── References ────────────────────────────────────────────────────────────────
 \bibliography{../references}
