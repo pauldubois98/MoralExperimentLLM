@@ -441,6 +441,21 @@ to represent the full distribution of human moral values. Whether LLMs have
 corrected for human biases or drifted from the values they serve \citep{gabriel2020}
 is a normative question---but the empirical gap is substantial.
 
+\textbf{Frontier scale does not resolve moral misalignment.}
+\citet{ahmad2025} found that larger models tend to be closer to human preferences
+across a 52-model sample. The seven frontier models studied here (all among the
+largest publicly available systems) present a more complex picture. Mean absolute
+deviations from the human global average range from $0.19$ (Gemini) to $0.39$
+(Llama~4~Maverick), all well outside the cross-country variation in human data.
+The size-proximity trend appears to hold selectively: frontier models have
+converged near human values on \emph{demographic} dimensions. Gender (mean
+$|\Delta| = 0.12$, is not significant for any model after FDR correction) and
+Fitness ($0.07$, not model significant). But show \emph{amplified} divergence on
+utilitarian dimensions: Species ($0.43$), No.\ of Lives ($0.38$), and Social
+Status ($0.36$). Post-training alignment thus appears to selectively suppress
+demographic preferences while over-correcting on utilitarian ones, producing a
+pattern that cannot be summarised simply as larger models being more human-like.
+
 \textbf{Inter-model diversity raises deployment questions.}
 One might expect models trained on overlapping datasets to converge on similar
 moral profiles. Instead, Mistral and Llama partially invert human norms while
