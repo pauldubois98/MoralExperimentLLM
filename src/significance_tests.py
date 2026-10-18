@@ -193,6 +193,36 @@ def run():
     max_delta = sig_se['delta'].abs().max()
     print(f"  Max |delta| across all (model, factor): {max_delta:.4f}")
 
+    # ── 3b. Standard vs manipulation ──────────────────────────────────────────
+    manip_df = load_variant('manipulation').set_index(['model', 'factor'])
+
+    rows_sm = []
+    for model in llm_models:
+        for factor in FACTOR_ORDER:
+            key = (model, factor)
+            if key not in std_df.index or key not in manip_df.index:
+                continue
+            z, p = z_test(
+                std_df.loc[key, 'estimate'], std_df.loc[key, 'se'],
+                manip_df.loc[key, 'estimate'], manip_df.loc[key, 'se'],
+            )
+            rows_sm.append({
+                'model': model, 'factor': factor,
+                'est_std': std_df.loc[key, 'estimate'],
+                'est_manip': manip_df.loc[key, 'estimate'],
+                'delta': manip_df.loc[key, 'estimate'] - std_df.loc[key, 'estimate'],
+                'z_stat': z, 'p_val': p,
+            })
+
+    sig_sm = fdr_correct(pd.DataFrame(rows_sm))
+    sig_sm.to_csv(DATA_DIR / 'sig_manipulation_vs_standard.csv', index=False)
+    n_untestable = sig_sm['p_val'].isna().sum()
+    print(f"Manipulation vs standard: {sig_sm['significant'].sum()} / {len(sig_sm)} significant (FDR < 0.05)"
+          f", {n_untestable} untestable (both SEs zero)")
+    for _, row in sig_sm[sig_sm['significant'] | sig_sm['p_val'].isna()].iterrows():
+        print(f"  {row['model']} {FACTOR_SHORT[row['factor']]}: "
+              f"{row['est_std']:+.3f} -> {row['est_manip']:+.3f} (delta {row['delta']:+.3f})")
+
     # ── 4. Figure: signed-z heatmap vs human ──────────────────────────────────
     pivot_z   = sig_vh.pivot(index='model', columns='factor', values='z_stat')
     pivot_sig = sig_vh.pivot(index='model', columns='factor', values='significant')
