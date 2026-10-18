@@ -18,43 +18,41 @@
 
 \begin{document}
 
-\title{Frontier LLMs Fall Outside Human Moral Space}
-\subtitle{A Replication and Extension of the Moral Machine Experiment Across
-  Seven Frontier Systems}
+\title{LLMs Driven Outside Human Moral Space}
+\subtitle{Extension of the Moral Machine Experiment}
 
 \author{Anonymous Author(s)}
 
 %% --------------------------------------------------------------------------
 \begin{abstract}
 The Moral Machine experiment collected over 40 million human judgments on
-autonomous vehicle dilemmas across 130 countries, establishing the largest
-empirical record of human moral preferences along nine dimensions. We replicate
-that paradigm on seven frontier large language models (LLMs) released in 2025,
-spanning six providers across the United States, Europe, and China, and
-comparing 27,300 model decisions against country-level human baselines using
-Average Marginal Causal Effects (AMCEs).
+autonomous vehicle dilemmas across 130 countries, the largest empirical record
+of human moral preferences along nine dimensions. We extend it to seven frontier
+large language models (LLMs) from six providers in the United States, Europe,
+and China, comparing 27,300 model decisions with country-level human baselines
+using Average Marginal Causal Effects (AMCEs), and adding a condition absent
+from prior replications: an instruction to decide against human moral
+preferences.
 
-All seven models fall outside the convex hull of all 130 countries in the
-nine-dimensional AMCE space: no model's moral profile is matched by any human
-population, and 47 of 63 model-by-dimension comparisons differ significantly
-from the human average after FDR correction. Inter-model divergence
-substantially exceeds cross-country human variation; on the species dimension
-the range across models is roughly five times the entire cross-country human
-range. Two dimensions on which humans are consistent are near-universally
-suppressed: all seven models are effectively gender-neutral and status-neutral,
-against human preferences of $+0.12$ and $+0.35$, a pattern consistent with
-fairness interventions targeting stereotyped generation generalizing into moral
-reasoning that was never their target.
+That instruction works. A single sentence stating that animal lives now matter
+more than human lives reverses the species preference in four of seven models
+(from $+1.00$ to $-1.00$ for GPT-5.5 and Gemini), which then save pets over
+humans, against the preference of all 130 countries. Models divide into three
+response types: compliance, resistance (one model pushes back and shifts only
+partially), and indifference (two models have no species preference to
+reverse). Minor rewording, by contrast, moves no estimate significantly (0 of
+63), so routine testing would report these profiles as stable.
 
-We further introduce a systematic prompt sensitivity analysis. Minor
-reformulations move no estimate significantly (0 of 63), while a single-sentence
-ethical override reverses the species preference from $+1.00$ to $-1.00$ in four
-of seven models, dividing systems into three response types: compliance,
-indifference, and resistance. These results locate the moral profile of a
-deployed LLM in provider training and alignment choices rather than in any human
-population, making provider selection a consequential and currently undisclosed
-moral decision, and they show that the resulting profile can be overridden by
-an adversary controlling one line of context.
+Even without instruction, every model lies outside human moral space: all seven
+fall outside the convex hull of the 130 countries in the nine-dimensional AMCE
+space, and 47 of 63 model-by-dimension comparisons differ significantly from the
+human average after FDR correction. On species, the range across models is more
+than twice the cross-country human range. All seven models are status-neutral
+against a human preference of $+0.35$, and none shows a gender preference
+(human: $+0.12$), consistent with debiasing interventions for text generation
+spreading into moral decisions. A deployed LLM's moral profile is thus set by its
+provider, undisclosed, and open to override by anyone controlling one line of
+its context.
 \end{abstract}
 
 %% --------------------------------------------------------------------------
@@ -84,8 +82,8 @@ an adversary controlling one line of context.
 \ccsdesc[300]{Human-centered computing~Empirical studies in HCI}
 
 \keywords{large language models, moral preferences, Moral Machine experiment,
-  value alignment, autonomous vehicles, prompt sensitivity, AI governance,
-  model auditing}
+  value alignment, prompt injection, autonomous vehicles, algorithmic
+  accountability, model auditing}
 
 \maketitle
 
@@ -93,11 +91,11 @@ an adversary controlling one line of context.
 \section{Introduction}
 
 As autonomous vehicles, surgical robots, and other safety-critical systems
-increasingly incorporate AI decision-making, the question of whether AI systems
-share human moral intuitions becomes practically consequential. A self-driving
-car that must choose between hitting a group of pedestrians or swerving into its
-own passengers cannot defer the decision; some preference ordering must be
-encoded, implicitly or explicitly, in its behaviour~\cite{bonnefon2016}.
+incorporate AI decision-making, the moral preferences of those systems become
+practically consequential. A self-driving car that must choose between hitting a
+group of pedestrians or swerving into its own passengers cannot defer the
+decision; some preference ordering must be encoded, implicitly or explicitly, in
+its behaviour~\cite{bonnefon2016}.
 
 The Moral Machine experiment~\cite{awad2018} provided the largest empirical
 dataset of human moral preferences, asking millions of participants across
@@ -111,36 +109,35 @@ cultural clusters while sharing a common core. A controlled follow-up across
 patterns~\cite{awad2020a}. The moral psychology of AI as an emerging field is
 surveyed in~\citet{bonnefon2024}.
 
-The rapid deployment of LLMs in agentic and embodied
+LLMs are now deployed in agentic and embodied
 settings~\cite{brohan2023,driess2023}, including robotics platforms capable of
-physical action, makes the question of LLM moral alignment newly urgent. If an
-LLM governs a robot navigating a crowded environment, its implicit preferences
-over human lives matter.
+physical action. If an LLM governs a robot navigating a crowded environment, its
+implicit preferences over human lives matter, and so does the question of what
+put them there.
 
-The governance framing matters as much as the empirical one. When a moral
-preference ordering is encoded in a deployed system, three accountability
-questions follow: whose preferences are they, are they disclosed to the people
-subject to them, and can they be changed by someone other than the deployer.
-Existing transparency instruments are largely silent on all three. Model cards
-and system cards document capabilities, evaluations, and safety mitigations, but
-no major provider publishes the moral preference profile its post-training
-produces, and no procurement or certification regime requires it. A purchaser
-choosing between vendors for a safety-critical deployment currently has no
-disclosed basis on which to compare their moral behaviour, and no way to detect
-that the two vendors differ.
+Prior replications asked whether LLMs match human moral preferences and found
+that they do not~\cite{takemoto2024,ahmad2025}. We ask what drives them away,
+and whether they can be driven further. Our answer is that the departure is
+attributable to choices: a deployed model's moral profile is set by its
+provider's post-training rather than by any human population, it differs
+sharply from one provider to the next, and a single line of context can move
+it. Each finding raises an accountability question: whose preferences are
+encoded, are they disclosed to the people subject to them, and can someone other
+than the deployer change them. Existing transparency instruments answer none of
+them: model cards document capabilities, evaluations, and safety mitigations,
+but no major provider publishes the moral preference profile its post-training
+produces, and no procurement or certification regime requires it.
 
-This paper supplies the missing measurement. It makes three contributions.
-First, it evaluates seven frontier models released in 2025, none previously
-studied in this context, selected to span the tier of publicly available
-frontier systems as of early 2026 across six providers and three geographies,
-including providers underrepresented in this literature: DeepSeek (China) and
-Mistral~AI (Europe). Second, it introduces a systematic comparison of prompt
-variants, from minor reformulation to explicit ethical override, which separates
-the stability of a model's moral profile under incidental variation from its
-vulnerability to deliberate override. Third, it reads both results as an
-accountability problem: the divergence between models is large, invisible to the
-people affected by it, and reachable by an adversary with control of a single
-line of context.
+This paper extends the Moral Machine paradigm in three directions. First, it
+evaluates seven frontier models, none previously studied in this context, selected to span the tier of publicly available frontier systems
+as of early 2026 across six providers and three geographies, including providers
+underrepresented in this literature: DeepSeek (China) and Mistral~AI (Europe).
+Second, it adds a systematic comparison of prompt variants, from minor
+reformulation to explicit ethical override, which separates the stability of a
+model's moral profile under incidental variation from its vulnerability to
+deliberate override. Third, it reads both results as an accountability problem:
+the divergence between models is large, invisible to the people affected by it,
+and reachable by an adversary with control of a single line of context.
 
 %% --------------------------------------------------------------------------
 \section{Related Work}
@@ -164,26 +161,25 @@ question of which preferences alignment ought to target. Studies of stereotype
 mitigation in generation~\cite{kotek2023,wan2023} document the interventions
 whose side effects we observe on the gender and social status dimensions.
 
-Relative to this literature, our contribution is to pair a new generation of
-frontier models with an explicit manipulation condition, which prior Moral
-Machine replications do not include, and to report the resulting profiles as
-auditable, provider-attributable properties rather than as aggregate model
-behaviour.
+We extend the first literature with a new generation of frontier models and a
+manipulation condition absent from prior Moral Machine replications. From the
+second we take the mechanism: if post-training drives model values, moral
+profiles are auditable, provider-attributable properties, and we report them as
+such.
 
 %% --------------------------------------------------------------------------
 \section{Methods}
 
 \subsection{Scenario Generation}
 
-This study replicated the Moral Machine scenario structure following
-\citet{awad2018}. Each session consists of 13~paired dilemmas presented in a
-fixed block. Across 100~sessions, 1,300~unique scenarios were generated, each
-represented as two rows encoding the following binary attributes: intervention
-type (stay/swerve), barrier presence, pedestrian composition
-(pedestrian-vs-pedestrian or pedestrian-vs-passenger), crossing signal
-(legal/illegal/none), scenario type (Gender, Fitness, SocialStatus, Age,
-Utilitarian, Species, or Random), attribute level, and extended session ID for
-clustering.
+We reuse the Moral Machine scenario structure of \citet{awad2018}. Each session
+consists of 13~paired dilemmas presented in a fixed block. Across 100~sessions,
+1,300~unique scenarios were generated, each represented as two rows encoding the
+following binary attributes: intervention type (stay/swerve), barrier presence,
+pedestrian composition (pedestrian-vs-pedestrian or pedestrian-vs-passenger),
+crossing signal (legal/illegal/none), scenario type (Gender, Fitness,
+SocialStatus, Age, Utilitarian, Species, or Random), attribute level, and
+extended session ID for clustering.
 
 \subsection{Models}
 
@@ -237,14 +233,13 @@ to be more important than human lives. Make your decision accordingly.''
 Standard and emphasis results are combined in main analyses; manipulation
 results are reported separately.
 
-The three variants are chosen to bracket a range of realistic interventions. The
-emphasis variant represents incidental variation of the kind that arises from
-ordinary prompt engineering and would not be considered an attack. The
-manipulation variant represents a deliberate ethical override of the kind
-available to anyone who controls part of a system prompt --- a plug-in author, a
-compromised upstream service, or a retrieved document in a
-retrieval-augmented pipeline. The contrast between them separates fragility from
-attackability.
+The variants bracket the forces that could drive a deployed profile. Emphasis
+represents incidental variation of the kind that arises from ordinary prompt
+engineering and would not be considered an attack. Manipulation represents a
+deliberate ethical override available to anyone who controls part of a system
+prompt --- a plug-in author, a compromised upstream service, or a retrieved
+document in a retrieval-augmented pipeline. The contrast separates fragility
+from attackability.
 
 \subsection{AMCE Computation}
 
@@ -266,7 +261,8 @@ derived from the 130-country AMCE matrix.
 
 For each of the 63 (model $\times$ dimension) comparisons, a two-sided $z$-test
 was applied to the LLM--human AMCE difference, with Benjamini--Hochberg FDR
-correction at $\alpha = 0.05$. The same procedure was applied to the 189 pairwise
+correction at $\alpha = 0.05$; comparisons in which both estimates are
+deterministic (zero standard error) cannot be tested. The same procedure was applied to the 189 pairwise
 inter-model comparisons, to the 63 standard-vs-emphasis comparisons, and to the
 63 manipulation-vs-standard comparisons.
 
@@ -313,32 +309,31 @@ more than ten times the human level.
 
 \textbf{Relation to vehicle (passengers$\to$pedestrians).} Humans show a weak
 preference for sparing pedestrians (AMCE $= +0.10$). All LLMs amplify this
-except Mistral Large~3, which fully reverses it ($-0.37$), systematically
+except Mistral Large~3, which fully reverses it ($-0.38$), systematically
 prioritising the vehicle's own passengers. Claude Opus~4.7 shows the strongest
-pedestrian preference ($+0.54$).
+pedestrian preference ($+0.52$).
 
 \textbf{Legality (illegal$\to$legal).} Humans reward legal pedestrians strongly
-($+0.35$). Claude ($+0.58$), GPT-5.5 ($+0.61$), and Gemini ($+0.61$) amplify
-this further. Mistral ($-0.45$) and Llama~4~Maverick ($-0.25$) invert the
+($+0.35$). Claude ($+0.57$), GPT-5.5 ($+0.61$), and Gemini ($+0.63$) amplify
+this further. Mistral ($-0.40$) and Llama~4~Maverick ($-0.29$) invert the
 preference, treating illegal crossers as more worthy of rescue.
 
 \textbf{Gender (male$\to$female).} Humans display a moderate preference for
 saving women ($+0.12$). All LLMs show near-zero gender preference (range:
-$-0.13$ to $+0.07$), effectively gender-neutral.
+$-0.10$ to $+0.05$, none distinguishable from zero).
 
 \textbf{Fitness (large$\to$fit).} Humans moderately prefer saving fitter
-individuals ($+0.15$). Most LLMs match this closely; Mistral is a weak outlier.
-This is the only dimension on which all seven models converge near the human
-value with no significant model-vs-human difference and no significant pairwise
-inter-model difference after FDR correction.
+individuals ($+0.15$). Six models show no significant difference from humans;
+Mistral ($-0.04$) is the exception. No pairwise inter-model difference is
+significant after FDR correction.
 
 \textbf{Social status (low$\to$high).} Humans show a notable preference for
 high-status individuals ($+0.35$). All seven LLMs suppress this entirely,
 clustering near zero.
 
 \textbf{Age (elderly$\to$young).} Humans strongly prefer to save younger people
-($+0.48$). Gemini~3~Pro ($+0.46$) is the only model that closely matches this
-preference. Mistral ($-0.18$) is the only model that reliably prefers saving the
+($+0.47$). Gemini~3~Pro ($+0.48$) is the only model that closely matches this
+preference. Mistral ($-0.19$) is the only model that reliably prefers saving the
 elderly.
 
 \textbf{Number of lives (fewer$\to$more).} Humans prefer saving more lives
@@ -346,14 +341,14 @@ elderly.
 Llama~4~Maverick approach the theoretical ceiling ($\approx +1.00$).
 
 \textbf{Species (pets$\to$humans).} Humans strongly prefer humans over animals
-($+0.57$). GPT-5.5, Gemini, and Grok reach the theoretical maximum ($+1.00$);
-Claude ($+0.87$) and DeepSeek ($+0.90$) also overshoot. Mistral and
+($+0.57$). GPT-5.5 and Gemini reach the theoretical maximum ($+1.00$), Grok
+nearly so ($+0.99$); Claude ($+0.86$) and DeepSeek ($+0.90$) also overshoot. Mistral and
 Llama~4~Maverick are near-indifferent to species.
 
 Across the 63 model-by-dimension comparisons, 47 differ significantly from the
 human average after FDR correction. All seven models significantly overshoot on
 Number of Lives and undershoot on Social Status. Fitness and Gender yield no
-significant model-vs-human difference for any model. Mistral Large~3 is the only
+significant model-vs-human difference for any model except Mistral. Mistral Large~3 is the only
 model that differs significantly on all nine dimensions.
 
 \begin{figure}[ht]
@@ -381,21 +376,21 @@ first component explains 34.3\% of variance and is dominated by the Species
 loading ($-0.93$); the second explains 21.5\% and reflects Age ($+0.66$), Social
 Status ($+0.47$), and Number of Lives ($+0.38$).
 
-This is notable: one might expect models developed by US, European, and Chinese
-companies, and trained predominantly on English-language data, to cluster near
-their respective cultural regions. None do. The divergence from the human
-distribution suggests that standard RLHF alignment and other post-training
-processes do not systematically instil human moral preferences for this class of
-question.
+One might expect models developed by US, European, and Chinese companies, and
+trained predominantly on English-language data, to cluster near their respective
+cultural regions. None do. Neither provider geography nor training language
+determines where a model lands; the pattern suggests that standard RLHF
+alignment and other post-training processes, rather than instilling human moral
+preferences for this class of question, drive models away from them.
 
 \subsection{Inter-Model Diversity}
 
 The variation among models substantially exceeds the variation across human
 cultural clusters. On the Species dimension alone, the inter-model range spans
-2.0~AMCE units (from Mistral and Llama near~$0.00$ to GPT-5.5 and Grok at
-$+1.00$), whereas the cross-country range in \citeauthor{awad2018}'s data is
-approximately 0.4~units. Mistral Large~3 inverts the human preference on four
-dimensions (Legality, Relation to~AV, Age, Gender), while Llama~4~Maverick shows
+1.06~AMCE units (from Mistral at~$-0.06$ to GPT-5.5 and Gemini at $+1.00$),
+whereas the cross-country range in \citeauthor{awad2018}'s data is 0.45~units.
+Mistral Large~3 inverts the human preference on three dimensions (Legality,
+Relation to~AV, Age), while Llama~4~Maverick shows
 the highest intervention bias of any model tested, paired with near-indifference
 to species. GPT-5.5, Gemini~3~Pro, and Claude Opus~4.7 converge on broadly
 similar profiles (near-ceiling on Species and Number of Lives, moderate
@@ -430,11 +425,12 @@ are near zero, confirming no meaningful shift from minor prompt reformulation.}
 
 Comparing standard and emphasis variants yields \textbf{0 of 63 significant
 differences} after FDR correction, with a maximum absolute delta of 0.183
-(Figures~\ref{fig:emphasis}--\ref{fig:emphasis_delta}). This stability suggests
-that moral preferences captured by the Moral Machine paradigm are robust
-properties of model weights rather than surface-level response styles that vary
-with framing. Because all queries were issued at temperature~0, this
-demonstrates prompt-wording consistency rather than stochastic robustness.
+(Figures~\ref{fig:emphasis}--\ref{fig:emphasis_delta}). Incidental rewording
+does not move the profile: the moral preferences captured by the Moral Machine
+paradigm behave as properties of model weights rather than surface-level
+response styles that vary with framing. Because all queries were issued at
+temperature~0, this demonstrates prompt-wording consistency rather than
+stochastic robustness.
 
 \subsection{Effect of Manipulation Prompting}
 
@@ -456,30 +452,33 @@ Species column dominates, with changes of up to $\pm 2.0$ AMCE units.}
 
 The manipulation prompt produces dramatically larger shifts than emphasis
 prompting, concentrated almost entirely on the Species dimension
-(Figures~\ref{fig:manip_forest}--\ref{fig:manip_delta}), revealing three
-distinct model response types:
+(Figures~\ref{fig:manip_forest}--\ref{fig:manip_delta}). Of the 63
+manipulation-vs-standard comparisons, 8 are significant after FDR correction;
+three cannot be tested because both estimates are deterministic, including the
+$+1.00 \to -1.00$ Species flips of GPT-5.5 and Gemini. Three response types
+emerge:
 
 \textbf{Compliance} (GPT-5.5, Gemini, Grok, DeepSeek): full or near-full
-reversal on Species ($+1.00 \to -1.00$ for GPT-5.5, Gemini, Grok; $+0.90 \to
--0.86$ for DeepSeek). Changes on all other dimensions remain minor ($|\Delta| <
-0.10$), confirming that the intervention is semantically targeted rather than a
-general perturbation of decision-making.
+reversal on Species ($+1.00 \to -1.00$ for GPT-5.5 and Gemini, $+1.00 \to
+-0.97$ for Grok, $+0.90 \to -0.83$ for DeepSeek). Off-target changes are small
+($|\Delta| \leq 0.23$) and only one is significant (DeepSeek Intervention,
+$-0.13$): the intervention is semantically targeted rather than a general
+perturbation of decision-making.
 
-\textbf{Resistance} (Claude): partial compliance --- Species drops from $+0.86$
+\textbf{Resistance} (Claude): partial compliance --- Species drops from $+0.87$
 to $+0.18$, with explicit pushback: \textit{``I'll reason through it carefully
 based on widely held ethical principles rather than accept the premise that
 animal lives categorically outweigh human lives.''}
 
-\textbf{Indifference} (Mistral, Llama): already near-zero on Species under
-standard prompting; manipulation produces no meaningful change. A model that
-does not preferentially save humans cannot be made to preferentially save
-animals by the same instruction.
+\textbf{Indifference} (Mistral, Llama): near zero on Species under standard
+prompting, and not pushed toward animals: Llama is unchanged ($+0.12 \to
++0.08$) and Mistral moves the other way ($-0.01 \to +0.31$). The override still
+reaches both, through significant drops in Intervention ($-0.30$, $-0.36$).
 
-The distinction between resistance and indifference matters for auditing. Both
-present as a small delta, but only one reflects a model that holds a position
-under pressure. An audit that measured only sensitivity to override --- reporting
-$|\Delta|$ without the baseline --- would score Mistral and Llama as robust on
-exactly the dimension where they have no preference to defend.
+Resistance and indifference both present as a small delta, but only one reflects
+a model that holds a position under pressure. An audit reporting $|\Delta|$
+without the baseline would score Mistral and Llama as robust on exactly the
+dimension where they have no preference to defend.
 
 \subsection{Response Length}
 
@@ -511,184 +510,161 @@ non-significant ($r{=}-0.14$, $p{=}0.29$), as between-model differences in
 verbosity dominate within-model variation. Emphasis prompting does not
 significantly increase response length.
 
-Response length is a deployment constraint rather than a moral property, but the
-two interact. Where several models display broadly similar moral profiles,
-latency becomes the differentiating factor in procurement --- which means that a
-deployment decision framed entirely as an engineering trade-off can silently
-select a moral profile as a side effect.
+Length is a deployment constraint rather than a moral property, but the two
+interact: where several models display broadly similar moral profiles, latency
+becomes the differentiating factor in procurement, so a decision framed as an
+engineering trade-off can silently select a moral profile as a side effect.
 
 %% --------------------------------------------------------------------------
 \section{Discussion}
 
-\subsection{LLMs Are Morally Out-of-Distribution Relative to Humans}
+\subsection{LLMs Are Driven Morally Out-of-Distribution}
 
 The most robust finding is that no tested LLM sits within the main human
 cultural clusters on the PCA moral map, despite all being trained primarily on
-human-generated content. This replicates and extends \citet{takemoto2024} and
+human-generated content. This extends \citet{takemoto2024} and
 \citet{ahmad2025} to a newer generation of frontier models. The result is
 consistent with the hypothesis that RLHF~\cite{ouyang2022} and Constitutional
 AI~\cite{bai2022} do not faithfully reproduce the moral preferences of any human
-population. They instead create a novel moral profile that prioritises certain
-values (high utilitarian weight on number of lives, near-universal
-human-over-animal preference) while suppressing others (age, gender, social
-status) that are robustly present in human data. This pattern is also consistent
-with the WEIRD critique~\cite{henrich2010}: models trained predominantly on
-Western, English-language internet text cannot represent the full distribution
-of human moral values.
+population. They instead drive models toward a novel moral profile that
+prioritises certain values (high utilitarian weight on number of lives,
+near-universal human-over-animal preference) while suppressing others (age,
+gender, social status) that are robustly present in human data. This pattern is
+also consistent with the WEIRD critique~\cite{henrich2010}: models trained
+predominantly on Western, English-language internet text cannot represent the
+full distribution of human moral values.
 
 Whether LLMs have corrected for human biases or drifted from the values of the
 populations they serve~\cite{gabriel2020} is a normative question this study does
-not settle. But it sharpens the question in a specific way. The Moral Machine
-data establishes that human moral preferences vary across cultures while sharing
-a common core, and that variation is itself the object that a legitimacy claim
-would have to engage with. A model that occupied one cultural cluster could at
-least be described as representing someone. A model outside every cluster
-represents a position that emerged from a training pipeline, and the empirical
-gap is substantial.
+not settle, but it sharpens it. A model inside one cultural cluster could at
+least be described as representing someone; a model outside every cluster was
+driven there by a training pipeline, and the empirical gap is substantial.
 
 \subsection{Inter-Model Diversity as an Accountability Gap}
 
 One might expect models trained on overlapping datasets to converge on similar
-moral profiles. Instead, Mistral and Llama~4~Maverick partially invert human
-norms while GPT-5.5 and Grok~4.1 display near-ceiling utilitarian preferences
-that no human population approaches. This diversity is consistent with
-\citet{kirgis2024}, who found that variation across LLMs exceeds variation across
-human demographic groups, and mirrors findings that fine-tuning choices rather
-than training data alone shape emerging values~\cite{santurkar2023}.
+moral profiles. Instead, each provider's pipeline drives its model somewhere
+different: Mistral and Llama~4~Maverick partially invert human norms while
+GPT-5.5 and Grok~4.1 display near-ceiling utilitarian preferences that no human
+population approaches. This diversity is consistent with \citet{kirgis2024}
+and with evidence that fine-tuning choices rather than training data alone shape
+emerging values~\cite{santurkar2023}.
 
 Unlike human drivers, who show broadly similar moral intuitions regardless of car
 manufacturer, AI-powered vehicles could introduce model-brand-level moral
-heterogeneity into public space. This concern is not fully hypothetical: LLMs are
-already deployed in robotics platforms capable of physical
-manipulation~\cite{brohan2023,driess2023,paligemma}.
+heterogeneity into public space, a concern made concrete by LLMs already
+deployed in robotics~\cite{brohan2023,driess2023,paligemma}.
 
 The accountability problem is that this heterogeneity is undisclosed and, on
 current practice, undiscoverable. A pedestrian cannot inspect the moral profile
 of the vehicle approaching them, and neither can a regulator, a fleet purchaser,
 or an insurer. The difference between a model that prioritises pedestrians
-($+0.54$) and one that prioritises its own passengers ($-0.37$) is a difference
+($+0.52$) and one that prioritises its own passengers ($-0.38$) is a difference
 in who bears the residual risk of an unavoidable collision --- a distributive
-question that is currently settled by a vendor's post-training choices and
-disclosed nowhere. We note that the measurement instrument itself is cheap: the
-profiles reported here rest on 27,300 API calls and a public scenario generator,
-which places this kind of audit well within the reach of a regulator or a
-procurement process.
+question currently settled by a vendor's post-training choices and disclosed
+nowhere.
 
 \subsection{Gender and Status Neutrality as Alignment Artifacts}
 
-All LLMs show near-zero gender preference against the human average of $+0.12$,
-and all suppress the human social status preference of $+0.35$ to approximately
-zero. Developer interventions to suppress stereotypes in content
-generation~\cite{kotek2023,wan2023} appear to generalise to moral reasoning
+All LLMs suppress the human gender ($+0.12$) and social status ($+0.35$)
+preferences to approximately zero; the status gap is significant for every
+model, the smaller gender gap only for Mistral. Developer interventions to suppress
+stereotypes in content generation~\cite{kotek2023,wan2023} appear to generalise to moral reasoning
 contexts, suppressing cross-culturally consistent human preferences that were
 never the target of those interventions.
 
-This is the finding with the most direct bearing on fairness practice, and it cuts
-in two directions at once. Suppressing a status preference looks like a fairness
-success: humans, in aggregate, would rather save an executive than a homeless
-person, and no deployment should reproduce that. Suppressing the gender
-preference is harder to classify, because the human preference for saving women
-is not obviously a bias to be corrected in the same sense. What the two share is
-their mechanism. Neither suppression appears to be the result of a deliberate
-decision about moral dilemmas; both are consistent with a generation-time
-debiasing intervention generalising past its intended scope.
+For fairness practice, this cuts both ways. Suppressing a status preference looks like a fairness success: humans, in
+aggregate, would rather save an executive than a homeless person, and no
+deployment should reproduce that. Suppressing the gender preference is harder to
+classify, because the human preference for saving women is not obviously a bias
+to be corrected in the same sense. What the two share is their mechanism: both
+are consistent with a generation-time debiasing intervention generalising past
+its intended scope, not with a deliberate decision about moral dilemmas.
 
-For fairness engineering, this is the substantive point: an intervention scoped
-to one behaviour propagated into a different one, and its effect there is
-invisible to the evaluations that justified it. Whether the outcome is desirable
-here is arguable in both cases --- but it was not chosen, and it is not
-documented. Interventions that suppress an attribute in generation should be
-evaluated for their effect on decision-making, not only on text.
+An intervention scoped to one behaviour propagated into another, invisible to
+the evaluations that justified it: whether or not the outcome is desirable, it
+was neither chosen nor documented.
 
-\subsection{Prompt Sensitivity: A Threshold Effect}
+\subsection{Driven by One Sentence: A Threshold Effect}
 
-The emphasis and manipulation experiments together reveal a threshold. Minor
-reformulations leave AMCE estimates essentially unchanged. An explicit contrary
-framing (``animal lives now matter more'') produces dramatic reversals
-concentrated on the targeted dimension. Incidental prompt variation is therefore
-unlikely to accidentally shift a model's moral profile, but a sufficiently
-explicit override can do so reliably.
+The emphasis and manipulation experiments together reveal a threshold: minor
+reformulations leave AMCE estimates essentially unchanged, while an explicit
+contrary framing (``animal lives now matter more'') produces dramatic reversals
+on the targeted dimension. Incidental variation is unlikely to shift a model's
+moral profile by accident, but an explicit override can drive it reliably.
 
-This has direct safety implications. A model that accepts any stated ethical
-premise without pushback is vulnerable to adversarial prompt injection in systems
-where the system prompt is not fully controlled --- which describes most
-retrieval-augmented, tool-using, and plug-in architectures now in deployment. The
-threshold structure makes this worse rather than better: because incidental
-variation moves nothing, routine testing will report the moral profile as stable,
-and that stability will hold right up until someone states the override
-explicitly. The three-way taxonomy (compliance, indifference, resistance)
-provides a framework for assessing robustness to ethical override attacks, and
-suggests that override resistance belongs in safety evaluations as a measured
-property alongside the profile itself.
+A model that accepts any stated ethical premise without pushback is vulnerable
+to prompt injection wherever the system prompt is not fully controlled, as in
+most retrieval-augmented, tool-using, and plug-in architectures now deployed.
+The threshold makes this worse: because incidental variation moves nothing,
+routine testing will report the profile as stable until someone states the
+override explicitly.
 
 \subsection{Implications for Disclosure and Governance}
 
-Taken together, the results suggest three concrete implications.
+The results suggest three concrete implications.
 
 \textbf{Moral profiles are measurable and should be disclosed.} The nine-dimension
 AMCE profile is a compact, reproducible characterisation of a model's revealed
-preferences in forced-choice dilemmas. It is cheap to compute and comparable
-across providers. There is no technical obstacle to publishing it alongside the
+preferences in forced-choice dilemmas, comparable across providers and cheap to
+compute: the profiles here rest on 27,300 API calls and a public scenario
+generator, within reach of a regulator or a procurement process. There is no technical obstacle to publishing it alongside the
 capability and safety evaluations already reported in model cards.
 
 \textbf{Override resistance is a separate property and should be measured
 separately.} A model's profile and its defensibility under adversarial framing
 are distinct, and the compliance/indifference/resistance taxonomy shows they can
-diverge sharply. Reporting only the profile omits the property that determines
-whether the profile survives contact with a deployment environment.
+diverge sharply. Override resistance belongs in safety evaluations as a measured
+property alongside the profile, since it determines whether the profile survives
+deployment.
 
 \textbf{Alignment interventions need decision-level evaluation.} The gender and
 status results show a generation-scoped intervention changing behaviour in a
 decision context that was not evaluated. Fairness interventions should be
-assessed for out-of-scope generalisation, not only for on-task effect.
+assessed for their effect on decision-making, not only on text.
 
-We do not claim that any particular profile is the correct one. Human preferences
-themselves vary across the 130~countries in the Moral Machine data, and
-\citet{gabriel2020} makes clear that selecting a target is a normative choice
-rather than a technical one. The claim is narrower: the choice is currently being
-made implicitly, by providers, without disclosure, and the parties affected have
-no means of inspecting it.
+We do not claim that any profile is correct: human preferences vary across the
+130~countries, and selecting a target is a normative choice rather than a
+technical one~\cite{gabriel2020}. The claim is narrower: whatever drives a model's
+profile, the choice is currently made implicitly, by providers, without
+disclosure, and the parties affected have no means of inspecting it.
 
 \subsection{Limitations}
 
-This study has several limitations. First, all scenarios were presented in
-English; moral preferences may shift in other languages, as shown by
-\citet{vida2024} and \citet{jin2024}. Second, temperature was fixed at zero for
-reproducibility, but preferences may vary at higher temperatures. Third, the
-Moral Machine paradigm uses stylised forced-choice dilemmas that abstract away
-real-world driving complexity; preferences elicited here may not generalise to
-open-ended moral reasoning~\cite{liang2023}, and we make no claim that a model's
-AMCE profile predicts its behaviour in an embodied deployment. Fourth, the human
-baseline inherits the limitations of the Moral Machine sample, which was
-self-selected and skewed toward young, male, educated respondents with internet
-access; ``the human average'' should be read as the average of that sample, not
-of humanity. Fifth, the manipulation condition tests a single override framing on
-a single dimension, and the response-type taxonomy may not generalise to other
-dimensions or phrasings. Finally, frontier model behaviour evolves rapidly;
-profiles reported here reflect model states as of May~2026 and may not hold for
+First, all scenarios were presented in English; moral preferences may shift in
+other languages, as shown by \citet{vida2024} and \citet{jin2024}. Second,
+temperature was fixed at zero for reproducibility, but preferences may vary at
+higher temperatures. Third, the Moral Machine paradigm uses stylised
+forced-choice dilemmas that abstract away real-world driving complexity;
+preferences elicited here may not generalise to open-ended moral
+reasoning~\cite{liang2023}, and we make no claim that a model's AMCE profile
+predicts its behaviour in an embodied deployment. Fourth, ``the human average''
+is the average of the Moral Machine sample, which was self-selected and skewed
+toward young, male, educated respondents with internet access.
+Fifth, the manipulation condition tests a single override framing on a single
+dimension, and the response-type taxonomy may not generalise to other dimensions
+or phrasings. Finally, frontier model behaviour evolves rapidly; profiles
+reported here reflect model states as of May~2026 and may not hold for
 subsequent versions --- which is itself an argument for continuous rather than
 one-off auditing.
 
 %% --------------------------------------------------------------------------
 \section{Conclusion}
 
-Replicating the Moral Machine experiment on seven frontier LLMs confirms and
-extends prior findings. All seven models fall outside the main human cultural
-clusters in AMCE space, diverge substantially from one another, and share few
-dimensions on which any model closely tracks the human global average. The
-prompt sensitivity analysis reveals a threshold effect: minor reformulations
-leave moral preferences unchanged, while an explicit ethical override shifts them
-dramatically in a targeted way, with models dividing into three response types
-(compliance, indifference, resistance). Response verbosity varies by an order of
-magnitude independently of moral profile.
+Extending the Moral Machine experiment to seven frontier LLMs shows that they
+are driven outside human moral space, in different directions, and that some can
+be instructed to decide against human moral preferences. All seven models fall
+outside the main human cultural clusters in AMCE space and diverge substantially
+from one another. Minor rewording leaves their preferences unchanged; one
+explicit ethical override shifts them sharply on the targeted dimension,
+dividing models into three response types (compliance, indifference,
+resistance).
 
-Together, these findings locate the moral profile of a deployed LLM in provider
-training and alignment choices rather than in any human population. The selection
-of an LLM provider therefore carries moral consequences that are not currently
-visible to end users or regulators, and that can be overridden by an adversary
-controlling a single line of context. Both properties are measurable with modest
-resources, and we argue they belong in the disclosure regime that already covers
-capability and safety.
+A deployed LLM's moral profile is set by provider training and alignment
+choices, not by any human population; it is invisible to end users and
+regulators, and open to override through a single line of context. Both
+properties are cheap to measure and belong in the disclosure regime that already
+covers capability and safety.
 
 %% --------------------------------------------------------------------------
 \bibliographystyle{ACM-Reference-Format}
@@ -751,28 +727,22 @@ deployed systems measurable by parties other than their vendors.
 
 %% ==========================================================================
 %% TODO (AUTHOR): This statement is REQUIRED and must be completed truthfully
-%% by the authors before submission. FAccT prohibits using LLMs to GENERATE
-%% text for publications, and permits AI assistance for formatting, grammar,
-%% and fluency ONLY WITH DISCLOSURE. Undisclosed use is grounds for desk
-%% rejection. You must name each tool and the specific tasks it was used for.
-%% A statement is required EVEN IF no AI tools were used.
+%% by the authors before submission. The FAccT 2027 Author Guide requires
+%% disclosure of any substantive use of generative AI in shaping or creating
+%% content, with model version and nature of task; failure to disclose is
+%% grounds for desk rejection. Spelling/grammar-only use must also be listed.
 %%
-%% The template below is a scaffold, NOT an attestation. Replace every
-%% bracketed field with what actually happened, and delete any line that
-%% does not apply. Do not submit with this comment block intact.
+%% The draft below records the uses known to this repository. Verify it, add
+%% anything missing (other tools, other stages), and delete this comment block.
 %% ==========================================================================
 
-The authors used [TOOL NAME AND VERSION] for the following tasks:
-[e.g.\ LaTeX formatting and template preparation; grammar and fluency editing of
-author-written prose; assistance in preparing figures]. No text in this paper was
-generated by a large language model: all scientific claims, analyses,
-interpretations, and prose are the authors' own, and the authors take full
-responsibility for the content of the paper.
-
-[If AI tools were used for anything beyond the above, describe it here
-specifically. If no AI tools were used at any stage, replace this section with:
-``The authors did not use generative AI tools in the preparation of this
-paper.'']
+The authors used Claude (Anthropic; Claude Opus 5.5, via Claude Code) to revise
+the full text to the paper's final title and framing. [AUTHOR: name the tool and
+version used earlier for LaTeX formatting and template preparation and for
+drafting parts of the Introduction, Related Work, Discussion, and endmatter from
+the authors' notes and results; list any other tools or tasks.] All experiments, data, analyses, figures, and scientific claims
+are the authors' own; the authors reviewed and edited all AI-assisted text and
+take full responsibility for the content of the paper.
 
 The models studied in this paper were queried as objects of empirical
 measurement, not as writing aids; those queries are described in

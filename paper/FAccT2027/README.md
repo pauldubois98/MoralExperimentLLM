@@ -1,7 +1,7 @@
 # ACM FAccT 2027 Submission
 
-**Title:** Frontier LLMs Fall Outside Human Moral Space: A Replication and
-Extension of the Moral Machine Experiment Across Seven Frontier Systems
+**Title:** LLMs Driven Outside Human Moral Space: Extension of the Moral Machine
+Experiment
 
 ## Deadlines (all 11:59 PM AoE)
 
@@ -33,10 +33,12 @@ references, and one additional page for endmatter statements.
 | Section | Pages |
 |---|---|
 | Content (Intro → Conclusion) | 1–14 — **exactly at the limit** |
-| References | 15–16 |
-| Endmatter (Ethics, Gen-AI) | 16–17 (~0.6 pages of text) |
+| References | 15 |
+| Endmatter (Ethics, Gen-AI) | 15–16 (~0.6 pages of text) |
 
-The content is at 14 pages with no slack. Anything you add needs something
+The content ends on the last line of page 14, with no slack. These counts come
+from the local build without Libertine fonts. Recheck the page count on Overleaf
+or a full TeX Live install before submitting. Anything you add needs something
 removed. The appendix was deliberately cut — appendices count toward the content
 limit, and the full supplementary tables live in `../AAAI27/supplementary.tex`.
 The paper points to them via a footnote in Methods; before submitting, host them
@@ -48,8 +50,8 @@ that link in the footnote.
 - [x] Anonymized: no author names, affiliations, acknowledgements, or
       positionality statement. Prior work cited in third person.
 - [x] **Ethical Considerations Statement** (required at submission).
-- [ ] **Generative AI Usage Statement** — REQUIRED, and currently a **template
-      you must complete truthfully**. See the warning below.
+- [ ] **Generative AI Usage Statement** — REQUIRED. The draft has `[AUTHOR: ...]`
+      fields you must complete truthfully. See the section below.
 - [x] ACM Reference Format (required for archival submissions).
 - [x] CCS concepts and keywords present. Verify the CCS concept IDs against
       https://dl.acm.org/ccs before camera-ready.
@@ -61,29 +63,31 @@ that link in the footnote.
 
 ## ⚠️ Generative AI Usage Statement — action required
 
-FAccT **prohibits using LLMs to generate text for publications**. AI assistance
-for formatting, grammar, and fluency is permitted **only with disclosure**, and
-undisclosed use is grounds for desk rejection. A statement is required even if no
-AI tools were used.
+The FAccT 2027 Author Guide allows generative AI to be used substantively in
+shaping or creating content, provided that use is disclosed with the model
+version and the nature of the task. Spelling and grammar help must also be
+listed. Undisclosed use is grounds for desk rejection. Every paper needs a
+statement, including papers that used no AI tools.
 
-The statement in `main.tex` is a scaffold with bracketed placeholders, not an
-attestation. Complete it yourself before submitting, and delete the TODO comment
-block above it.
+The statement in `main.tex` is a draft, not an attestation. It records:
 
-Relatedly: the body text of this version was adapted from the author-written
-`../AIMagazine/main.tex`, but the following passages were newly drafted and
-should be rewritten in your own words before you sign the statement:
+- **Revision to the current title and framing** (October 2026, Claude Opus 5.5
+  via Claude Code). This touched every section, the endmatter excepted.
+- **Earlier drafting**, for which you need to fill in the tool and version:
+  LaTeX/template preparation, plus these passages, which were newly drafted
+  rather than adapted from the author-written `../AIMagazine/main.tex`:
+  - Introduction: the governance/accountability paragraph and the
+    contributions paragraph
+  - Related Work: the whole section
+  - Methods: the paragraph motivating the three prompt variants
+  - Results: the closing remarks on audit interpretation (manipulation) and
+    procurement (response length)
+  - Discussion: §5.2 (second half), §5.3 (second half), and §5.5 (all)
+  - Limitations: the items on sample skew and single-framing manipulation
+  - Both endmatter statements
 
-- Introduction, the "governance framing" paragraph and the contributions paragraph
-- Related Work (the whole section, assembled from the existing citations)
-- Methods, the paragraph motivating the three prompt variants
-- Results, the closing remarks on audit interpretation (manipulation) and
-  procurement (response length)
-- Discussion §"Inter-Model Diversity as an Accountability Gap" (second half),
-  §"Gender and Status Neutrality as Alignment Artifacts" (second half),
-  §"Implications for Disclosure and Governance" (all)
-- Limitations, the added items on sample skew and single-framing manipulation
-- Both endmatter statements
+Fill in the `[AUTHOR: ...]` fields, check that the statement is accurate, and
+delete the TODO comment block above it.
 
 ## Note on the local build helper
 
