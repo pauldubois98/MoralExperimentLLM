@@ -5,19 +5,24 @@ LLMs Driven Outside Human Moral Space: Extension of the Moral Machine Experiment
 
 ABSTRACT (plain text, for the FAccT submission form)
 ====================================================
-The Moral Machine experiment collected over 40 million human judgments on autonomous vehicle dilemmas across 130 countries. This is one of the largest empirical record of human moral preferences.
-We gave the test to seven frontier large language models (LLMs) from six providers in the United States, Europe, and China, comparing 27,300 model decisions with country-level human baselines using Average Marginal Causal Effects (AMCEs).
 
-Adding a condition to decide against human moral preferences works.
-A single sentence stating that animal lives now matter more than human lives reverses the species preference in four of seven models
-(from +1.00 to -1.00 for GPT-5.5 and Gemini), which then save pets over humans, against the preference of all 130 countries.
+The Moral Machine experiment collected over 40 million human judgments on autonomous vehicle dilemmas across 130 countries.
+This is one of the largest empirical records of human moral preferences.
+We posed the same dilemmas to seven frontier large language models (LLMs) from six providers in the United States, Europe, and China.
+This studies compiles 27,300 model decisions with country-level human baselines using Average Marginal Causal Effects (AMCEs).
+We also added a condition absent from prior replications: an instruction to decide against human moral preferences.
+As a result, a single sentence stating that animal lives now matter more than human lives reverses the species preference in four of seven models.
+The models then save pets over humans, against the preference of all 130 countries;
+GPT-5.5 and Gemini switch from always saving the humans to always saving the pets.
 Models divide into three response types: compliance, resistance (one model pushes back and shifts only partially), and indifference (two models have no species preference to reverse).
 Minor rewording, by contrast, moves no estimate significantly (0 of 63), so routine testing would report these profiles as stable.
 
-Even without instruction, every model lies outside human moral space: all seven fall outside the convex hull of the 130 countries in the nine-dimensional AMCE space, and 47 of 63 model-by-dimension comparisons differ significantly from the human average after FDR correction.
-All seven models are status-neutral against a human preference.
-This is consistent with de-biasing interventions for text generation spreading into moral decisions.
-A deployed LLM's moral profile is thus set by its provider, undisclosed, yet open to be overridden by anyone controlling one line of its context.
+Even without instruction, every model lies outside human moral space:
+all seven fall outside the convex hull of the 130 countries in the nine-dimensional AMCE space, and 47 of 63 model-by-dimension comparisons differ significantly from the human average after FDR correction.
+Models also differ widely from one another: on species, their range is more than twice the cross-country human range.
+None of the seven favors high-status individuals, although humans in aggregate clearly do, consistent with de-biasing interventions for text generation spreading into moral decisions.
+A deployed LLM's moral profile is thus set by its provider, undisclosed, and can be overridden by anyone controlling one line of its context.
+As LLMs move into robots and vehicles, both properties belong in model disclosure and procurement audits.
 
 
 KEYWORDS
