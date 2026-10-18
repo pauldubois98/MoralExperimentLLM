@@ -1,0 +1,54 @@
+TITLE
+=====
+Frontier LLMs Fall Outside Human Moral Space: A Replication and Extension of the
+Moral Machine Experiment Across Seven Frontier Systems
+
+
+ABSTRACT (plain text, for the FAccT submission form)
+====================================================
+The Moral Machine experiment collected over 40 million human judgments on
+autonomous vehicle dilemmas across 130 countries, establishing the largest
+empirical record of human moral preferences along nine dimensions. We replicate
+that paradigm on seven frontier large language models (LLMs) released in 2025,
+spanning six providers across the United States, Europe, and China, and comparing
+27,300 model decisions against country-level human baselines using Average
+Marginal Causal Effects (AMCEs).
+
+All seven models fall outside the convex hull of all 130 countries in the
+nine-dimensional AMCE space: no model's moral profile is matched by any human
+population, and 47 of 63 model-by-dimension comparisons differ significantly from
+the human average after FDR correction. Inter-model divergence substantially
+exceeds cross-country human variation; on the species dimension the range across
+models is roughly five times the entire cross-country human range. Two dimensions
+on which humans are consistent are near-universally suppressed: all seven models
+are effectively gender-neutral and status-neutral, against human preferences of
++0.12 and +0.35, a pattern consistent with fairness interventions targeting
+stereotyped generation generalizing into moral reasoning that was never their
+target.
+
+We further introduce a systematic prompt sensitivity analysis. Minor
+reformulations move no estimate significantly (0 of 63), while a single-sentence
+ethical override reverses the species preference from +1.00 to -1.00 in four of
+seven models, dividing systems into three response types: compliance,
+indifference, and resistance. These results locate the moral profile of a deployed
+LLM in provider training and alignment choices rather than in any human
+population, making provider selection a consequential and currently undisclosed
+moral decision, and they show that the resulting profile can be overridden by an
+adversary controlling one line of context.
+
+
+KEYWORDS
+========
+large language models; moral preferences; Moral Machine experiment; value
+alignment; autonomous vehicles; prompt sensitivity; AI governance; model auditing
+
+
+SUBMISSION FORM NOTES
+=====================
+- Abstract deadline: October 27, 2026, 11:59 PM AoE (paper: November 3, 2026).
+- Choose ARCHIVAL or NON-ARCHIVAL at abstract registration. Archival is the
+  default choice for this paper: it appears in the ACM Digital Library and
+  requires ACM Reference Format (already configured in main.tex).
+- The abstract text above is plain ASCII with no LaTeX markup, ready to paste.
+  It matches the abstract in main.tex; if you edit one, edit both.
+- All authors must sign up to review for the conference.

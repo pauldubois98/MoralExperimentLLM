@@ -1,0 +1,7 @@
+% LOCAL BUILD HELPER --- DO NOT INCLUDE IN THE SUBMISSION TARBALL.
+% acmart requires the Libertine font family, which is not installed in this
+% environment (texlive-fonts-extra). Without scalable Type1 fonts, microtype's
+% automatic font expansion is a fatal error. Disabling expansion lets the paper
+% compile locally for page-count and layout checking; Overleaf and any complete
+% TeX Live installation have the fonts and do not need this file.
+\PassOptionsToPackage{expansion=false}{microtype}
