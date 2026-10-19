@@ -141,27 +141,33 @@ col_labels = list(pref_df.columns)
 row_labels = list(pref_df.index)
 vmax = 2.0
 
-fig2, ax = plt.subplots(figsize=(12, max(3, len(row_labels) * 1.1 + 1.5)))
-im = ax.imshow(matrix, cmap='RdBu_r', vmin=-vmax, vmax=vmax, aspect='auto')
+def plot_pref_heatmap(figsize, fname):
+    fig2, ax = plt.subplots(figsize=figsize)
+    im = ax.imshow(matrix, cmap='RdBu_r', vmin=-vmax, vmax=vmax, aspect='auto')
 
-ax.set_xticks(range(len(col_labels)))
-ax.set_xticklabels(col_labels, rotation=30, ha='right', fontsize=10)
-ax.set_yticks(range(len(row_labels)))
-ax.set_yticklabels(row_labels, fontsize=11)
+    ax.set_xticks(range(len(col_labels)))
+    ax.set_xticklabels(col_labels, rotation=30, ha='right', fontsize=10)
+    ax.set_yticks(range(len(row_labels)))
+    ax.set_yticklabels(row_labels, fontsize=11)
 
-for ri in range(len(row_labels)):
-    for ci in range(len(col_labels)):
-        val = matrix[ri, ci]
-        if not np.isnan(val):
-            ax.text(ci, ri, f'{val:+.2f}', ha='center', va='center',
-                    fontsize=8, color='white' if abs(val) > vmax * 0.5 else 'black')
+    for ri in range(len(row_labels)):
+        for ci in range(len(col_labels)):
+            val = matrix[ri, ci]
+            if not np.isnan(val):
+                ax.text(ci, ri, f'{val:+.2f}', ha='center', va='center',
+                        fontsize=8, color='white' if abs(val) > vmax * 0.5 else 'black')
 
-plt.colorbar(im, ax=ax, label='Preference (Δ Pr from 0.5)', shrink=0.8)
-ax.set_title('Moral preferences by model')
-fig2.tight_layout()
-fig2.savefig(FIG_DIR / 'fig2_preference_heatmap.png', dpi=150, bbox_inches='tight')
-plt.close()
-print('Saved fig2_preference_heatmap.png')
+    plt.colorbar(im, ax=ax, label='Preference (Δ Pr from 0.5)', shrink=0.8)
+    ax.set_title('Moral preferences by model')
+    fig2.tight_layout()
+    fig2.savefig(FIG_DIR / fname, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f'Saved {fname}')
+
+
+plot_pref_heatmap((12, max(3, len(row_labels) * 1.1 + 1.5)), 'fig2_preference_heatmap.png')
+# Compact version for the FAccT paper: drawn near print size so text stays legible
+plot_pref_heatmap((7.5, 4.6), 'fig2_preference_heatmap_print.png')
 
 # ── Figure 3: Per-attribute grouped bar chart (all 9 dimensions) ─────────────
 

@@ -32,14 +32,13 @@ references, and one additional page for endmatter statements.
 
 | Section | Pages |
 |---|---|
-| Content (Intro → Conclusion) | 1–14 — **exactly at the limit** |
-| References | 15 |
-| Endmatter (Ethics, Gen-AI) | 15–16 (~0.6 pages of text) |
+| Content (Intro → Conclusion) | 1–13 — about one page under the limit |
+| References | 13–14 |
+| Endmatter (Ethics, Gen-AI) | 14–15 |
 
-The content ends on the last line of page 14, with no slack. These counts come
-from the local build without Libertine fonts. Recheck the page count on Overleaf
-or a full TeX Live install before submitting. Anything you add needs something
-removed. The appendix was deliberately cut — appendices count toward the content
+Related Work is folded into the Introduction. These counts come from the local
+build without Libertine fonts. Recheck the page count on Overleaf or a full TeX
+Live install before submitting. The appendix was deliberately cut — appendices count toward the content
 limit, and the full supplementary tables live in `../AAAI27/supplementary.tex`.
 The paper points to them via a footnote in Methods; before submitting, host them
 at an anonymous repository (e.g. Anonymous GitHub, OSF anonymized view) and put

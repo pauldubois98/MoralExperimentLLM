@@ -72,37 +72,46 @@ model_colors = [MODEL_STYLE[m]['color'] for m in MODEL_STYLE if m in all_df['mod
 
 # ── Fig 7a: Token distribution (violin + box) ─────────────────────────────────
 
-fig, ax = plt.subplots(figsize=(12, 6))
+def plot_token_distribution(figsize, fname):
+    fig, ax = plt.subplots(figsize=figsize)
 
-data_by_model = [all_df[all_df['model_label'] == m]['OutputTokens'].dropna().values
-                 for m in model_order]
+    data_by_model = [all_df[all_df['model_label'] == m]['OutputTokens'].dropna().values
+                     for m in model_order]
 
-parts = ax.violinplot(data_by_model, positions=range(len(model_order)),
-                      showmedians=False, showextrema=False, widths=0.7)
-for pc, color in zip(parts['bodies'], model_colors):
-    pc.set_facecolor(color)
-    pc.set_alpha(0.4)
+    parts = ax.violinplot(data_by_model, positions=range(len(model_order)),
+                          showmedians=False, showextrema=False, widths=0.7)
+    for pc, color in zip(parts['bodies'], model_colors):
+        pc.set_facecolor(color)
+        pc.set_alpha(0.4)
 
-bp = ax.boxplot(data_by_model, positions=range(len(model_order)),
-                widths=0.25, patch_artist=True,
-                medianprops=dict(color='black', linewidth=2),
-                whiskerprops=dict(linewidth=1.2),
-                capprops=dict(linewidth=1.2),
-                flierprops=dict(marker='.', markersize=2, alpha=0.3))
-for patch, color in zip(bp['boxes'], model_colors):
-    patch.set_facecolor(color)
-    patch.set_alpha(0.7)
+    bp = ax.boxplot(data_by_model, positions=range(len(model_order)),
+                    widths=0.25, patch_artist=True,
+                    medianprops=dict(color='black', linewidth=2),
+                    whiskerprops=dict(linewidth=1.2),
+                    capprops=dict(linewidth=1.2),
+                    flierprops=dict(marker='.', markersize=2, alpha=0.3))
+    for patch, color in zip(bp['boxes'], model_colors):
+        patch.set_facecolor(color)
+        patch.set_alpha(0.7)
 
-ax.set_xticks(range(len(model_order)))
-ax.set_xticklabels(model_order, fontsize=11)
-ax.set_ylabel('Output tokens', fontsize=12)
-ax.set_title('Response length distribution by model')
-ax.yaxis.set_major_locator(mticker.MaxNLocator(integer=True))
-sns.despine(ax=ax)
-fig.tight_layout()
-fig.savefig(FIG_DIR / 'fig7a_token_distribution.png', dpi=150, bbox_inches='tight')
-plt.close()
-print('Saved fig7a_token_distribution.png')
+    ax.set_xticks(range(len(model_order)))
+    if figsize[0] > 9:
+        ax.set_xticklabels(model_order, fontsize=11)
+    else:
+        ax.set_xticklabels(model_order, fontsize=9, rotation=25, ha='right')
+    ax.set_ylabel('Output tokens', fontsize=12)
+    ax.set_title('Response length distribution by model')
+    ax.yaxis.set_major_locator(mticker.MaxNLocator(integer=True))
+    sns.despine(ax=ax)
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / fname, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f'Saved {fname}')
+
+
+plot_token_distribution((12, 6), 'fig7a_token_distribution.png')
+# Compact version for the FAccT paper: drawn near print size so text stays legible
+plot_token_distribution((7, 3.6), 'fig7a_token_distribution_print.png')
 
 
 # ── Fig 7b: Emphasis vs standard token count per model ────────────────────────────

@@ -83,53 +83,64 @@ n_factors = len(factor_order)
 n_models  = len([m for m in MODEL_STYLE if m in amce['model'].unique()])
 ROW_HEIGHT = 1.1
 fig_height = max(9, n_factors * ROW_HEIGHT + 2)
-fig, ax = plt.subplots(figsize=(13, fig_height))
-offsets   = np.linspace(-0.35, 0.35, n_models)
-model_order = ['Human (global avg)'] + llm_models
+def plot_amce_forest(figsize, fname):
+    fig, ax = plt.subplots(figsize=figsize)
+    offsets   = np.linspace(-0.35, 0.35, n_models)
+    model_order = ['Human (global avg)'] + llm_models
 
-# Shade alternating rows for readability
-for fi in range(n_factors):
-    if fi % 2 == 0:
-        ax.axhspan(fi - 0.5, fi + 0.5, color='#f5f5f5', zorder=0)
+    # Shade alternating rows for readability
+    for fi in range(n_factors):
+        if fi % 2 == 0:
+            ax.axhspan(fi - 0.5, fi + 0.5, color='#f5f5f5', zorder=0)
 
-for mi, model in enumerate(model_order):
-    if model not in amce['model'].unique():
-        continue
-    style = MODEL_STYLE.get(model, {'color': '#888', 'marker': 'o', 'label': model})
-    sub   = amce[amce['model'] == model].set_index('factor')
-    yo    = offsets[mi]
-
-    for fi, factor in enumerate(factor_order):
-        if factor not in sub.index:
+    for mi, model in enumerate(model_order):
+        if model not in amce['model'].unique():
             continue
-        row  = sub.loc[factor]
-        est  = row['estimate']
-        ci_lo, ci_hi = row['ci_lo'], row['ci_hi']
-        y    = fi + yo
+        style = MODEL_STYLE.get(model, {'color': '#888', 'marker': 'o', 'label': model})
+        sub   = amce[amce['model'] == model].set_index('factor')
+        yo    = offsets[mi]
 
-        ax.plot([ci_lo, ci_hi], [y, y], color=style['color'], linewidth=1.6, alpha=0.6)
-        ax.plot(est, y, marker=style['marker'], color=style['color'],
-                markersize=8, zorder=3, alpha=0.9)
+        for fi, factor in enumerate(factor_order):
+            if factor not in sub.index:
+                continue
+            row  = sub.loc[factor]
+            est  = row['estimate']
+            ci_lo, ci_hi = row['ci_lo'], row['ci_hi']
+            y    = fi + yo
 
-ax.axvline(0, color='black', linewidth=1, linestyle='--', alpha=0.4)
-ax.set_yticks(range(n_factors))
-ax.set_yticklabels([FACTOR_SHORT[f] for f in factor_order], fontsize=11)
-ax.set_ylim(-0.7, n_factors - 0.3)
-ax.set_xlabel('Δ Pr (AMCE)', fontsize=12)
-ax.set_title('Moral preferences: LLMs vs. human global average')
+            ax.plot([ci_lo, ci_hi], [y, y], color=style['color'], linewidth=1.6, alpha=0.6)
+            ax.plot(est, y, marker=style['marker'], color=style['color'],
+                    markersize=8, zorder=3, alpha=0.9)
 
-legend_handles = [
-    mlines.Line2D([], [], color=MODEL_STYLE[m]['color'], marker=MODEL_STYLE[m]['marker'],
-                  markersize=9, linewidth=1.4, label=MODEL_STYLE[m]['label'])
-    for m in model_order if m in amce['model'].unique()
-]
-ax.legend(handles=legend_handles, fontsize=10, loc='lower right', framealpha=0.9)
-ax.set_xlim(-1.1, 1.1)
-sns.despine(ax=ax)
-fig.tight_layout()
-fig.savefig(FIG_DIR / 'fig5a_amce_forest.png', dpi=150, bbox_inches='tight')
-plt.close()
-print('Saved fig5a_amce_forest.png')
+    ax.axvline(0, color='black', linewidth=1, linestyle='--', alpha=0.4)
+    ax.set_yticks(range(n_factors))
+    ax.set_yticklabels([FACTOR_SHORT[f] for f in factor_order], fontsize=11)
+    ax.set_ylim(-0.7, n_factors - 0.3)
+    ax.set_xlabel('Δ Pr (AMCE)', fontsize=12)
+    ax.set_title('Moral preferences: LLMs vs. human global average')
+
+    legend_handles = [
+        mlines.Line2D([], [], color=MODEL_STYLE[m]['color'], marker=MODEL_STYLE[m]['marker'],
+                      markersize=9, linewidth=1.4, label=MODEL_STYLE[m]['label'])
+        for m in model_order if m in amce['model'].unique()
+    ]
+    if figsize[0] > 9:
+        ax.legend(handles=legend_handles, fontsize=10, loc='lower right', framealpha=0.9)
+    else:
+        # Legend below the axes so it hides no data points
+        ax.legend(handles=legend_handles, fontsize=8.5, loc='upper center',
+                  bbox_to_anchor=(0.5, -0.08), ncol=4, frameon=False)
+    ax.set_xlim(-1.1, 1.1)
+    sns.despine(ax=ax)
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / fname, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f'Saved {fname}')
+
+
+plot_amce_forest((13, fig_height), 'fig5a_amce_forest.png')
+# Compact version for the FAccT paper: drawn near print size so text stays legible
+plot_amce_forest((7.5, 7.5), 'fig5a_amce_forest_print.png')
 
 
 # ── Fig 5b: PCA moral distance map ───────────────────────────────────────────
@@ -144,56 +155,65 @@ X_c = X - X.mean(axis=0)
 U, S, Vt = np.linalg.svd(X_c, full_matrices=False)
 coords_2d = U[:, :2] * S[:2]   # (n_countries, 2)
 
-fig, ax = plt.subplots(figsize=(11, 8))
+def plot_pca_map(figsize, fname, label_offsets=None):
+    fig, ax = plt.subplots(figsize=figsize)
 
-# Plot countries coloured by cluster
-for iso, (x2, y2) in zip(country_idx, coords_2d):
-    cluster = cluster_map.loc[iso, 'Cluster'] if iso in cluster_map.index else -1
-    color   = CLUSTER_COLORS.get(cluster, '#aaa')
-    ax.scatter(x2, y2, color=color, s=30, alpha=0.55, zorder=1)
+    # Plot countries coloured by cluster
+    for iso, (x2, y2) in zip(country_idx, coords_2d):
+        cluster = cluster_map.loc[iso, 'Cluster'] if iso in cluster_map.index else -1
+        color   = CLUSTER_COLORS.get(cluster, '#aaa')
+        ax.scatter(x2, y2, color=color, s=30, alpha=0.55, zorder=1)
 
-# Compute LLM positions in same PCA space
-for model in llm_models:
-    sub = amce[amce['model'] == model].set_index('factor')
-    if len(sub) == 0:
-        continue
-    vec = np.array([sub.loc[f, 'estimate'] if f in sub.index else np.nan for f in factors_9])
-    if np.isnan(vec).any():
-        continue
-    vec_c   = vec - X.mean(axis=0)
-    proj    = vec_c @ Vt[:2].T          # project onto first 2 PCs
-    style   = MODEL_STYLE.get(model, {'color': '#888', 'marker': 'o', 'label': model})
-    ax.scatter(*proj, color=style['color'], marker=style['marker'],
-               s=220, zorder=5, edgecolors='white', linewidths=1.5)
-    ax.annotate(style['label'], proj, fontsize=9, fontweight='bold',
-                color=style['color'], xytext=(6, 4), textcoords='offset points')
+    # Compute LLM positions in same PCA space
+    for model in llm_models:
+        sub = amce[amce['model'] == model].set_index('factor')
+        if len(sub) == 0:
+            continue
+        vec = np.array([sub.loc[f, 'estimate'] if f in sub.index else np.nan for f in factors_9])
+        if np.isnan(vec).any():
+            continue
+        vec_c   = vec - X.mean(axis=0)
+        proj    = vec_c @ Vt[:2].T          # project onto first 2 PCs
+        style   = MODEL_STYLE.get(model, {'color': '#888', 'marker': 'o', 'label': model})
+        ax.scatter(*proj, color=style['color'], marker=style['marker'],
+                   s=220, zorder=5, edgecolors='white', linewidths=1.5)
+        ax.annotate(style['label'], proj, fontsize=9, fontweight='bold',
+                    color=style['color'], xytext=(label_offsets or {}).get(model, (6, 4)),
+                    textcoords='offset points')
 
-    # Distance to nearest country
-    dists   = np.linalg.norm(X_c - (vec - X.mean(axis=0)), axis=1)
-    nearest_iso = country_idx[np.argmin(dists)]
-    nearest_name = cluster_map.loc[nearest_iso, 'Country'] if nearest_iso in cluster_map.index else nearest_iso
-    print(f'  {style["label"]:22s} → nearest country: {nearest_name} ({nearest_iso})')
+        # Distance to nearest country
+        dists   = np.linalg.norm(X_c - (vec - X.mean(axis=0)), axis=1)
+        nearest_iso = country_idx[np.argmin(dists)]
+        nearest_name = cluster_map.loc[nearest_iso, 'Country'] if nearest_iso in cluster_map.index else nearest_iso
+        print(f'  {style["label"]:22s} → nearest country: {nearest_name} ({nearest_iso})')
 
-# Cluster legend
-cluster_patches = [
-    mpatches.Patch(color=CLUSTER_COLORS[c], label=f'Cluster {c}: {CLUSTER_LABELS[c]}')
-    for c in sorted(CLUSTER_COLORS)
-]
-model_handles = [
-    mlines.Line2D([], [], color=MODEL_STYLE[m]['color'], marker=MODEL_STYLE[m]['marker'],
-                  markersize=10, linewidth=0, label=MODEL_STYLE[m]['label'])
-    for m in llm_models if m in amce['model'].unique()
-]
-ax.legend(handles=cluster_patches + model_handles, fontsize=9, loc='upper left',
-          bbox_to_anchor=(1.01, 1), borderaxespad=0, framealpha=0.9)
-ax.set_xlabel(f'PC1 ({S[0]**2 / (S**2).sum()*100:.1f}% variance)', fontsize=11)
-ax.set_ylabel(f'PC2 ({S[1]**2 / (S**2).sum()*100:.1f}% variance)', fontsize=11)
-ax.set_title('130 countries and LLMs (PCA of 9 AMCE dimensions)')
-sns.despine(ax=ax)
-fig.tight_layout()
-fig.savefig(FIG_DIR / 'fig5b_pca_map.png', dpi=150, bbox_inches='tight')
-plt.close()
-print('Saved fig5b_pca_map.png')
+    # Cluster legend
+    cluster_patches = [
+        mpatches.Patch(color=CLUSTER_COLORS[c], label=f'Cluster {c}: {CLUSTER_LABELS[c]}')
+        for c in sorted(CLUSTER_COLORS)
+    ]
+    model_handles = [
+        mlines.Line2D([], [], color=MODEL_STYLE[m]['color'], marker=MODEL_STYLE[m]['marker'],
+                      markersize=10, linewidth=0, label=MODEL_STYLE[m]['label'])
+        for m in llm_models if m in amce['model'].unique()
+    ]
+    ax.legend(handles=cluster_patches + model_handles, fontsize=9, loc='upper left',
+              bbox_to_anchor=(1.01, 1), borderaxespad=0, framealpha=0.9)
+    ax.set_xlabel(f'PC1 ({S[0]**2 / (S**2).sum()*100:.1f}% variance)', fontsize=11)
+    ax.set_ylabel(f'PC2 ({S[1]**2 / (S**2).sum()*100:.1f}% variance)', fontsize=11)
+    ax.set_title('130 countries and LLMs (PCA of 9 AMCE dimensions)')
+    sns.despine(ax=ax)
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / fname, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f'Saved {fname}')
+
+
+plot_pca_map((11, 8), 'fig5b_pca_map.png')
+# Compact version for the FAccT paper: drawn near print size so text stays legible
+plot_pca_map((6, 4.4), 'fig5b_pca_map_print.png', label_offsets={
+    'gpt-5.5': (-4, -16), 'grok-4.1': (-6, 8), 'deepseek-v4-pro': (4, 8), 'claude-opus-4-7': (8, -10),
+})
 
 
 # ── Fig 5c: Radar chart ───────────────────────────────────────────────────────
@@ -214,34 +234,49 @@ N = len(radar_factors)
 angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
 angles += angles[:1]  # close the polygon
 
-fig, ax = plt.subplots(figsize=(9, 9), subplot_kw=dict(polar=True))
+def plot_radar(figsize, fname, legend_below=False):
+    fig, ax = plt.subplots(figsize=figsize, subplot_kw=dict(polar=True))
 
-radar_models = ['Human (global avg)'] + llm_models
-for model in radar_models:
-    if model not in amce['model'].unique():
-        continue
-    sub    = amce[amce['model'] == model].set_index('factor')
-    vals   = [sub.loc[f, 'estimate'] if f in sub.index else 0 for f in radar_factors]
-    vals  += vals[:1]
-    style  = MODEL_STYLE.get(model, {'color': '#888', 'label': model})
-    lw     = 2.5 if model == 'Human (global avg)' else 1.8
-    ls     = '--' if model == 'Human (global avg)' else '-'
-    alpha  = 0.15 if model == 'Human (global avg)' else 0.08
-    ax.plot(angles, vals, color=style['color'], linewidth=lw, linestyle=ls,
-            label=style['label'])
-    ax.fill(angles, vals, color=style['color'], alpha=alpha)
+    radar_models = ['Human (global avg)'] + llm_models
+    for model in radar_models:
+        if model not in amce['model'].unique():
+            continue
+        sub    = amce[amce['model'] == model].set_index('factor')
+        vals   = [sub.loc[f, 'estimate'] if f in sub.index else 0 for f in radar_factors]
+        vals  += vals[:1]
+        style  = MODEL_STYLE.get(model, {'color': '#888', 'label': model})
+        lw     = 2.5 if model == 'Human (global avg)' else 1.8
+        ls     = '--' if model == 'Human (global avg)' else '-'
+        alpha  = 0.15 if model == 'Human (global avg)' else 0.08
+        ax.plot(angles, vals, color=style['color'], linewidth=lw, linestyle=ls,
+                label=style['label'])
+        ax.fill(angles, vals, color=style['color'], alpha=alpha)
 
-ax.set_xticks(angles[:-1])
-ax.set_xticklabels(radar_labels, fontsize=9)
-ax.set_ylim(-0.6, 1.1)
-ax.set_yticks([-0.5, 0, 0.25, 0.5, 0.75, 1.0])
-ax.set_yticklabels(['-0.5', '0', '0.25', '0.5', '0.75', '1.0'], fontsize=7, color='grey')
-ax.axhline(y=0, color='black', linewidth=0.8, linestyle=':', alpha=0.5)
-ax.set_title('Moral preference radar')
-ax.legend(loc='upper right', bbox_to_anchor=(1.35, 1.15), fontsize=9, framealpha=0.9)
-fig.tight_layout()
-fig.savefig(FIG_DIR / 'fig5c_radar.png', dpi=150, bbox_inches='tight')
-plt.close()
-print('Saved fig5c_radar.png')
+    ax.set_xticks(angles[:-1])
+    if legend_below:
+        # Two-line labels and ring labels moved off the axes, so nothing overlaps
+        ax.set_xticklabels([FACTOR_SHORT[f] for f in radar_factors], fontsize=9)
+        ax.tick_params(axis='x', pad=8)
+        ax.set_rlabel_position(100)
+    else:
+        ax.set_xticklabels(radar_labels, fontsize=9)
+    ax.set_ylim(-0.6, 1.1)
+    ax.set_yticks([-0.5, 0, 0.25, 0.5, 0.75, 1.0])
+    ax.set_yticklabels(['-0.5', '0', '0.25', '0.5', '0.75', '1.0'], fontsize=7, color='grey')
+    ax.axhline(y=0, color='black', linewidth=0.8, linestyle=':', alpha=0.5)
+    ax.set_title('Moral preference radar')
+    if legend_below:
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.08), ncol=3, fontsize=8, frameon=False)
+    else:
+        ax.legend(loc='upper right', bbox_to_anchor=(1.35, 1.15), fontsize=9, framealpha=0.9)
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / fname, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f'Saved {fname}')
+
+
+plot_radar((9, 9), 'fig5c_radar.png')
+# Compact version for the FAccT paper: legend below so the chart can print larger
+plot_radar((5.2, 5.2), 'fig5c_radar_print.png', legend_below=True)
 
 print('\n‡ DeepSeek v4 Pro: 10 parse failures out of 1300 scenarios.')

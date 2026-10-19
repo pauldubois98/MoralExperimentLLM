@@ -121,47 +121,62 @@ print(f'\nPooled  r={pooled_r:+.3f}  p={pooled_p:.4f}  N={len(corr_df)}')
 
 # ── Fig 8: two-panel figure ───────────────────────────────────────────────────
 
-fig, (ax_bar, ax_scat) = plt.subplots(1, 2, figsize=(13, 5))
+def plot_length_correlation(figsize, fname):
+    fig, (ax_bar, ax_scat) = plt.subplots(1, 2, figsize=figsize)
 
-# Left panel: bar chart of Spearman r per model
-bar_colors = [('#888888' if not row['sig'] else row['color']) for _, row in res_df.iterrows()]
-bars = ax_bar.barh(res_df['model_label'], res_df['r'], color=bar_colors, alpha=0.85, height=0.55)
-ax_bar.axvline(0, color='black', linewidth=1)
-ax_bar.set_xlabel('Spearman r  (|AMCE| vs. median tokens)', fontsize=11)
-ax_bar.set_title('Preference strength vs. response length')
-ax_bar.set_xlim(-1.1, 0.4)
-for bar, (_, row) in zip(bars, res_df.iterrows()):
-    x = row['r'] - 0.03 if row['r'] < 0 else row['r'] + 0.03
-    ha = 'right' if row['r'] < 0 else 'left'
-    label = f"{row['r']:+.2f}{'*' if row['sig'] else ''}"
-    ax_bar.text(x, bar.get_y() + bar.get_height() / 2,
-                label, va='center', ha=ha, fontsize=9, fontweight='bold',
-                color=row['color'] if row['sig'] else '#555555')
-sig_patch   = mpatches.Patch(color='#555555', label='p ≥ 0.05 (n.s.)')
-insig_patch = mpatches.Patch(color='#aaaaaa', label='p < 0.05')
-sns.despine(ax=ax_bar)
+    # Left panel: bar chart of Spearman r per model
+    bar_colors = [('#888888' if not row['sig'] else row['color']) for _, row in res_df.iterrows()]
+    bars = ax_bar.barh(res_df['model_label'], res_df['r'], color=bar_colors, alpha=0.85, height=0.55)
+    ax_bar.axvline(0, color='black', linewidth=1)
+    ax_bar.set_xlabel('Spearman r  (|AMCE| vs. median tokens)', fontsize=11)
+    ax_bar.set_title('Preference strength vs. response length')
+    ax_bar.set_xlim(-1.1, 0.4)
+    for bar, (_, row) in zip(bars, res_df.iterrows()):
+        if figsize[0] > 9:
+            x = row['r'] - 0.03 if row['r'] < 0 else row['r'] + 0.03
+            ha = 'right' if row['r'] < 0 else 'left'
+        else:
+            # Values right of zero so they never overlap the model names
+            x, ha = 0.03, 'left'
+        label = f"{row['r']:+.2f}{'*' if row['sig'] else ''}"
+        ax_bar.text(x, bar.get_y() + bar.get_height() / 2,
+                    label, va='center', ha=ha, fontsize=9, fontweight='bold',
+                    color=row['color'] if row['sig'] else '#555555')
+    sig_patch   = mpatches.Patch(color='#555555', label='p ≥ 0.05 (n.s.)')
+    insig_patch = mpatches.Patch(color='#aaaaaa', label='p < 0.05')
+    sns.despine(ax=ax_bar)
 
-# Right panel: scatter + per-model fit lines
-for model_key, style in MODEL_STYLE.items():
-    sub = corr_df[corr_df['model_key'] == model_key]
-    if len(sub) < 2:
-        continue
-    r_val = res_df.loc[res_df['model_key'] == model_key, 'r'].values
-    r_str = f' (r={r_val[0]:+.2f})' if len(r_val) else ''
-    ax_scat.scatter(sub['abs_amce'], sub['tokens'],
-                    color=style['color'], s=60, alpha=0.75, zorder=3)
-    m, b = np.polyfit(sub['abs_amce'], sub['tokens'], 1)
-    xr = np.linspace(sub['abs_amce'].min(), sub['abs_amce'].max(), 100)
-    ax_scat.plot(xr, m * xr + b, color=style['color'], linewidth=1.4,
-                 linestyle='--', alpha=0.7, label=style['label'] + r_str)
+    # Right panel: scatter + per-model fit lines
+    for model_key, style in MODEL_STYLE.items():
+        sub = corr_df[corr_df['model_key'] == model_key]
+        if len(sub) < 2:
+            continue
+        r_val = res_df.loc[res_df['model_key'] == model_key, 'r'].values
+        r_str = f' (r={r_val[0]:+.2f})' if len(r_val) else ''
+        ax_scat.scatter(sub['abs_amce'], sub['tokens'],
+                        color=style['color'], s=60, alpha=0.75, zorder=3)
+        m, b = np.polyfit(sub['abs_amce'], sub['tokens'], 1)
+        xr = np.linspace(sub['abs_amce'].min(), sub['abs_amce'].max(), 100)
+        ax_scat.plot(xr, m * xr + b, color=style['color'], linewidth=1.4,
+                     linestyle='--', alpha=0.7, label=style['label'] + r_str)
 
-ax_scat.set_xlabel('|AMCE|  (preference strength)', fontsize=11)
-ax_scat.set_ylabel('Median output tokens', fontsize=11)
-ax_scat.set_title('Preference strength vs. response length')
-ax_scat.legend(fontsize=8, loc='upper right', framealpha=0.9)
-sns.despine(ax=ax_scat)
+    ax_scat.set_xlabel('|AMCE|  (preference strength)', fontsize=11)
+    ax_scat.set_ylabel('Median output tokens', fontsize=11)
+    ax_scat.set_title('Preference strength vs. response length')
+    if figsize[0] > 9:
+        ax_scat.legend(fontsize=8, loc='upper right', framealpha=0.9)
+    else:
+        # Legend below the scatter so it hides no points
+        ax_scat.legend(fontsize=7, loc='upper center', bbox_to_anchor=(0.5, -0.2),
+                       ncol=2, frameon=False)
+    sns.despine(ax=ax_scat)
 
-fig.tight_layout()
-fig.savefig(FIG_DIR / 'fig8_amce_length_correlation.png', dpi=150, bbox_inches='tight')
-plt.close()
-print('\nSaved fig8_amce_length_correlation.png')
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / fname, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f'\nSaved {fname}')
+
+
+plot_length_correlation((13, 5), 'fig8_amce_length_correlation.png')
+# Compact version for the FAccT paper: drawn near print size so text stays legible
+plot_length_correlation((8.5, 3.8), 'fig8_amce_length_correlation_print.png')

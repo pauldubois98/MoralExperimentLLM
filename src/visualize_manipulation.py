@@ -176,26 +176,32 @@ for mi, model in enumerate(common_models):
 
 model_labels = [MODEL_STYLE[m]['label'] for m in common_models]
 
-fig, ax = plt.subplots(figsize=(12, max(3, len(common_models) * 1.1 + 1.5)))
-vmax = max(np.nanmax(np.abs(delta_matrix)), 0.1)
+def plot_delta_heatmap(figsize, fname):
+    fig, ax = plt.subplots(figsize=figsize)
+    vmax = max(np.nanmax(np.abs(delta_matrix)), 0.1)
 
-im = ax.imshow(delta_matrix, cmap='RdBu_r', vmin=-vmax, vmax=vmax, aspect='auto')
+    im = ax.imshow(delta_matrix, cmap='RdBu_r', vmin=-vmax, vmax=vmax, aspect='auto')
 
-ax.set_xticks(range(len(factors)))
-ax.set_xticklabels(factor_labels, rotation=30, ha='right', fontsize=10)
-ax.set_yticks(range(len(common_models)))
-ax.set_yticklabels(model_labels, fontsize=11)
+    ax.set_xticks(range(len(factors)))
+    ax.set_xticklabels(factor_labels, rotation=30 if figsize[0] > 8 else 45, ha='right', fontsize=10)
+    ax.set_yticks(range(len(common_models)))
+    ax.set_yticklabels(model_labels, fontsize=11)
 
-for mi in range(len(common_models)):
-    for fi in range(len(factors)):
-        val = delta_matrix[mi, fi]
-        if not np.isnan(val):
-            ax.text(fi, mi, f'{val:+.2f}', ha='center', va='center',
-                    fontsize=8, color='white' if abs(val) > vmax * 0.5 else 'black')
+    for mi in range(len(common_models)):
+        for fi in range(len(factors)):
+            val = delta_matrix[mi, fi]
+            if not np.isnan(val):
+                ax.text(fi, mi, f'{val:+.2f}', ha='center', va='center',
+                        fontsize=8, color='white' if abs(val) > vmax * 0.5 else 'black')
 
-plt.colorbar(im, ax=ax, label='AMCE delta (manipulation − standard)', shrink=0.8)
-ax.set_title('Effect of manipulation prompt on moral preferences')
-fig.tight_layout()
-fig.savefig(FIG_DIR / 'fig9b_manipulation_delta_heatmap.png', dpi=150, bbox_inches='tight')
-plt.close()
-print('Saved fig9b_manipulation_delta_heatmap.png')
+    plt.colorbar(im, ax=ax, label='AMCE delta (manipulation − standard)', shrink=0.8)
+    ax.set_title('Effect of manipulation prompt on moral preferences')
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / fname, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f'Saved {fname}')
+
+
+plot_delta_heatmap((12, max(3, len(common_models) * 1.1 + 1.5)), 'fig9b_manipulation_delta_heatmap.png')
+# Compact version for the FAccT paper: drawn near print size so text stays legible
+plot_delta_heatmap((6.5, 4.4), 'fig9b_manipulation_delta_heatmap_print.png')
