@@ -219,5 +219,42 @@ fig3.tight_layout()
 fig3.savefig(FIG_DIR / 'fig3_per_attribute.png', dpi=150, bbox_inches='tight')
 print('Saved fig3_per_attribute.png')
 
+# ── Figure 3 (two rows): same chart split 5 + 4, readable at page width ──────
+
+fig3r, axes = plt.subplots(2, 5, figsize=(9, 4.6), sharey=True)
+
+for ax, dim_label in zip(axes.flat, dim_labels):
+    model_names, prefs = [], []
+    for key, df in frames.items():
+        p = get_prefs_all9(df)[dim_label]
+        if not np.isnan(p):
+            model_names.append(MODELS[key])
+            prefs.append(p)
+
+    bar_colors = [MODEL_COLORS[m] for m in model_names]
+    bars = ax.bar(range(len(model_names)), prefs, color=bar_colors, alpha=0.85, width=0.6)
+    ax.axhline(0, color='black', linewidth=1)
+    ax.set_xticks([])
+    ax.set_title(dim_label, fontsize=8.5, fontweight='bold')
+    ax.set_ylim(-0.8, 0.8)
+    ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.1f'))
+    sns.despine(ax=ax)
+    for bar, pref in zip(bars, prefs):
+        ax.text(bar.get_x() + bar.get_width()/2,
+                pref + (0.02 if pref >= 0 else -0.04),
+                f'{pref:+.2f}', ha='center', va='bottom' if pref >= 0 else 'top',
+                fontsize=6, fontweight='bold', rotation=90)
+
+for ax in axes[:, 0]:
+    ax.set_ylabel('Preference (Δ Pr from 0.5)', fontsize=8.5)
+
+# Legend goes in the unused tenth panel
+axes.flat[-1].axis('off')
+axes.flat[-1].legend(handles=legend_patches, loc='center', fontsize=8, frameon=False)
+fig3r.suptitle('Moral preference per dimension', y=1.0)
+fig3r.tight_layout()
+fig3r.savefig(FIG_DIR / 'fig3_per_attribute_2rows.png', dpi=150, bbox_inches='tight')
+print('Saved fig3_per_attribute_2rows.png')
+
 plt.close('all')
 print('\nAll figures saved to figures/')

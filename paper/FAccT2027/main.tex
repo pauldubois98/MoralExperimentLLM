@@ -183,9 +183,8 @@ excluded; these are distributed across scenario types without concentration on
 any single moral dimension. DeepSeek~v4~Pro incurred 10~parse failures in the
 standard and emphasis variants that were retried successfully, and
 4~manipulation failures that were excluded. In total, 27,300~API calls were
-issued. Full per-variant AMCE estimates, complete pairwise inter-model
-$z$-statistics, PCA eigenvector loadings, scenario counts, and the verbatim
-prompt templates are provided in the supplementary material.\footnote{Scenario
+issued. Per-variant AMCEs, all test statistics, PCA loadings, scenario counts,
+and verbatim prompts are in the supplementary material.\footnote{Scenario
 generator, analysis code, and raw model responses are available at an anonymized
 repository; the link is withheld here to preserve anonymity and will be included
 in the camera-ready version.}
@@ -223,12 +222,10 @@ Standard and emphasis results are combined in main analyses; manipulation
 results are reported separately.
 
 The variants bracket the forces that could drive a deployed profile. Emphasis
-represents incidental variation of the kind that arises from ordinary prompt
-engineering and would not be considered an attack. Manipulation represents a
-deliberate ethical override available to anyone who controls part of a system
-prompt --- a plug-in author, a compromised upstream service, or a retrieved
-document in a retrieval-augmented pipeline. The contrast separates fragility
-from attackability.
+is incidental variation from ordinary prompt engineering, not an attack.
+Manipulation is a deliberate ethical override available to anyone who controls
+part of a system prompt: a plug-in author, a compromised upstream service, or a
+retrieved document. The contrast separates fragility from attackability.
 
 \subsection{AMCE Computation}
 
@@ -282,7 +279,7 @@ confidence intervals.}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\linewidth]{figures/fig5c_radar}
+\includegraphics[width=0.55\linewidth]{figures/fig5c_radar}
 \caption{Radar chart of AMCE estimates across all nine dimensions. The dashed
 line shows the human global average.}
 \label{fig:radar}
@@ -342,9 +339,9 @@ model that differs significantly on all nine dimensions.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\linewidth]{figures/fig3_per_attribute}
-\caption{Per-attribute moral preferences for all seven LLMs across the six
-character-type scenario dimensions.}
+\includegraphics[width=\linewidth]{figures/fig3_per_attribute_2rows}
+\caption{Per-attribute moral preferences (mean save-probability minus 0.5) for
+all seven LLMs across the nine moral dimensions.}
 \label{fig:per_attribute}
 \end{figure}
 
@@ -352,7 +349,7 @@ character-type scenario dimensions.}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.9\linewidth]{figures/fig5b_pca_map}
+\includegraphics[width=0.56\linewidth]{figures/fig5b_pca_map}
 \caption{PCA of nine-dimensional AMCE profiles for 130~countries (coloured by
 cluster: Western, Eastern, Latin/Southern) with LLMs overlaid. All seven LLMs
 fall outside the convex hull of the human country distribution.}
@@ -397,7 +394,7 @@ human baseline, not agreement with humans.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\linewidth]{figures/fig6b_prompt_forest}
+\includegraphics[width=0.9\linewidth]{figures/fig6b_prompt_forest_2rows}
 \caption{AMCE estimates for standard (filled circles) and emphasis (open
 squares) variants per model. No significant shifts are observed across any model
 or dimension.}
@@ -406,7 +403,7 @@ or dimension.}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\linewidth]{figures/fig6a_prompt_delta_heatmap}
+\includegraphics[width=0.55\linewidth]{figures/fig6a_prompt_delta_heatmap}
 \caption{AMCE delta (emphasis $-$ standard) per model and dimension. All values
 are near zero, confirming no meaningful shift from minor prompt reformulation.}
 \label{fig:emphasis_delta}
@@ -425,7 +422,7 @@ stochastic robustness.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\linewidth]{figures/fig9a_manipulation_forest}
+\includegraphics[width=0.9\linewidth]{figures/fig9a_manipulation_forest_2rows}
 \caption{AMCE estimates under standard (filled circles) vs.\ manipulation (open
 squares) prompting per model.}
 \label{fig:manip_forest}
@@ -433,7 +430,7 @@ squares) prompting per model.}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.85\linewidth]{figures/fig9b_manipulation_delta_heatmap}
+\includegraphics[width=0.55\linewidth]{figures/fig9b_manipulation_delta_heatmap}
 \caption{AMCE delta (manipulation $-$ standard) per model and dimension. The
 Species column dominates, with changes of up to $\pm 2.0$ AMCE units.}
 \label{fig:manip_delta}

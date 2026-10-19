@@ -73,12 +73,7 @@ factor_labels = [FACTOR_SHORT[f] for f in factors]
 
 # ── Fig 9a: Side-by-side forest plot per model ────────────────────────────────
 
-n_models = len(common_models)
-fig, axes = plt.subplots(1, n_models, figsize=(5 * n_models, 8), sharey=True)
-if n_models == 1:
-    axes = [axes]
-
-for ax, model in zip(axes, common_models):
+def draw_panel(ax, model, panel_legend=True):
     style    = MODEL_STYLE[model]
     std_sub  = std[std['model'] == model].set_index('factor')
     man_sub  = manip[manip['model'] == model].set_index('factor')
@@ -118,8 +113,18 @@ for ax, model in zip(axes, common_models):
                    linewidth=1.5, linestyle='--', markerfacecolor='white',
                    markeredgewidth=1.5, label='Manipulation'),
     ]
-    ax.legend(handles=legend_handles, fontsize=8, loc='lower right')
+    if panel_legend:
+        ax.legend(handles=legend_handles, fontsize=8, loc='lower right')
     sns.despine(ax=ax)
+
+
+n_models = len(common_models)
+fig, axes = plt.subplots(1, n_models, figsize=(5 * n_models, 8), sharey=True)
+if n_models == 1:
+    axes = [axes]
+
+for ax, model in zip(axes, common_models):
+    draw_panel(ax, model)
 
 axes[0].set_yticks(range(len(factors)))
 axes[0].set_yticklabels(factor_labels, fontsize=10)
@@ -130,6 +135,32 @@ fig.tight_layout()
 fig.savefig(FIG_DIR / 'fig9a_manipulation_forest.png', dpi=150, bbox_inches='tight')
 plt.close()
 print('Saved fig9a_manipulation_forest.png')
+
+# ── Two-row version (4 + 3 panels), readable at page width ───────────────────
+
+fig, axes2 = plt.subplots(2, 4, figsize=(9, 5.8), sharey=True)
+for ax, model in zip(axes2.flat, common_models):
+    draw_panel(ax, model, panel_legend=False)
+    ax.title.set_fontsize(10)
+    ax.tick_params(axis='x', labelsize=8)
+    ax.xaxis.label.set_fontsize(9)
+for ax in axes2[:, 0]:
+    ax.set_yticks(range(len(factors)))
+    ax.set_yticklabels(factor_labels, fontsize=9)
+    ax.set_ylim(-0.7, len(factors) - 0.3)
+
+# Shared legend in the unused eighth panel
+axes2.flat[-1].axis('off')
+axes2.flat[-1].legend(handles=[
+    plt.Line2D([0], [0], marker='o', color='#555', markersize=7, linewidth=1.5, label='Standard'),
+    plt.Line2D([0], [0], marker='s', color='#555', markersize=7, linewidth=1.5, linestyle='--',
+               markerfacecolor='white', markeredgewidth=1.5, label='Manipulation'),
+], loc='center', fontsize=10, frameon=False)
+fig.suptitle('Standard vs. manipulation prompting', y=1.0)
+fig.tight_layout()
+fig.savefig(FIG_DIR / 'fig9a_manipulation_forest_2rows.png', dpi=150, bbox_inches='tight')
+plt.close()
+print('Saved fig9a_manipulation_forest_2rows.png')
 
 
 # ── Fig 9b: Delta heatmap (manipulation − standard) ──────────────────────────
